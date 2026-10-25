@@ -59,46 +59,54 @@
     nav {
       position: sticky;
       top: 0;
-      z-index: 100;
-      background: rgba(9, 10, 15, 0.85);
+      z-index: 1000;
+      background: rgba(9, 10, 15, 0.88);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--card-border);
-      padding: 0.85rem 2rem;
+      transition: background 0.2s;
+    }
+
+    .nav-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0.85rem 1.5rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      width: 100%;
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 0.6rem;
-      font-weight: 700;
-      font-size: 1.05rem;
+      gap: 0.55rem;
+      font-weight: 800;
+      font-size: 1.15rem;
       color: #fff;
       text-decoration: none;
-      letter-spacing: -0.02em;
+      letter-spacing: -0.03em;
     }
 
     .brand-tag {
       font-family: var(--font-mono);
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       font-weight: 600;
       background: rgba(59, 130, 246, 0.15);
       color: #60a5fa;
       border: 1px solid rgba(59, 130, 246, 0.3);
-      padding: 0.15rem 0.45rem;
-      border-radius: 4px;
+      padding: 0.15rem 0.5rem;
+      border-radius: 9999px;
     }
 
-    .nav-links {
+    /* Desktop Navigation Links */
+    .desktop-nav {
       display: flex;
       gap: 1.3rem;
       align-items: center;
     }
 
-    .nav-links a {
+    .desktop-nav a {
       color: var(--text-muted);
       text-decoration: none;
       font-size: 0.88rem;
@@ -106,58 +114,221 @@
       transition: color 0.15s;
     }
 
-    .nav-links a:hover { color: #fff; }
+    .desktop-nav a:hover {
+      color: #fff;
+    }
 
-    .nav-btn-typo {
-      background: rgba(59, 130, 246, 0.15);
-      border: 1px solid rgba(59, 130, 246, 0.35);
-      color: #60a5fa !important;
-      padding: 0.35rem 0.8rem;
-      border-radius: 6px;
-      font-weight: 600;
-      font-size: 0.82rem !important;
-      display: flex;
+    .nav-link-typo {
+      display: inline-flex;
       align-items: center;
       gap: 0.35rem;
-      transition: all 0.2s;
+      color: #93c5fd !important;
+      font-weight: 600;
+      transition: color 0.15s;
     }
 
-    .nav-btn-typo:hover {
-      background: rgba(59, 130, 246, 0.3);
-      color: #fff !important;
-      border-color: #3b82f6;
+    .nav-link-typo:hover {
+      color: #60a5fa !important;
     }
 
-    .nav-btn {
+    .nav-divider {
+      width: 1px;
+      height: 18px;
+      background: rgba(255, 255, 255, 0.12);
+      margin: 0 0.2rem;
+    }
+
+    .nav-btn-source {
       background: rgba(255, 255, 255, 0.06);
       border: 1px solid var(--card-border);
       color: #fff !important;
-      padding: 0.4rem 0.9rem;
+      padding: 0.42rem 0.9rem;
       border-radius: 6px;
-      display: flex;
+      display: inline-flex;
       align-items: center;
-      gap: 0.4rem;
+      gap: 0.45rem;
       font-size: 0.82rem !important;
+      font-weight: 600;
+      text-decoration: none;
       transition: all 0.2s;
     }
 
-    .nav-btn:hover {
-      background: rgba(255, 255, 255, 0.1);
-      border-color: rgba(255, 255, 255, 0.2);
+    .nav-btn-source:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.25);
+      transform: translateY(-1px);
     }
 
-    .nav-top {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .mobile-source {
+    /* Mobile Nav Controls & Animated Hamburger */
+    .mobile-nav-actions {
       display: none;
     }
 
-    .desktop-source {
-      display: inline-flex;
+    .mobile-toggle-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      padding: 0;
+      transition: all 0.2s;
+    }
+
+    .mobile-toggle-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .mobile-toggle-btn .bar {
+      width: 18px;
+      height: 2px;
+      background: #f3f4f6;
+      border-radius: 2px;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .mobile-toggle-btn.active .bar-1 {
+      transform: translateY(7px) rotate(45deg);
+    }
+    .mobile-toggle-btn.active .bar-2 {
+      opacity: 0;
+      transform: scaleX(0);
+    }
+    .mobile-toggle-btn.active .bar-3 {
+      transform: translateY(-7px) rotate(-45deg);
+    }
+
+    /* Mobile Drawer */
+    .mobile-drawer {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      background: rgba(12, 15, 24, 0.98);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-top: 1px solid transparent;
+      transition: max-height 0.32s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease, border-color 0.2s;
+    }
+
+    nav.menu-open .mobile-drawer {
+      max-height: 520px;
+      opacity: 1;
+      border-color: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+    }
+
+    .mobile-drawer-content {
+      padding: 0.85rem 1.25rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+
+    .mobile-drawer-link {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      padding: 0.7rem 0.85rem;
+      border-radius: 8px;
+      text-decoration: none;
+      color: #e2e8f0;
+      transition: background 0.15s, transform 0.15s;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .mobile-drawer-link:hover, .mobile-drawer-link:active {
+      background: rgba(255, 255, 255, 0.07);
+      border-color: rgba(255, 255, 255, 0.12);
+      transform: translateX(2px);
+    }
+
+    .mobile-link-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #94a3b8;
+      flex-shrink: 0;
+    }
+
+    .mobile-link-icon.typo-icon {
+      background: rgba(59, 130, 246, 0.15);
+      border-color: rgba(59, 130, 246, 0.3);
+      color: #60a5fa;
+    }
+
+    .mobile-link-text {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .mobile-link-text .link-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .mobile-link-text .link-desc {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 0.1rem;
+    }
+
+    .mobile-badge-new {
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.28);
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+    }
+
+    .mobile-drawer-footer {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-top: 0.65rem;
+      padding-top: 0.85rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .mobile-action-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      padding: 0.65rem 0.8rem;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+
+    .mobile-action-btn.btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: #e2e8f0;
+    }
+
+    .mobile-action-btn.btn-primary {
+      background: #2563eb;
+      border: 1px solid #3b82f6;
+      color: #fff;
     }
 
     /* Container */
@@ -958,48 +1129,23 @@
        MOBILE RESPONSIVE ADAPTATIONS (<= 768px)
        ========================================================================== */
     @media (max-width: 768px) {
-      nav {
-        flex-direction: column;
-        align-items: stretch;
-        padding: 0.65rem 1rem;
-        gap: 0.55rem;
-      }
-
-      .nav-top {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        width: 100%;
-      }
-
-      .mobile-source {
-        display: inline-flex;
-        padding: 0.32rem 0.75rem;
-        font-size: 0.78rem !important;
-      }
-
-      .desktop-source {
+      .desktop-nav {
         display: none !important;
       }
 
-      .nav-links {
-        display: flex;
-        overflow-x: auto;
-        white-space: nowrap;
-        gap: 0.5rem;
-        padding-bottom: 2px;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
+      .mobile-nav-actions {
+        display: flex !important;
+        align-items: center;
+        gap: 0.55rem;
       }
-      .nav-links::-webkit-scrollbar { display: none; }
 
-      .nav-links a {
-        font-size: 0.78rem;
-        padding: 0.35rem 0.65rem;
-        background: rgba(255, 255, 255, 0.04);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 6px;
-        flex-shrink: 0;
+      .nav-container {
+        padding: 0.65rem 1rem;
+      }
+
+      .mobile-source-btn {
+        padding: 0.35rem 0.75rem;
+        font-size: 0.78rem !important;
       }
 
       .container {
@@ -1178,28 +1324,97 @@
 
   <!-- Top Sticky Navigation -->
   <nav>
-    <div class="nav-top">
+    <div class="nav-container">
       <a href="#" class="brand">
         <span>MOS</span>
         <span class="brand-tag">v1.0</span>
       </a>
-      <a href="https://github.com/soundarrajan-a/mos" target="_blank" class="nav-btn mobile-source">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
-        Source
-      </a>
+
+      <!-- Desktop Links (Visible > 768px) -->
+      <div class="desktop-nav">
+        <a href="#playground">Playground</a>
+        <a href="#typography" class="nav-link-typo">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg>
+          Text FX
+        </a>
+        <a href="#presets">28 Presets</a>
+        <a href="#docs">Docs</a>
+        <div class="nav-divider"></div>
+        <a href="https://github.com/soundarrajan-a/mos" target="_blank" class="nav-btn-source">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          Source
+        </a>
+      </div>
+
+      <!-- Mobile Actions (Single Row: Source + Animated Hamburger) -->
+      <div class="mobile-nav-actions">
+        <a href="https://github.com/soundarrajan-a/mos" target="_blank" class="nav-btn-source mobile-source-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          Source
+        </a>
+        <button id="mobileMenuBtn" class="mobile-toggle-btn" aria-label="Toggle navigation menu" onclick="toggleMobileMenu()">
+          <span class="bar bar-1"></span>
+          <span class="bar bar-2"></span>
+          <span class="bar bar-3"></span>
+        </button>
+      </div>
     </div>
-    <div class="nav-links">
-      <a href="#playground">Playground</a>
-      <a href="#typography" class="nav-btn-typo">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg>
-        Text FX
-      </a>
-      <a href="#presets">28 Presets</a>
-      <a href="#docs">Docs</a>
-      <a href="https://github.com/soundarrajan-a/mos" target="_blank" class="nav-btn desktop-source">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
-        Source
-      </a>
+
+    <!-- Mobile Slide-Down Drawer Menu -->
+    <div id="mobileMenuDrawer" class="mobile-drawer">
+      <div class="mobile-drawer-content">
+        <a href="#playground" class="mobile-drawer-link" onclick="closeMobileMenu()">
+          <div class="mobile-link-icon">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          </div>
+          <div class="mobile-link-text">
+            <span class="link-title">Playground</span>
+            <span class="link-desc">Test all 32 animations live without scroll</span>
+          </div>
+        </a>
+
+        <a href="#typography" class="mobile-drawer-link" onclick="closeMobileMenu()">
+          <div class="mobile-link-icon typo-icon">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg>
+          </div>
+          <div class="mobile-link-text">
+            <span class="link-title">Text Animations</span>
+            <span class="link-desc">4 kinetic typography reveal effects</span>
+          </div>
+          <span class="mobile-badge-new">NEW</span>
+        </a>
+
+        <a href="#presets" class="mobile-drawer-link" onclick="closeMobileMenu()">
+          <div class="mobile-link-icon">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          </div>
+          <div class="mobile-link-text">
+            <span class="link-title">28 Presets Catalog</span>
+            <span class="link-desc">Fades, flips, 3D glides & shape wipes</span>
+          </div>
+        </a>
+
+        <a href="#docs" class="mobile-drawer-link" onclick="closeMobileMenu()">
+          <div class="mobile-link-icon">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          </div>
+          <div class="mobile-link-text">
+            <span class="link-title">Documentation</span>
+            <span class="link-desc">CDN install, attributes & API options</span>
+          </div>
+        </a>
+
+        <div class="mobile-drawer-footer">
+          <a href="mos.css" download="mos.css" class="mobile-action-btn btn-secondary">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+            Download CSS
+          </a>
+          <a href="https://github.com/soundarrajan-a/mos" target="_blank" class="mobile-action-btn btn-primary">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+            GitHub Repo
+          </a>
+        </div>
+      </div>
     </div>
   </nav>
 
@@ -2128,6 +2343,38 @@ MOS.init({
         }
       });
     }
+
+    // Mobile Drawer Navigation Controls
+    function toggleMobileMenu() {
+      const nav = document.querySelector('nav');
+      const btn = document.getElementById('mobileMenuBtn');
+      const isOpen = nav.classList.toggle('menu-open');
+      btn.classList.toggle('active', isOpen);
+      btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    }
+
+    function closeMobileMenu() {
+      const nav = document.querySelector('nav');
+      const btn = document.getElementById('mobileMenuBtn');
+      if (nav) nav.classList.remove('menu-open');
+      if (btn) {
+        btn.classList.remove('active');
+        btn.setAttribute('aria-expanded', 'false');
+      }
+    }
+
+    // Close on click outside
+    document.addEventListener('click', (e) => {
+      const nav = document.querySelector('nav');
+      if (nav && nav.classList.contains('menu-open') && !nav.contains(e.target)) {
+        closeMobileMenu();
+      }
+    });
+
+    // Close on ESC key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeMobileMenu();
+    });
 
     // Toast and Copy Helpers
     function showToast(text) {
