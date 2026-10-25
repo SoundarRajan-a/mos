@@ -71,23 +71,23 @@
 [data-mos="diagonal-wipe"] {
   will-change: -webkit-clip-path, clip-path;
 }
-[data-mos="wipe-up"]    { opacity: 1; -webkit-clip-path: inset(99.9% 0 0 0); clip-path: inset(99.9% 0 0 0); }
-[data-mos="wipe-up"].mos-animate { -webkit-clip-path: inset(0 0 0 0) !important; clip-path: inset(0 0 0 0) !important; }
+[data-mos="wipe-up"]    { opacity: 1; -webkit-clip-path: inset(99.9% 0% 0% 0%); clip-path: inset(99.9% 0% 0% 0%); }
+[data-mos="wipe-up"].mos-animate { -webkit-clip-path: inset(0% 0% 0% 0%) !important; clip-path: inset(0% 0% 0% 0%) !important; }
 
-[data-mos="wipe-down"]  { opacity: 1; -webkit-clip-path: inset(0 0 99.9% 0); clip-path: inset(0 0 99.9% 0); }
-[data-mos="wipe-down"].mos-animate { -webkit-clip-path: inset(0 0 0 0) !important; clip-path: inset(0 0 0 0) !important; }
+[data-mos="wipe-down"]  { opacity: 1; -webkit-clip-path: inset(0% 0% 99.9% 0%); clip-path: inset(0% 0% 99.9% 0%); }
+[data-mos="wipe-down"].mos-animate { -webkit-clip-path: inset(0% 0% 0% 0%) !important; clip-path: inset(0% 0% 0% 0%) !important; }
 
-[data-mos="wipe-right"] { opacity: 1; -webkit-clip-path: inset(0 99.9% 0 0); clip-path: inset(0 99.9% 0 0); }
-[data-mos="wipe-right"].mos-animate { -webkit-clip-path: inset(0 0 0 0) !important; clip-path: inset(0 0 0 0) !important; }
+[data-mos="wipe-right"] { opacity: 1; -webkit-clip-path: inset(0% 99.9% 0% 0%); clip-path: inset(0% 99.9% 0% 0%); }
+[data-mos="wipe-right"].mos-animate { -webkit-clip-path: inset(0% 0% 0% 0%) !important; clip-path: inset(0% 0% 0% 0%) !important; }
 
-[data-mos="wipe-left"]  { opacity: 1; -webkit-clip-path: inset(0 0 0 99.9%); clip-path: inset(0 0 0 99.9%); }
-[data-mos="wipe-left"].mos-animate { -webkit-clip-path: inset(0 0 0 0) !important; clip-path: inset(0 0 0 0) !important; }
+[data-mos="wipe-left"]  { opacity: 1; -webkit-clip-path: inset(0% 0% 0% 99.9%); clip-path: inset(0% 0% 0% 99.9%); }
+[data-mos="wipe-left"].mos-animate { -webkit-clip-path: inset(0% 0% 0% 0%) !important; clip-path: inset(0% 0% 0% 0%) !important; }
 
 [data-mos="circle-expand"] { opacity: 1; -webkit-clip-path: circle(0.1% at 50% 50%); clip-path: circle(0.1% at 50% 50%); }
 [data-mos="circle-expand"].mos-animate { -webkit-clip-path: circle(140% at 50% 50%) !important; clip-path: circle(140% at 50% 50%) !important; }
 
-[data-mos="diagonal-wipe"] { opacity: 1; -webkit-clip-path: polygon(0 0, 0 0, 0 100%, 0 100%); clip-path: polygon(0 0, 0 0, 0 100%, 0 100%); }
-[data-mos="diagonal-wipe"].mos-animate { -webkit-clip-path: polygon(0 0, 140% 0, 100% 140%, 0 100%) !important; clip-path: polygon(0 0, 140% 0, 100% 140%, 0 100%) !important; }
+[data-mos="diagonal-wipe"] { opacity: 1; -webkit-clip-path: polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%); clip-path: polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%); }
+[data-mos="diagonal-wipe"].mos-animate { -webkit-clip-path: polygon(0% 0%, 140% 0%, 100% 140%, 0% 100%) !important; clip-path: polygon(0% 0%, 140% 0%, 100% 140%, 0% 100%) !important; }
 
 /* ==========================================================================
    4. DIRECTIONAL SPRINGS & SCALES (8 Types)
@@ -112,23 +112,31 @@
 
 /* 1. Sliding Text Reveal (Masked Baseline Glide) */
 [data-mos="text-slide-up"] {
+  opacity: 1;
   transform: translateY(115%);
-  -webkit-clip-path: inset(0 0 99.9% 0);
-  clip-path: inset(0 0 99.9% 0);
+  -webkit-clip-path: inset(0% 0% 99.9% 0%);
+  clip-path: inset(0% 0% 99.9% 0%);
   --mos-ease: cubic-bezier(0.16, 1, 0.3, 1);
 }
 [data-mos="text-slide-up"].mos-animate {
+  opacity: 1 !important;
   transform: translateY(0) !important;
-  -webkit-clip-path: inset(0 0 0 0) !important;
-  clip-path: inset(0 0 0 0) !important;
+  -webkit-clip-path: inset(0% 0% 0% 0%) !important;
+  clip-path: inset(0% 0% 0% 0%) !important;
 }
 
 /* 2. Stretch & Snap (Kinetic Elastic Recoil) */
 [data-mos="text-stretch-snap"] {
+  opacity: 0.05;
   transform: scaleY(2.2) scaleX(0.7) translateY(35px);
   transform-origin: bottom center;
   filter: blur(3px);
   --mos-ease: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+[data-mos="text-stretch-snap"].mos-animate {
+  opacity: 1 !important;
+  transform: none !important;
+  filter: none !important;
 }
 
 /* 3. Blur Text Scroller (Optical Bokeh & Tracking Expansion) */

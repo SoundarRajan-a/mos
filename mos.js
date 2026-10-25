@@ -65,7 +65,7 @@
         observerInstance.disconnect();
       }
 
-      const elements = document.querySelectorAll('[data-mos]:not(#liveTarget)');
+      const elements = document.querySelectorAll('[data-mos]:not(#liveTarget):not(.typo-headline)');
 
       // Pre-apply custom durations & delays once to eliminate scroll-time style recalcs
       elements.forEach(el => {
@@ -87,6 +87,13 @@
           const el = entry.target;
 
           if (entry.isIntersecting) {
+            const duration = el.getAttribute('data-mos-duration');
+            if (duration) {
+              const dur = (!duration.endsWith('s') && !duration.endsWith('ms')) ? `${duration}ms` : duration;
+              el.style.setProperty('--mos-duration', dur);
+              el.style.transitionDuration = dur;
+            }
+            el.style.transition = '';
             el.classList.add('mos-animate');
 
             if (this.options.once) {
@@ -96,9 +103,6 @@
             // TWO-WAY SCROLL: Instant off-screen reset (zero GPU compositing load while off-screen)
             el.style.transition = 'none';
             el.classList.remove('mos-animate');
-            requestAnimationFrame(() => {
-              el.style.transition = '';
-            });
           }
         });
       }, {
@@ -112,7 +116,7 @@
     refresh() {
       this.prepareSplitText();
       if (observerInstance) {
-        const elements = document.querySelectorAll('[data-mos]:not(#liveTarget)');
+        const elements = document.querySelectorAll('[data-mos]:not(#liveTarget):not(.typo-headline)');
         elements.forEach(el => observerInstance.observe(el));
       }
     }

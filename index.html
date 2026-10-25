@@ -962,10 +962,28 @@
       transition: border-color 0.2s, box-shadow 0.2s;
     }
 
+    .anim-card::after {
+      content: '↻ Click to replay';
+      position: absolute;
+      bottom: 0.75rem;
+      right: 1rem;
+      font-size: 0.68rem;
+      color: #64748b;
+      opacity: 0;
+      transition: opacity 0.2s, transform 0.2s;
+      transform: translateY(2px);
+      pointer-events: none;
+      font-family: var(--font-mono);
+    }
+
     @media (hover: hover) {
       .anim-card:hover {
         border-color: rgba(255, 255, 255, 0.22);
         box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45);
+      }
+      .anim-card:hover::after {
+        opacity: 1;
+        transform: translateY(0);
       }
     }
 
@@ -1510,7 +1528,7 @@
         <div class="studio-body">
           <!-- Stage Area -->
           <div class="stage">
-            <div id="liveTarget" class="preview-box mos-animate" data-mos="blur-up">
+            <div id="liveTarget" class="preview-box mos-animate" data-mos="blur-up" onclick="triggerReplay()" style="cursor: pointer;" title="Click box to replay preview animation">
               <div class="preview-icon">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
               </div>
@@ -2396,6 +2414,40 @@ MOS.init({
     // Close on ESC key
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') closeMobileMenu();
+    });
+
+    // Replay animation on click for any catalog card
+    function replayCard(card) {
+      const durAttr = card.getAttribute('data-mos-duration');
+      const dur = durAttr ? (parseFloat(durAttr) > 10 ? `${parseFloat(durAttr) / 1000}s` : `${durAttr}s`) : '1.8s';
+
+      card.classList.remove('mos-animate');
+      card.style.transition = 'none';
+      void card.offsetWidth; // Force layout reflow
+
+      requestAnimationFrame(() => {
+        card.style.transition = '';
+        card.style.transitionDuration = dur;
+        card.style.setProperty('--mos-duration', dur);
+        requestAnimationFrame(() => {
+          card.classList.add('mos-animate');
+        });
+      });
+    }
+
+    // Attach click replay to all cards in the catalog
+    document.addEventListener('DOMContentLoaded', () => {
+      const grid = document.getElementById('catalogGrid');
+      if (grid) {
+        grid.addEventListener('click', (e) => {
+          if (e.target.closest('.card-copy')) return; // Allow snippet copy button
+          const card = e.target.closest('.anim-card');
+          if (card) {
+            replayCard(card);
+            showToast(`Replaying: ${card.getAttribute('data-mos')}`);
+          }
+        });
+      }
     });
 
     // Toast and Copy Helpers
