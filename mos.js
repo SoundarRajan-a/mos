@@ -21,7 +21,7 @@
 
   const MOS = {
     options: {
-      rootMargin: '-50px 0px -50px 0px',
+      rootMargin: '0px 0px -20px 0px',
       threshold: 0,
       once: false
     },
@@ -67,36 +67,38 @@
 
       const elements = document.querySelectorAll('[data-mos]:not(#liveTarget)');
 
+      // Pre-apply custom durations & delays once to eliminate scroll-time style recalcs
+      elements.forEach(el => {
+        const delay = el.getAttribute('data-mos-delay');
+        const duration = el.getAttribute('data-mos-duration');
+        if (delay) {
+          const d = (!delay.endsWith('s') && !delay.endsWith('ms')) ? `${delay}ms` : delay;
+          el.style.transitionDelay = d;
+        }
+        if (duration) {
+          const dur = (!duration.endsWith('s') && !duration.endsWith('ms')) ? `${duration}ms` : duration;
+          el.style.setProperty('--mos-duration', dur);
+          el.style.transitionDuration = dur;
+        }
+      });
+
       observerInstance = new IntersectionObserver((entries, obs) => {
         entries.forEach(entry => {
           const el = entry.target;
 
           if (entry.isIntersecting) {
-            let delay = el.getAttribute('data-mos-delay');
-            let duration = el.getAttribute('data-mos-duration');
-
-            if (delay) {
-              if (!delay.endsWith('s') && !delay.endsWith('ms')) delay += 'ms';
-              el.style.transitionDelay = delay;
-            }
-
-            if (duration) {
-              if (!duration.endsWith('s') && !duration.endsWith('ms')) duration += 'ms';
-              el.style.setProperty('--mos-duration', duration);
-              el.style.transitionDuration = duration;
-            }
-
             el.classList.add('mos-animate');
 
             if (this.options.once) {
               obs.unobserve(el);
             }
           } else if (!this.options.once) {
-            // TWO-WAY SCROLL:
-            // When scrolling away (element exits the viewport above or below),
-            // hide the element so it cleanly re-animates every time you scroll back!
-            el.style.transitionDelay = '0s';
+            // TWO-WAY SCROLL: Instant off-screen reset (zero GPU compositing load while off-screen)
+            el.style.transition = 'none';
             el.classList.remove('mos-animate');
+            requestAnimationFrame(() => {
+              el.style.transition = '';
+            });
           }
         });
       }, {

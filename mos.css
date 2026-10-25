@@ -6,17 +6,17 @@
  */
 
 /* ==========================================================================
-   GLOBAL MOTION BASE (Two-Way GPU Compositing)
+   GLOBAL MOTION BASE (High-Performance GPU Compositing)
    ========================================================================== */
 [data-mos] {
   opacity: 0;
-  transition-property: opacity, transform, filter, -webkit-clip-path, clip-path, letter-spacing, box-shadow;
-  transition-duration: 0.45s; /* Smooth, quick exit when scrolling away */
+  transition-property: opacity, transform, filter, -webkit-clip-path, clip-path;
+  transition-duration: 0.25s;
   transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: opacity, transform, clip-path;
+  will-change: opacity, transform;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
-  transform-style: preserve-3d;
+  transform: translateZ(0);
 }
 
 [data-mos].mos-animate {
@@ -24,35 +24,53 @@
   transform: none !important;
   filter: none !important;
   letter-spacing: normal !important;
-  transition-duration: var(--mos-duration, 1.8s); /* Slow, graceful reveal when entering */
+  transition-duration: var(--mos-duration, 1.8s);
   transition-timing-function: var(--mos-ease, cubic-bezier(0.16, 1, 0.3, 1));
 }
 
 /* ==========================================================================
-   1. MODERN LENS & BLUR PRESETS (6 Types)
+   1. MODERN LENS & BLUR PRESETS (Optimized GPU Radii)
    ========================================================================== */
-[data-mos="blur-up"]    { transform: translateY(30px); filter: blur(14px); }
-[data-mos="blur-down"]  { transform: translateY(-30px); filter: blur(14px); }
-[data-mos="blur-left"]  { transform: translateX(35px); filter: blur(14px); }
-[data-mos="blur-right"] { transform: translateX(-35px); filter: blur(14px); }
-[data-mos="blur-scale"] { transform: scale(0.88); filter: blur(16px); }
-[data-mos="lens-flare"] { transform: scale(1.12); filter: blur(14px) brightness(1.4); }
+[data-mos="blur-up"]    { transform: translateY(30px); filter: blur(8px); }
+[data-mos="blur-down"]  { transform: translateY(-30px); filter: blur(8px); }
+[data-mos="blur-left"]  { transform: translateX(35px); filter: blur(8px); }
+[data-mos="blur-right"] { transform: translateX(-35px); filter: blur(8px); }
+[data-mos="blur-scale"] { transform: scale(0.9); filter: blur(8px); }
+[data-mos="lens-flare"] { transform: scale(1.1); filter: blur(8px) brightness(1.25); }
 
 /* ==========================================================================
-   2. 3D SPATIAL & PERSPECTIVE PRESETS (8 Types)
+   2. 3D SPATIAL & PERSPECTIVE PRESETS (Isolated 3D Rendering Contexts)
    ========================================================================== */
-[data-mos="tilt-up"]    { transform: perspective(1000px) rotateX(20deg) translateY(30px); }
-[data-mos="tilt-down"]  { transform: perspective(1000px) rotateX(-20deg) translateY(-30px); }
-[data-mos="tilt-left"]  { transform: perspective(1000px) rotateY(-18deg) translateX(-30px); }
-[data-mos="tilt-right"] { transform: perspective(1000px) rotateY(18deg) translateX(30px); }
-[data-mos="flip-x"]     { transform: perspective(1000px) rotateX(75deg); }
-[data-mos="flip-y"]     { transform: perspective(1000px) rotateY(75deg); }
-[data-mos="skew-up"]    { transform: skewY(5deg) translateY(30px); }
-[data-mos="skew-down"]  { transform: skewY(-5deg) translateY(-30px); }
+[data-mos="tilt-up"],
+[data-mos="tilt-down"],
+[data-mos="tilt-left"],
+[data-mos="tilt-right"],
+[data-mos="flip-x"],
+[data-mos="flip-y"],
+[data-mos="text-glide"] {
+  transform-style: preserve-3d;
+}
+
+[data-mos="tilt-up"]    { transform: perspective(1000px) rotateX(18deg) translateY(30px); }
+[data-mos="tilt-down"]  { transform: perspective(1000px) rotateX(-18deg) translateY(-30px); }
+[data-mos="tilt-left"]  { transform: perspective(1000px) rotateY(-16deg) translateX(-30px); }
+[data-mos="tilt-right"] { transform: perspective(1000px) rotateY(16deg) translateX(30px); }
+[data-mos="flip-x"]     { transform: perspective(1000px) rotateX(70deg); }
+[data-mos="flip-y"]     { transform: perspective(1000px) rotateY(70deg); }
+[data-mos="skew-up"]    { transform: skewY(4deg) translateY(30px); }
+[data-mos="skew-down"]  { transform: skewY(-4deg) translateY(-30px); }
 
 /* ==========================================================================
-   3. ARCHITECTURAL SHAPE WIPES (6 Types - GPU Safe Area Geometry)
+   3. ARCHITECTURAL SHAPE WIPES (GPU Safe Area Geometry)
    ========================================================================== */
+[data-mos="wipe-up"],
+[data-mos="wipe-down"],
+[data-mos="wipe-right"],
+[data-mos="wipe-left"],
+[data-mos="circle-expand"],
+[data-mos="diagonal-wipe"] {
+  will-change: -webkit-clip-path, clip-path;
+}
 [data-mos="wipe-up"]    { opacity: 1; -webkit-clip-path: inset(99.9% 0 0 0); clip-path: inset(99.9% 0 0 0); }
 [data-mos="wipe-up"].mos-animate { -webkit-clip-path: inset(0 0 0 0) !important; clip-path: inset(0 0 0 0) !important; }
 
@@ -115,8 +133,8 @@
 
 /* 3. Blur Text Scroller (Optical Bokeh & Tracking Expansion) */
 [data-mos="text-blur-scroller"] {
-  filter: blur(18px);
-  letter-spacing: 0.16em;
+  filter: blur(8px);
+  letter-spacing: 0.12em;
   transform: translateY(20px) scale(0.96);
   opacity: 0;
   --mos-ease: cubic-bezier(0.16, 1, 0.3, 1);
@@ -125,7 +143,7 @@
 /* 4. Kinetic 3D Glide */
 [data-mos="text-glide"] {
   transform: perspective(800px) rotateX(45deg) translateY(45px);
-  filter: blur(8px);
+  filter: blur(5px);
   opacity: 0;
   --mos-ease: cubic-bezier(0.16, 1, 0.3, 1);
 }
