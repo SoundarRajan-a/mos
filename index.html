@@ -46,13 +46,13 @@
       max-width: 100vw;
     }
 
-    /* Fixed GPU-cached background layer: 0 repaints during scroll */
+    /* Fixed GPU-cached background layer: 0 repaints during scroll (Mild Ambience) */
     body::before {
       content: '';
       position: fixed;
       inset: 0;
       background-image: 
-        radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.08) 0%, transparent 60%),
+        radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.04) 0%, transparent 60%),
         linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
       background-size: 100% 100%, 48px 48px, 48px 48px;
@@ -723,13 +723,13 @@
     }
 
     .typo-card {
-      background: #111625;
-      border: 2px solid rgba(255, 255, 255, 0.12);
+      background: #101524;
+      border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 12px;
       padding: 2.2rem;
       position: relative;
       overflow: hidden;
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
       transition: border-color 0.2s, box-shadow 0.2s;
       content-visibility: auto;
       contain-intrinsic-size: 0 280px;
@@ -737,8 +737,8 @@
 
     @media (hover: hover) {
       .typo-card:hover {
-        border-color: rgba(56, 189, 248, 0.4);
-        box-shadow: 0 20px 50px rgba(56, 189, 248, 0.15);
+        border-color: rgba(255, 255, 255, 0.22);
+        box-shadow: 0 14px 38px rgba(0, 0, 0, 0.45);
       }
     }
 
@@ -949,21 +949,23 @@
     .anim-card {
       width: 100%;
       max-width: 480px;
-      background: #141b2c;
-      border: 3px solid #ffffff;
-      border-radius: 8px;
+      background: #101524;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 10px;
       padding: 1.8rem 2.2rem;
       position: relative;
       overflow: hidden;
-      box-shadow: 0 16px 45px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
       cursor: pointer;
       content-visibility: auto;
       contain-intrinsic-size: 0 240px;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
 
     @media (hover: hover) {
       .anim-card:hover {
-        box-shadow: 0 20px 50px rgba(59, 130, 246, 0.3), 0 0 0 1px #38bdf8;
+        border-color: rgba(255, 255, 255, 0.22);
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45);
       }
     }
 
@@ -997,7 +999,7 @@
       align-items: center;
       margin-bottom: 0.9rem;
       padding-bottom: 0.6rem;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
     }
 
     .card-label {
@@ -1010,18 +1012,19 @@
 
     .card-copy {
       font-size: 0.72rem;
-      color: #38bdf8;
-      background: rgba(56, 189, 248, 0.12);
-      border: 1px solid rgba(56, 189, 248, 0.25);
+      color: #93c5fd;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       padding: 0.2rem 0.55rem;
       border-radius: 4px;
       cursor: pointer;
       font-family: var(--font-mono);
-      transition: background 0.15s;
+      transition: all 0.15s;
     }
 
     .card-copy:hover {
-      background: rgba(56, 189, 248, 0.25);
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
       color: #fff;
     }
 
@@ -1295,7 +1298,8 @@
         max-width: 100% !important;
         margin: 0 !important;
         align-self: center !important;
-        border: 2.5px solid #ffffff;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
       }
 
       .code-editor {
