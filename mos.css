@@ -10,7 +10,7 @@
    ========================================================================== */
 [data-mos] {
   opacity: 0;
-  transition-property: opacity, transform, filter, -webkit-clip-path, clip-path;
+  transition-property: opacity, transform, filter, -webkit-clip-path, clip-path !important;
   transition-duration: 0.25s;
   transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
   will-change: opacity, transform;
@@ -24,6 +24,7 @@
   transform: none !important;
   filter: none !important;
   letter-spacing: normal !important;
+  transition-property: opacity, transform, filter, -webkit-clip-path, clip-path !important;
   transition-duration: var(--mos-duration, 1.8s);
   transition-timing-function: var(--mos-ease, cubic-bezier(0.16, 1, 0.3, 1));
 }

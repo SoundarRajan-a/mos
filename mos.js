@@ -93,7 +93,7 @@
               el.style.setProperty('--mos-duration', dur);
               el.style.transitionDuration = dur;
             }
-            el.style.transition = '';
+            el.style.removeProperty('transition');
             el.classList.add('mos-animate');
 
             if (this.options.once) {
@@ -101,7 +101,7 @@
             }
           } else if (!this.options.once) {
             // TWO-WAY SCROLL: Instant off-screen reset (zero GPU compositing load while off-screen)
-            el.style.transition = 'none';
+            el.style.setProperty('transition', 'none', 'important');
             el.classList.remove('mos-animate');
           }
         });

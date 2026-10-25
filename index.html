@@ -957,9 +957,6 @@
       overflow: hidden;
       box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
       cursor: pointer;
-      content-visibility: auto;
-      contain-intrinsic-size: 0 240px;
-      transition: border-color 0.2s, box-shadow 0.2s;
     }
 
     .anim-card::after {
@@ -2278,14 +2275,14 @@ MOS.init({
       const dur = parseFloat(document.getElementById('durInput').value) || 1.8;
 
       target.classList.remove('mos-animate');
-      target.style.transition = 'none';
+      target.style.setProperty('transition', 'none', 'important');
       target.setAttribute('data-mos', preset);
 
       // Force layout reflow
       void target.offsetWidth;
 
       requestAnimationFrame(() => {
-        target.style.transition = '';
+        target.style.removeProperty('transition');
         target.style.transitionDuration = `${dur}s`;
         target.style.setProperty('--mos-duration', `${dur}s`);
         requestAnimationFrame(() => {
@@ -2309,13 +2306,13 @@ MOS.init({
 
       // Reset animation state cleanly
       heading.classList.remove('mos-animate');
-      heading.style.transition = 'none';
+      heading.style.setProperty('transition', 'none', 'important');
       heading.setAttribute('data-mos', preset);
       void heading.offsetWidth;
 
       // Trigger slow, majestic animation
       requestAnimationFrame(() => {
-        heading.style.transition = '';
+        heading.style.removeProperty('transition');
         heading.style.transitionDuration = '1.8s';
         heading.style.setProperty('--mos-duration', '1.8s');
         requestAnimationFrame(() => {
@@ -2422,11 +2419,11 @@ MOS.init({
       const dur = durAttr ? (parseFloat(durAttr) > 10 ? `${parseFloat(durAttr) / 1000}s` : `${durAttr}s`) : '1.8s';
 
       card.classList.remove('mos-animate');
-      card.style.transition = 'none';
+      card.style.setProperty('transition', 'none', 'important');
       void card.offsetWidth; // Force layout reflow
 
       requestAnimationFrame(() => {
-        card.style.transition = '';
+        card.style.removeProperty('transition');
         card.style.transitionDuration = dur;
         card.style.setProperty('--mos-duration', dur);
         requestAnimationFrame(() => {
