@@ -1,0 +1,2152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MOS — Modern Viewport Motion Engine</title>
+  
+  <!-- Inter & JetBrains Mono Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Core Standalone MOS Library -->
+  <link rel="stylesheet" href="mos.css" />
+
+  <style>
+    /* ==========================================================================
+       MODERN DEVELOPER PLATFORM DESIGN
+       ========================================================================== */
+    :root {
+      color-scheme: dark;
+      --bg: #090a0f;
+      --card-bg: rgba(18, 20, 29, 0.65);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-hover: rgba(255, 255, 255, 0.16);
+      --accent: #3b82f6;
+      --text: #f3f4f6;
+      --text-muted: #8b949e;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html {
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+      max-width: 100vw;
+    }
+
+    body {
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.08) 0%, transparent 60%),
+        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 100% 100%, 48px 48px, 48px 48px;
+      color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      max-width: 100vw;
+    }
+
+    section, [id] {
+      scroll-margin-top: 100px;
+    }
+
+    /* Top Bar */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(9, 10, 15, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--card-border);
+      padding: 0.85rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: #fff;
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-tag {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 600;
+      background: rgba(59, 130, 246, 0.15);
+      color: #60a5fa;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.3rem;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
+      transition: color 0.15s;
+    }
+
+    .nav-links a:hover { color: #fff; }
+
+    .nav-btn-typo {
+      background: rgba(59, 130, 246, 0.15);
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      color: #60a5fa !important;
+      padding: 0.35rem 0.8rem;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.82rem !important;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: all 0.2s;
+    }
+
+    .nav-btn-typo:hover {
+      background: rgba(59, 130, 246, 0.3);
+      color: #fff !important;
+      border-color: #3b82f6;
+    }
+
+    .nav-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--card-border);
+      color: #fff !important;
+      padding: 0.4rem 0.9rem;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.82rem !important;
+      transition: all 0.2s;
+    }
+
+    .nav-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .nav-top {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .mobile-source {
+      display: none;
+    }
+
+    .desktop-source {
+      display: inline-flex;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      overflow-x: clip;
+    }
+
+    /* Hero */
+    .hero {
+      padding: 6.5rem 0 4rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .release-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--card-border);
+      padding: 0.35rem 0.9rem;
+      border-radius: 9999px;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+      transition: border-color 0.2s;
+    }
+
+    .release-badge:hover {
+      border-color: rgba(255, 255, 255, 0.18);
+    }
+
+    .release-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 10px #10b981;
+    }
+
+    h1 {
+      font-size: clamp(2.8rem, 6.5vw, 4.6rem);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1.08;
+      max-width: 820px;
+      margin: 0 auto 1.5rem;
+      color: #ffffff;
+    }
+
+    .hero-sub {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      max-width: 580px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.6;
+    }
+
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 3.5rem;
+    }
+
+    .btn-main {
+      background: #fff;
+      color: #000;
+      font-weight: 600;
+      font-size: 0.92rem;
+      padding: 0.75rem 1.4rem;
+      border-radius: 8px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s;
+    }
+
+    .btn-main:hover {
+      background: #e5e7eb;
+      transform: translateY(-1px);
+    }
+
+    .btn-outline {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--card-border);
+      color: var(--text);
+      font-weight: 500;
+      font-size: 0.92rem;
+      padding: 0.75rem 1.4rem;
+      border-radius: 8px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s;
+    }
+
+    .btn-outline:hover {
+      background: rgba(255, 255, 255, 0.07);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-download {
+      background: rgba(59, 130, 246, 0.12);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      color: #60a5fa;
+      font-size: 0.82rem;
+      font-weight: 600;
+      padding: 0.45rem 0.85rem;
+      border-radius: 6px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      transition: all 0.2s;
+    }
+
+    .btn-download:hover {
+      background: rgba(59, 130, 246, 0.25);
+      border-color: #3b82f6;
+      color: #fff;
+      transform: translateY(-1px);
+    }
+
+    /* Metrics Bar */
+    .metrics {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 2.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .metric-item { text-align: center; }
+
+    .metric-val {
+      font-weight: 700;
+      font-size: 1.3rem;
+      color: #fff;
+      letter-spacing: -0.02em;
+    }
+
+    .metric-lbl {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-top: 0.2rem;
+    }
+
+    /* ==========================================================================
+       INTERACTIVE LIVE STUDIO
+       ========================================================================== */
+    .studio-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      overflow: hidden;
+      margin-bottom: 6rem;
+    }
+
+    .studio-topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.85rem 1.5rem;
+      background: rgba(255, 255, 255, 0.02);
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .dots { display: flex; gap: 6px; }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .studio-title {
+      font-size: 0.8rem;
+      font-family: var(--font-mono);
+      color: var(--text-muted);
+    }
+
+    .studio-body {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      min-height: 380px;
+    }
+
+    @media (max-width: 860px) {
+      .studio-body { grid-template-columns: 1fr; }
+    }
+
+    .stage {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem;
+      background: radial-gradient(circle at center, rgba(59, 130, 246, 0.05) 0%, transparent 70%);
+      border-right: 1px solid var(--card-border);
+      position: relative;
+    }
+
+    .preview-box {
+      background: linear-gradient(145deg, #181d29, #10141e);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 14px;
+      padding: 2.2rem 2.8rem;
+      text-align: center;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
+      width: 100%;
+      max-width: 340px;
+    }
+
+    .preview-icon {
+      width: 44px;
+      height: 44px;
+      margin: 0 auto 1rem;
+      background: rgba(59, 130, 246, 0.12);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #60a5fa;
+    }
+
+    .controls-panel {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .control-group label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.45rem;
+    }
+
+    select, input[type="range"] {
+      width: 100%;
+      padding: 0.6rem 0.8rem;
+      background: #111624;
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      color: #fff;
+      font-size: 0.85rem;
+      outline: none;
+      color-scheme: dark;
+    }
+
+    select optgroup {
+      background-color: #1a2236;
+      color: #60a5fa;
+      font-weight: 700;
+      font-style: normal;
+      padding: 6px 8px;
+    }
+
+    select option {
+      background-color: #0c111d;
+      color: #f1f5f9;
+      padding: 6px 10px;
+    }
+
+    .replay-btn {
+      width: 100%;
+      background: #3b82f6;
+      color: #fff;
+      border: none;
+      padding: 0.75rem;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: background 0.15s;
+      margin-top: auto;
+    }
+
+    .replay-btn:hover { background: #2563eb; }
+
+    .snippet-preview {
+      background: #06070a;
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      padding: 0.65rem 0.85rem;
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      color: #93c5fd;
+      word-break: break-all;
+    }
+
+    /* ==========================================================================
+       DEDICATED KINETIC TYPOGRAPHY SECTION (ON-CLICK SEPARATE BUTTONS)
+       ========================================================================== */
+    .typo-section {
+      margin-bottom: 7rem;
+    }
+
+    .typo-master-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(59, 130, 246, 0.08);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      border-radius: 10px;
+      padding: 1rem 1.4rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .typo-master-text {
+      font-size: 0.88rem;
+      color: #93c5fd;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .typo-master-actions {
+      display: flex;
+      gap: 0.6rem;
+    }
+
+    .btn-master-play {
+      background: #3b82f6;
+      color: #fff;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: background 0.15s;
+    }
+    .btn-master-play:hover { background: #2563eb; }
+
+    .btn-master-reset {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--card-border);
+      color: #cbd5e1;
+      padding: 0.5rem 0.9rem;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-master-reset:hover { background: rgba(255, 255, 255, 0.12); color: #fff; }
+
+    .typo-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 2.2rem;
+    }
+
+    .typo-card {
+      background: #111625;
+      border: 2px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      padding: 2.2rem;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .typo-card:hover {
+      border-color: rgba(56, 189, 248, 0.4);
+      box-shadow: 0 20px 50px rgba(56, 189, 248, 0.15);
+    }
+
+    .typo-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.8rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .typo-label {
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #94a3b8;
+    }
+
+    .typo-badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+    }
+
+    .typo-stage {
+      min-height: 110px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at center, rgba(56, 189, 248, 0.04) 0%, transparent 70%);
+      border: 1px dashed rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 1.5rem 1rem;
+      margin-bottom: 1.4rem;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .typo-headline {
+      font-size: clamp(1.6rem, 3.8vw, 2.6rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+      text-align: center;
+      line-height: 1.15;
+    }
+
+    .typo-placeholder {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      color: #64748b;
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+
+    .typo-placeholder svg {
+      opacity: 0.6;
+    }
+
+    .typo-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .typo-code {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: #cbd5e1;
+      background: #080a10;
+      padding: 0.65rem 0.95rem;
+      border-radius: 6px;
+      border: 1px solid var(--card-border);
+      flex: 1;
+      min-width: 260px;
+    }
+
+    .typo-action-group {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .typo-btn-trigger {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      border: 1px solid #3b82f6;
+      color: #ffffff;
+      font-size: 0.82rem;
+      font-weight: 600;
+      padding: 0.65rem 1.1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+      transition: all 0.15s;
+    }
+
+    .typo-btn-trigger:hover {
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.5);
+    }
+
+    .typo-btn-hide {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: #94a3b8;
+      font-size: 0.8rem;
+      font-weight: 500;
+      padding: 0.65rem 0.85rem;
+      border-radius: 6px;
+      cursor: pointer;
+      display: none;
+      transition: all 0.15s;
+    }
+
+    .typo-btn-hide:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+
+    /* ==========================================================================
+       SECTION HEADERS & FILTER TABS
+       ========================================================================== */
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #fff;
+    }
+
+    .section-desc {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-top: 0.25rem;
+    }
+
+    .filter-tabs {
+      display: flex;
+      gap: 0.4rem;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 0.3rem;
+      border-radius: 8px;
+      border: 1px solid var(--card-border);
+      overflow-x: auto;
+      white-space: nowrap;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      max-width: 100%;
+    }
+
+    .filter-tabs::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      font-weight: 500;
+      padding: 0.4rem 0.8rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .tab-btn.active, .tab-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+    }
+
+    /* ==========================================================================
+       STAGGERED SHOWCASE (Two-Way Live Scroll: Animate In & Hide Out)
+       ========================================================================== */
+    .catalog-stream {
+      display: flex;
+      flex-direction: column;
+      gap: 6.5rem;
+      margin-bottom: 7rem;
+      padding: 1.5rem 0;
+      position: relative;
+      overflow-x: clip;
+    }
+
+    .anim-card {
+      width: 100%;
+      max-width: 480px;
+      background: #141b2c;
+      border: 3px solid #ffffff;
+      border-radius: 8px;
+      padding: 1.8rem 2.2rem;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 16px 45px rgba(0, 0, 0, 0.5);
+      cursor: pointer;
+    }
+
+    .anim-card:hover {
+      box-shadow: 0 20px 50px rgba(59, 130, 246, 0.3), 0 0 0 1px #38bdf8;
+    }
+
+    /* Staggered Alternating Alignment: Left then Right */
+    .anim-card:nth-child(odd) {
+      align-self: flex-start;
+      margin-left: 2rem;
+    }
+
+    .anim-card:nth-child(even) {
+      align-self: flex-end;
+      margin-right: 2rem;
+    }
+
+    @media (max-width: 860px) {
+      .anim-card:nth-child(odd),
+      .anim-card:nth-child(even) {
+        align-self: center !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        max-width: 100%;
+      }
+      .catalog-stream {
+        gap: 4.5rem;
+      }
+    }
+
+    .card-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.9rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .card-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #94a3b8;
+    }
+
+    .card-copy {
+      font-size: 0.72rem;
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      padding: 0.2rem 0.55rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: var(--font-mono);
+      transition: background 0.15s;
+    }
+
+    .card-copy:hover {
+      background: rgba(56, 189, 248, 0.25);
+      color: #fff;
+    }
+
+    .code-editor {
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      line-height: 1.7;
+      color: #e2e8f0;
+    }
+
+    .c-tag { color: #38bdf8; font-weight: 600; }
+    .c-attr { color: #60a5fa; }
+    .c-val { color: #f97316; font-weight: 500; }
+    .c-num { color: #fbbf24; }
+
+    /* Documentation Section */
+    .docs-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 2.5rem;
+      margin-bottom: 6rem;
+    }
+
+    .step-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .step-box h4 {
+      font-size: 0.95rem;
+      color: #fff;
+      font-weight: 600;
+      margin-bottom: 0.6rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .step-num {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #3b82f6;
+      color: #fff;
+      font-size: 0.72rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+    }
+
+    .code-snippet {
+      background: #06070a;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 0.9rem 1.1rem;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: #cbd5e1;
+      overflow-x: auto;
+      margin-top: 0.5rem;
+      position: relative;
+    }
+
+    .copy-icon-btn {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.72rem;
+      cursor: pointer;
+    }
+
+    .copy-icon-btn:hover { color: #fff; background: rgba(255, 255, 255, 0.12); }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--card-border);
+      padding: 3rem 0;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    footer a { color: #fff; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* Toast */
+    #toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #11141e;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+      font-size: 0.85rem;
+      font-weight: 500;
+      padding: 0.65rem 1.1rem;
+      border-radius: 8px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+      transform: translateY(80px);
+      opacity: 0;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    #toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* ==========================================================================
+       MOBILE RESPONSIVE ADAPTATIONS (<= 768px)
+       ========================================================================== */
+    @media (max-width: 768px) {
+      nav {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 0.65rem 1rem;
+        gap: 0.55rem;
+      }
+
+      .nav-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+      }
+
+      .mobile-source {
+        display: inline-flex;
+        padding: 0.32rem 0.75rem;
+        font-size: 0.78rem !important;
+      }
+
+      .desktop-source {
+        display: none !important;
+      }
+
+      .nav-links {
+        display: flex;
+        overflow-x: auto;
+        white-space: nowrap;
+        gap: 0.5rem;
+        padding-bottom: 2px;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+      .nav-links::-webkit-scrollbar { display: none; }
+
+      .nav-links a {
+        font-size: 0.78rem;
+        padding: 0.35rem 0.65rem;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 6px;
+        flex-shrink: 0;
+      }
+
+      .container {
+        padding: 0 1rem;
+      }
+
+      .hero {
+        padding: 3.5rem 0 2.5rem;
+      }
+
+      h1 {
+        font-size: clamp(2rem, 7vw, 2.5rem);
+        line-height: 1.15;
+      }
+
+      .hero-sub {
+        font-size: 0.95rem;
+        margin-bottom: 1.8rem;
+      }
+
+      .hero-actions {
+        flex-direction: column;
+        width: 100%;
+        gap: 0.75rem;
+      }
+
+      .hero-actions a {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .metrics {
+        flex-direction: column;
+        gap: 1.2rem;
+      }
+
+      .studio-card {
+        margin-bottom: 4rem;
+      }
+
+      .studio-body {
+        grid-template-columns: 1fr;
+      }
+
+      .stage {
+        padding: 1.8rem 1rem;
+        border-right: none;
+        border-bottom: 1px solid var(--card-border);
+      }
+
+      .preview-box {
+        padding: 1.6rem 1.2rem;
+        max-width: 100%;
+      }
+
+      .typo-section {
+        margin-bottom: 5rem;
+      }
+
+      .section-head {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.8rem;
+      }
+
+      .filter-tabs {
+        width: 100%;
+        min-width: 0;
+      }
+
+      .typo-master-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.8rem;
+      }
+
+      .typo-master-actions {
+        width: 100%;
+      }
+
+      .typo-master-actions button {
+        flex: 1;
+        justify-content: center;
+      }
+
+      .typo-card {
+        padding: 1.35rem 1.1rem;
+      }
+
+      .typo-stage {
+        padding: 1.2rem 0.8rem;
+        min-height: 90px;
+      }
+
+      .typo-headline {
+        font-size: 1.45rem !important;
+      }
+
+      .typo-bottom {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .typo-code {
+        min-width: 0;
+        width: 100%;
+        overflow-x: auto;
+        font-size: 0.72rem;
+        padding: 0.55rem 0.75rem;
+      }
+
+      .typo-action-group {
+        width: 100%;
+      }
+
+      .typo-btn-trigger, .typo-btn-hide {
+        flex: 1;
+        justify-content: center;
+      }
+
+      .catalog-stream {
+        gap: 3.5rem;
+        padding: 1rem 0;
+        margin-bottom: 5rem;
+      }
+
+      .anim-card {
+        padding: 1.35rem 1.15rem;
+        max-width: 100% !important;
+        margin: 0 !important;
+        align-self: center !important;
+        border: 2.5px solid #ffffff;
+      }
+
+      .code-editor {
+        font-size: 0.78rem;
+        word-break: break-all;
+      }
+
+      .docs-panel {
+        padding: 1.4rem 1.1rem;
+        margin-bottom: 4rem;
+      }
+
+      .step-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .step-box {
+        min-width: 0;
+        max-width: 100%;
+        overflow: hidden;
+      }
+
+      .code-snippet {
+        font-size: 0.75rem;
+        padding: 0.8rem 0.9rem;
+        max-width: 100%;
+        word-break: break-all;
+      }
+
+      footer {
+        padding: 2.2rem 1rem;
+        font-size: 0.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Toast Notification -->
+  <div id="toast">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+    <span id="toast-text">Copied to clipboard</span>
+  </div>
+
+  <!-- Top Sticky Navigation -->
+  <nav>
+    <div class="nav-top">
+      <a href="#" class="brand">
+        <span>MOS</span>
+        <span class="brand-tag">v1.0</span>
+      </a>
+      <a href="https://github.com/soundarrajan-a/mos" target="_blank" class="nav-btn mobile-source">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        Source
+      </a>
+    </div>
+    <div class="nav-links">
+      <a href="#playground">Playground</a>
+      <a href="#typography" class="nav-btn-typo">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg>
+        Text FX
+      </a>
+      <a href="#presets">28 Presets</a>
+      <a href="#docs">Docs</a>
+      <a href="https://github.com/soundarrajan-a/mos" target="_blank" class="nav-btn desktop-source">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        Source
+      </a>
+    </div>
+  </nav>
+
+  <div class="container">
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="release-badge">
+        <span class="release-dot"></span>
+        <span>Modern Viewport Motion Engine</span>
+      </div>
+      <h1>Ultra-fast viewport animations for the modern web.</h1>
+      <p class="hero-sub">
+        Zero dependencies. Hardware-accelerated two-way scroll triggers. Pure CSS physics and under 2KB minified.
+      </p>
+
+      <div class="hero-actions">
+        <a href="#typography" class="btn-main">
+          Explore Text Animations
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="https://github.com/soundarrajan-a/mos" target="_blank" class="btn-outline">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          View Source
+        </a>
+        <a href="mos.css" download="mos.css" class="btn-outline">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+          Download CSS
+        </a>
+        <a href="#playground" class="btn-outline">Interactive Playground</a>
+      </div>
+
+      <div class="metrics">
+        <div class="metric-item">
+          <div class="metric-val">1.8 KB</div>
+          <div class="metric-lbl">Bundle Size</div>
+        </div>
+        <div class="metric-item">
+          <div class="metric-val">120 FPS</div>
+          <div class="metric-lbl">GPU Accelerated</div>
+        </div>
+        <div class="metric-item">
+          <div class="metric-val">32 Presets</div>
+          <div class="metric-lbl">Curated Motion + Text FX</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         INTERACTIVE LIVE STUDIO (Test Any Animation Without Scrolling)
+         ====================================================================== -->
+    <section id="playground" style="margin-bottom: 5rem;">
+      <div class="section-head">
+        <div>
+          <div class="section-title">Interactive Studio</div>
+          <div class="section-desc">Preview any preset with slow, graceful physics to clearly inspect motion details.</div>
+        </div>
+      </div>
+
+      <div class="studio-card">
+        <div class="studio-topbar">
+          <div class="dots">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+          </div>
+          <div class="studio-title">mos-preview.studio</div>
+          <div style="width: 40px;"></div>
+        </div>
+
+        <div class="studio-body">
+          <!-- Stage Area -->
+          <div class="stage">
+            <div id="liveTarget" class="preview-box mos-animate" data-mos="blur-up">
+              <div class="preview-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              </div>
+              <h4 style="font-size: 1.1rem; color: #fff; margin-bottom: 0.3rem;" id="livePresetLabel">Blur Up</h4>
+              <p style="font-size: 0.82rem; color: var(--text-muted);" id="livePresetSub">Spring-driven focus reveal</p>
+            </div>
+          </div>
+
+          <!-- Controls Sidepanel -->
+          <div class="controls-panel">
+            <div class="control-group">
+              <label>Preset (32 Types)</label>
+              <select id="presetSelect" onchange="updateStudio(true)">
+                <optgroup label="Kinetic Typography FX">
+                  <option value="text-slide-up">text-slide-up (Sliding Text Reveal)</option>
+                  <option value="text-stretch-snap">text-stretch-snap (Stretch & Snap)</option>
+                  <option value="text-blur-scroller">text-blur-scroller (Blur Scroller)</option>
+                  <option value="text-glide">text-glide (Kinetic 3D Glide)</option>
+                </optgroup>
+                <optgroup label="Modern Lens & Blurs">
+                  <option value="blur-up" selected>blur-up</option>
+                  <option value="blur-down">blur-down</option>
+                  <option value="blur-left">blur-left</option>
+                  <option value="blur-right">blur-right</option>
+                  <option value="blur-scale">blur-scale</option>
+                  <option value="lens-flare">lens-flare</option>
+                </optgroup>
+                <optgroup label="3D Spatial & Tilts">
+                  <option value="tilt-up">tilt-up</option>
+                  <option value="tilt-down">tilt-down</option>
+                  <option value="tilt-left">tilt-left</option>
+                  <option value="tilt-right">tilt-right</option>
+                  <option value="flip-x">flip-x</option>
+                  <option value="flip-y">flip-y</option>
+                  <option value="skew-up">skew-up</option>
+                  <option value="skew-down">skew-down</option>
+                </optgroup>
+                <optgroup label="Shape Wipes">
+                  <option value="wipe-up">wipe-up</option>
+                  <option value="wipe-down">wipe-down</option>
+                  <option value="wipe-right">wipe-right</option>
+                  <option value="wipe-left">wipe-left</option>
+                  <option value="circle-expand">circle-expand</option>
+                  <option value="diagonal-wipe">diagonal-wipe</option>
+                </optgroup>
+                <optgroup label="Spring Dynamics & Scales">
+                  <option value="fade-up">fade-up</option>
+                  <option value="fade-down">fade-down</option>
+                  <option value="fade-left">fade-left</option>
+                  <option value="fade-right">fade-right</option>
+                  <option value="zoom-in">zoom-in</option>
+                  <option value="zoom-out">zoom-out</option>
+                  <option value="pop">pop</option>
+                  <option value="spin-in">spin-in</option>
+                </optgroup>
+              </select>
+            </div>
+
+            <div class="control-group">
+              <label>Duration: <span id="durVal" style="color: #fff;">1.8s (Slow Demo)</span></label>
+              <input type="range" id="durInput" min="0.6" max="3.5" step="0.1" value="1.8" oninput="updateStudio(false)" />
+            </div>
+
+            <div class="control-group">
+              <label>Generated Tag</label>
+              <div class="snippet-preview" id="snippetPreview">
+                &lt;div data-mos="blur-up" data-mos-duration="1800"&gt;
+              </div>
+            </div>
+
+            <button class="replay-btn" onclick="triggerReplay()">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+              Slow Motion Replay
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         DEDICATED KINETIC TYPOGRAPHY SECTION (ON-CLICK SEPARATE BUTTONS)
+         ====================================================================== -->
+    <section id="typography" class="typo-section">
+      <div class="section-head">
+        <div>
+          <div class="section-title">Kinetic Typography Engine</div>
+          <div class="section-desc">Click each button below to reveal the kinetic text animation on demand.</div>
+        </div>
+      </div>
+
+      <!-- Master Action Bar -->
+      <div class="typo-master-bar">
+        <div class="typo-master-text">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span>Text reveals only trigger when you click each button below.</span>
+        </div>
+        <div class="typo-master-actions">
+          <button class="btn-master-play" onclick="playAllTypo()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Play All 4 Text Animations
+          </button>
+          <button class="btn-master-reset" onclick="resetAllTypo()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+            Reset All
+          </button>
+        </div>
+      </div>
+
+      <div class="typo-grid">
+
+        <!-- TYPO 1: Sliding Text Reveal -->
+        <div class="typo-card" id="typoCard1">
+          <div class="typo-meta">
+            <span class="typo-label">Typography 01 / Sliding Text Reveal</span>
+            <span class="typo-badge">Masked Baseline Glide</span>
+          </div>
+          <div class="typo-stage">
+            <div id="typoPrompt1" class="typo-placeholder">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill="currentColor"/></svg>
+              Click button below to show text animation
+            </div>
+            <h2 id="typoHeading1" class="typo-headline" data-mos="text-slide-up" data-mos-duration="1800" style="display: none;">
+              CRAFTING NEXT-GEN MOTION
+            </h2>
+          </div>
+          <div class="typo-bottom">
+            <div class="typo-code">
+              &lt;h1 <span class="c-attr">data-mos</span>=<span class="c-val">"text-slide-up"</span> <span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span>&gt;Crafting Next-Gen Motion&lt;/h1&gt;
+            </div>
+            <div class="typo-action-group">
+              <button id="typoBtn1" class="typo-btn-trigger" onclick="toggleTypo(1, 'text-slide-up')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                Show Sliding Reveal
+              </button>
+              <button id="typoHideBtn1" class="typo-btn-hide" onclick="hideTypo(1)">
+                Hide
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- TYPO 2: Stretch & Snap -->
+        <div class="typo-card" id="typoCard2">
+          <div class="typo-meta">
+            <span class="typo-label">Typography 02 / Stretch &amp; Snap</span>
+            <span class="typo-badge">Elastic Recoil Snap</span>
+          </div>
+          <div class="typo-stage">
+            <div id="typoPrompt2" class="typo-placeholder">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill="currentColor"/></svg>
+              Click button below to show text animation
+            </div>
+            <h2 id="typoHeading2" class="typo-headline" data-mos="text-stretch-snap" data-mos-duration="1800" style="display: none; color: #f59e0b;">
+              ELASTIC MOMENTUM SNAP
+            </h2>
+          </div>
+          <div class="typo-bottom">
+            <div class="typo-code">
+              &lt;h1 <span class="c-attr">data-mos</span>=<span class="c-val">"text-stretch-snap"</span> <span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span>&gt;Elastic Momentum Snap&lt;/h1&gt;
+            </div>
+            <div class="typo-action-group">
+              <button id="typoBtn2" class="typo-btn-trigger" onclick="toggleTypo(2, 'text-stretch-snap')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                Show Stretch &amp; Snap
+              </button>
+              <button id="typoHideBtn2" class="typo-btn-hide" onclick="hideTypo(2)">
+                Hide
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- TYPO 3: Blur Text Scroller -->
+        <div class="typo-card" id="typoCard3">
+          <div class="typo-meta">
+            <span class="typo-label">Typography 03 / Blur Text Scroller</span>
+            <span class="typo-badge">Optical Bokeh Tracking</span>
+          </div>
+          <div class="typo-stage">
+            <div id="typoPrompt3" class="typo-placeholder">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill="currentColor"/></svg>
+              Click button below to show text animation
+            </div>
+            <h2 id="typoHeading3" class="typo-headline" data-mos="text-blur-scroller" data-mos-duration="1800" style="display: none; color: #38bdf8;">
+              CINEMATIC OPTICAL FOCUS
+            </h2>
+          </div>
+          <div class="typo-bottom">
+            <div class="typo-code">
+              &lt;h1 <span class="c-attr">data-mos</span>=<span class="c-val">"text-blur-scroller"</span> <span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span>&gt;Cinematic Optical Focus&lt;/h1&gt;
+            </div>
+            <div class="typo-action-group">
+              <button id="typoBtn3" class="typo-btn-trigger" onclick="toggleTypo(3, 'text-blur-scroller')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                Show Blur Scroller
+              </button>
+              <button id="typoHideBtn3" class="typo-btn-hide" onclick="hideTypo(3)">
+                Hide
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- TYPO 4: Kinetic 3D Glide -->
+        <div class="typo-card" id="typoCard4">
+          <div class="typo-meta">
+            <span class="typo-label">Typography 04 / Kinetic 3D Glide</span>
+            <span class="typo-badge">3D Perspective Fold</span>
+          </div>
+          <div class="typo-stage">
+            <div id="typoPrompt4" class="typo-placeholder">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill="currentColor"/></svg>
+              Click button below to show text animation
+            </div>
+            <h2 id="typoHeading4" class="typo-headline" data-mos="text-glide" data-mos-duration="1800" style="display: none; color: #c084fc;">
+              SPATIAL PERSPECTIVE GLIDE
+            </h2>
+          </div>
+          <div class="typo-bottom">
+            <div class="typo-code">
+              &lt;h1 <span class="c-attr">data-mos</span>=<span class="c-val">"text-glide"</span> <span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span>&gt;Spatial Perspective Glide&lt;/h1&gt;
+            </div>
+            <div class="typo-action-group">
+              <button id="typoBtn4" class="typo-btn-trigger" onclick="toggleTypo(4, 'text-glide')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                Show 3D Glide
+              </button>
+              <button id="typoHideBtn4" class="typo-btn-hide" onclick="hideTypo(4)">
+                Hide
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         28 PRESETS CATALOG WITH CATEGORY FILTER TABS
+         ====================================================================== -->
+    <section id="presets">
+      <div class="section-head">
+        <div>
+          <div class="section-title">Preset Motion Catalog</div>
+          <div class="section-desc">Scroll down to observe animations trigger, and scroll up to observe them hide.</div>
+        </div>
+
+        <div class="filter-tabs">
+          <button class="tab-btn active" onclick="filterCategory('all', this)">All (28)</button>
+          <button class="tab-btn" onclick="filterCategory('blur', this)">Lens Blurs</button>
+          <button class="tab-btn" onclick="filterCategory('3d', this)">3D Spatial</button>
+          <button class="tab-btn" onclick="filterCategory('wipe', this)">Shape Wipes</button>
+          <button class="tab-btn" onclick="filterCategory('spring', this)">Springs &amp; Scales</button>
+        </div>
+      </div>
+
+      <div class="catalog-stream" id="catalogGrid">
+        
+        <!-- BLURS (6) -->
+        <div class="anim-card" data-category="blur" data-mos="blur-up" data-mos-duration="1800">
+          <div class="card-meta">
+            <span class="card-label">01 / Blur Up</span>
+            <span class="card-copy" onclick="copyTag('data-mos=\x22blur-up\x22')">Copy</span>
+          </div>
+          <div class="code-editor">
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"blur-up"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;/div&gt;</span>
+          </div>
+        </div>
+
+        <div class="anim-card" data-category="blur" data-mos="blur-down" data-mos-duration="1800">
+          <div class="card-meta">
+            <span class="card-label">02 / Blur Down</span>
+            <span class="card-copy" onclick="copyTag('data-mos=\x22blur-down\x22')">Copy</span>
+          </div>
+          <div class="code-editor">
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"blur-down"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;/div&gt;</span>
+          </div>
+        </div>
+
+        <div class="anim-card" data-category="blur" data-mos="blur-left" data-mos-duration="1800">
+          <div class="card-meta">
+            <span class="card-label">03 / Blur Left</span>
+            <span class="card-copy" onclick="copyTag('data-mos=\x22blur-left\x22')">Copy</span>
+          </div>
+          <div class="code-editor">
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"blur-left"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;/div&gt;</span>
+          </div>
+        </div>
+
+        <div class="anim-card" data-category="blur" data-mos="blur-right" data-mos-duration="1800">
+          <div class="card-meta">
+            <span class="card-label">04 / Blur Right</span>
+            <span class="card-copy" onclick="copyTag('data-mos=\x22blur-right\x22')">Copy</span>
+          </div>
+          <div class="code-editor">
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"blur-right"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;/div&gt;</span>
+          </div>
+        </div>
+
+        <div class="anim-card" data-category="blur" data-mos="blur-scale" data-mos-duration="1800">
+          <div class="card-meta">
+            <span class="card-label">05 / Blur Scale</span>
+            <span class="card-copy" onclick="copyTag('data-mos=\x22blur-scale\x22')">Copy</span>
+          </div>
+          <div class="code-editor">
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"blur-scale"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;/div&gt;</span>
+          </div>
+        </div>
+
+        <div class="anim-card" data-category="blur" data-mos="lens-flare" data-mos-duration="1800">
+          <div class="card-meta">
+            <span class="card-label">06 / Lens Flare</span>
+            <span class="card-copy" onclick="copyTag('data-mos=\x22lens-flare\x22')">Copy</span>
+          </div>
+          <div class="code-editor">
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"lens-flare"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;/div&gt;</span>
+          </div>
+        </div>
+
+        <!-- 3D PERSPECTIVES (8) -->
+        <div class="anim-card" data-category="3d" data-mos="tilt-up" data-mos-duration="1800">
+          <div class="card-meta">
+            <span class="card-label">07 / Tilt Up</span>
+            <span class="card-copy" onclick="copyTag('data-mos=\x22tilt-up\x22')">Copy</span>
+          </div>
+          <div class="code-editor">
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"tilt-up"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;/div&gt;</span>
+          </div>
+        </div>
+
+        <div class="anim-card" data-category="3d" data-mos="tilt-down" data-mos-duration="1800">
+          <div class="card-meta">
+            <span class="card-label">08 / Tilt Down</span>
+            <span class="card-copy" onclick="copyTag('data-mos=\x22tilt-down\x22')">Copy</span>
+          </div>
+          <div class="code-editor">
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"tilt-down"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;/div&gt;</span>
+          </div>
+        </div>
+
+        <div class="anim-card" data-category="3d" data-mos="tilt-left" data-mos-duration="1800">
+          <div class="card-meta">
+            <span class="card-label">09 / Tilt Left</span>
+            <span class="card-copy" onclick="copyTag('data-mos=\x22tilt-left\x22')">Copy</span>
+          </div>
+          <div class="code-editor">
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"tilt-left"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;/div&gt;</span>
+          </div>
+        </div>
+
+        <div class="anim-card" data-category="3d" data-mos="tilt-right" data-mos-duration="1800">
+          <div class="card-meta">
+            <span class="card-label">10 / Tilt Right</span>
+            <span class="card-copy" onclick="copyTag('data-mos=\x22tilt-right\x22')">Copy</span>
+          </div>
+          <div class="code-editor">
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"tilt-right"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;/div&gt;</span>
+          </div>
+        </div>
+
+        <div class="anim-card" data-category="3d" data-mos="flip-x" data-mos-duration="1800">
+          <div class="card-meta">
+            <span class="card-label">11 / Flip X</span>
+            <span class="card-copy" onclick="copyTag('data-mos=\x22flip-x\x22')">Copy</span>
+          </div>
+          <div class="code-editor">
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"flip-x"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;/div&gt;</span>
+          </div>
+        </div>
+
+        <div class="anim-card" data-category="3d" data-mos="flip-y" data-mos-duration="1800">
+          <div class="card-meta">
+            <span class="card-label">12 / Flip Y</span>
+            <span class="card-copy" onclick="copyTag('data-mos=\x22flip-y\x22')">Copy</span>
+          </div>
+          <div class="code-editor">
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"flip-y"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;/div&gt;</span>
+          </div>
+        </div>
+
+        <div class="anim-card" data-category="3d" data-mos="skew-up" data-mos-duration="1800">
+          <div class="card-meta">
+            <span class="card-label">13 / Skew Up</span>
+            <span class="card-copy" onclick="copyTag('data-mos=\x22skew-up\x22')">Copy</span>
+          </div>
+          <div class="code-editor">
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"skew-up"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;/div&gt;</span>
+          </div>
+        </div>
+
+        <div class="anim-card" data-category="3d" data-mos="skew-down" data-mos-duration="1800">
+          <div class="card-meta">
+            <span class="card-label">14 / Skew Down</span>
+            <span class="card-copy" onclick="copyTag('data-mos=\x22skew-down\x22')">Copy</span>
+          </div>
+          <div class="code-editor">
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"skew-down"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;/div&gt;</span>
+          </div>
+        </div>
+
+        <!-- SHAPE WIPES (6) -->
+        <div class="anim-card" data-category="wipe" data-mos="wipe-up" data-mos-duration="3000">
+          <div class="card-meta">
+            <span class="card-label">15 / Architectural Wipe Up (3s Preview)</span>
+            <span class="card-copy" onclick="copyTag('data-mos=\x22wipe-up\x22 data-mos-duration=\x223000\x22')">Copy</span>
+          </div>
+          <div class="code-editor">
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"wipe-up"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"3000"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;/div&gt;</span>
+          </div>
+        </div>
+
+        <div class="anim-card" data-category="wipe" data-mos="wipe-down" data-mos-duration="3000">
+          <div class="card-meta">
+            <span class="card-label">16 / Wipe Down (3s Preview)</span>
+            <span class="card-copy" onclick="copyTag('data-mos=\x22wipe-down\x22 data-mos-duration=\x223000\x22')">Copy</span>
+          </div>
+          <div class="code-editor">
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"wipe-down"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"3000"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;/div&gt;</span>
+          </div>
+        </div>
+
+        <div class="anim-card" data-category="wipe" data-mos="wipe-right" data-mos-duration="3000">
+          <div class="card-meta">
+            <span class="card-label">17 / Wipe Right (3s Preview)</span>
+            <span class="card-copy" onclick="copyTag('data-mos=\x22wipe-right\x22 data-mos-duration=\x223000\x22')">Copy</span>
+          </div>
+          <div class="code-editor">
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"wipe-right"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"3000"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;/div&gt;</span>
+          </div>
+        </div>
+
+        <div class="anim-card" data-category="wipe" data-mos="wipe-left" data-mos-duration="3000">
+          <div class="card-meta">
+            <span class="card-label">18 / Wipe Left (3s Preview)</span>
+            <span class="card-copy" onclick="copyTag('data-mos=\x22wipe-left\x22 data-mos-duration=\x223000\x22')">Copy</span>
+          </div>
+          <div class="code-editor">
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"wipe-left"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"3000"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;/div&gt;</span>
+          </div>
+        </div>
+
+        <div class="anim-card" data-category="wipe" data-mos="circle-expand" data-mos-duration="3000">
+          <div class="card-meta">
+            <span class="card-label">19 / Radial Circle Expand (3s Preview)</span>
+            <span class="card-copy" onclick="copyTag('data-mos=\x22circle-expand\x22 data-mos-duration=\x223000\x22')">Copy</span>
+          </div>
+          <div class="code-editor">
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"circle-expand"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"3000"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;/div&gt;</span>
+          </div>
+        </div>
+
+        <div class="anim-card" data-category="wipe" data-mos="diagonal-wipe" data-mos-duration="3000">
+          <div class="card-meta">
+            <span class="card-label">20 / Diagonal Wipe (3s Preview)</span>
+            <span class="card-copy" onclick="copyTag('data-mos=\x22diagonal-wipe\x22 data-mos-duration=\x223000\x22')">Copy</span>
+          </div>
+          <div class="code-editor">
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"diagonal-wipe"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"3000"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;/div&gt;</span>
+          </div>
+        </div>
+
+        <!-- SPRINGS & SCALES (8) -->
+        <div class="anim-card" data-category="spring" data-mos="fade-up" data-mos-duration="1800">
+          <div class="card-meta">
+            <span class="card-label">21 / Spring Fade Up</span>
+            <span class="card-copy" onclick="copyTag('data-mos=\x22fade-up\x22')">Copy</span>
+          </div>
+          <div class="code-editor">
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"fade-up"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;/div&gt;</span>
+          </div>
+        </div>
+
+        <div class="anim-card" data-category="spring" data-mos="fade-down" data-mos-duration="1800">
+          <div class="card-meta">
+            <span class="card-label">22 / Spring Fade Down</span>
+            <span class="card-copy" onclick="copyTag('data-mos=\x22fade-down\x22')">Copy</span>
+          </div>
+          <div class="code-editor">
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"fade-down"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;/div&gt;</span>
+          </div>
+        </div>
+
+        <div class="anim-card" data-category="spring" data-mos="fade-left" data-mos-duration="1800">
+          <div class="card-meta">
+            <span class="card-label">23 / Spring Fade Left</span>
+            <span class="card-copy" onclick="copyTag('data-mos=\x22fade-left\x22')">Copy</span>
+          </div>
+          <div class="code-editor">
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"fade-left"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;/div&gt;</span>
+          </div>
+        </div>
+
+        <div class="anim-card" data-category="spring" data-mos="fade-right" data-mos-duration="1800">
+          <div class="card-meta">
+            <span class="card-label">24 / Spring Fade Right</span>
+            <span class="card-copy" onclick="copyTag('data-mos=\x22fade-right\x22')">Copy</span>
+          </div>
+          <div class="code-editor">
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"fade-right"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;/div&gt;</span>
+          </div>
+        </div>
+
+        <div class="anim-card" data-category="spring" data-mos="zoom-in" data-mos-duration="1800">
+          <div class="card-meta">
+            <span class="card-label">25 / Snappy Zoom In</span>
+            <span class="card-copy" onclick="copyTag('data-mos=\x22zoom-in\x22')">Copy</span>
+          </div>
+          <div class="code-editor">
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"zoom-in"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;/div&gt;</span>
+          </div>
+        </div>
+
+        <div class="anim-card" data-category="spring" data-mos="zoom-out" data-mos-duration="1800">
+          <div class="card-meta">
+            <span class="card-label">26 / Cinematic Zoom Out</span>
+            <span class="card-copy" onclick="copyTag('data-mos=\x22zoom-out\x22')">Copy</span>
+          </div>
+          <div class="code-editor">
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"zoom-out"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;/div&gt;</span>
+          </div>
+        </div>
+
+        <div class="anim-card" data-category="spring" data-mos="pop" data-mos-duration="1800">
+          <div class="card-meta">
+            <span class="card-label">27 / Tactile Pop</span>
+            <span class="card-copy" onclick="copyTag('data-mos=\x22pop\x22')">Copy</span>
+          </div>
+          <div class="code-editor">
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"pop"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;/div&gt;</span>
+          </div>
+        </div>
+
+        <div class="anim-card" data-category="spring" data-mos="spin-in" data-mos-duration="1800">
+          <div class="card-meta">
+            <span class="card-label">28 / Subtle Spin In</span>
+            <span class="card-copy" onclick="copyTag('data-mos=\x22spin-in\x22')">Copy</span>
+          </div>
+          <div class="code-editor">
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"spin-in"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;/div&gt;</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         QUICK START / DOCUMENTATION
+         ====================================================================== -->
+    <section id="docs" class="docs-panel">
+      <div class="section-title">Developer Quick Start</div>
+      <div class="section-desc">Drop into any project or host on GitHub Pages in under 60 seconds.</div>
+
+      <div class="step-grid">
+        <div class="step-box">
+          <h4><span class="step-num">1</span> Direct CDN Link or Download</h4>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">Paste the CDN link or download the file directly:</p>
+          <div style="display: flex; gap: 0.5rem; margin: 0.75rem 0 0.85rem; flex-wrap: wrap;">
+            <a href="mos.css" download="mos.css" class="btn-download">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+              Download mos.css
+            </a>
+            <a href="mos.js" download="mos.js" class="btn-download" style="background: rgba(255, 255, 255, 0.05); border-color: var(--card-border); color: #cbd5e1;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+              Download mos.js
+            </a>
+          </div>
+          <div class="code-snippet">
+            <button class="copy-icon-btn" onclick="copySnippet(this)">Copy</button>
+&lt;!-- In &lt;head&gt; --&gt;
+&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/soundarrajan-a/mos@main/mos.css"&gt;
+
+&lt;!-- Before &lt;/body&gt; --&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/soundarrajan-a/mos@main/mos.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+  MOS.init();
+&lt;/script&gt;
+          </div>
+        </div>
+
+        <div class="step-box">
+          <h4><span class="step-num">2</span> Add Attributes</h4>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">Attach <code>data-mos</code> to any element or headline you want to animate:</p>
+          <div class="code-snippet">
+            <button class="copy-icon-btn" onclick="copySnippet(this)">Copy</button>
+&lt;!-- Motion on element --&gt;
+&lt;div data-mos="blur-up" data-mos-duration="1800"&gt;
+  Card Content
+&lt;/div&gt;
+
+&lt;!-- Kinetic Typography --&gt;
+&lt;h1 data-mos="text-slide-up" data-mos-duration="1800"&gt;
+  Hero Headline
+&lt;/h1&gt;
+          </div>
+        </div>
+
+        <div class="step-box">
+          <h4><span class="step-num">3</span> Configure Options</h4>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">Optional configuration object:</p>
+          <div class="code-snippet">
+            <button class="copy-icon-btn" onclick="copySnippet(this)">Copy</button>
+MOS.init({
+  once: false,       // two-way: repeat when scrolling up &amp; down
+  rootMargin: "-50px 0px -50px 0px"
+});
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <p><strong>MOS (Modern Viewport Motion Engine)</strong> • MIT Licensed Open Source Project</p>
+    <p style="margin-top: 0.4rem;">Designed for developers who care about 120 FPS craft and typography.</p>
+    <p style="margin-top: 0.75rem;">
+      <a href="https://github.com/soundarrajan-a/mos" target="_blank" style="color: #60a5fa; display: inline-flex; align-items: center; gap: 0.45rem; font-weight: 500;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        View Source Code on GitHub
+      </a>
+    </p>
+  </footer>
+
+  <!-- Core Standalone Script -->
+  <script src="mos.js"></script>
+
+  <!-- Interactive Demo UI Scripts -->
+  <script>
+    // Interactive Studio Logic
+    function updateStudio(isPresetChange = false) {
+      const select = document.getElementById('presetSelect');
+      const durInput = document.getElementById('durInput');
+      const preset = select.value;
+      const wipePresets = ['wipe-up', 'wipe-down', 'wipe-right', 'wipe-left', 'circle-expand', 'diagonal-wipe'];
+
+      // When selecting any shape wipe animation, automatically set 3s for preview
+      if (isPresetChange && wipePresets.includes(preset)) {
+        durInput.value = '3.0';
+      }
+
+      const dur = durInput.value;
+      const target = document.getElementById('liveTarget');
+      const label = document.getElementById('livePresetLabel');
+      const snippet = document.getElementById('snippetPreview');
+
+      document.getElementById('durVal').textContent = `${dur}s (Slow Demo)`;
+      label.textContent = select.options[select.selectedIndex].text.split(' (')[0];
+
+      const durMs = Math.round(dur * 1000);
+      if (preset.startsWith('text-')) {
+        snippet.textContent = `<h1 data-mos="${preset}" data-mos-duration="${durMs}">`;
+      } else {
+        snippet.textContent = `<div data-mos="${preset}" data-mos-duration="${durMs}">`;
+      }
+
+      triggerReplay();
+    }
+
+    function triggerReplay() {
+      const target = document.getElementById('liveTarget');
+      const preset = document.getElementById('presetSelect').value;
+      const dur = parseFloat(document.getElementById('durInput').value) || 1.8;
+
+      target.classList.remove('mos-animate');
+      target.style.transition = 'none';
+      target.setAttribute('data-mos', preset);
+
+      // Force layout reflow
+      void target.offsetWidth;
+
+      requestAnimationFrame(() => {
+        target.style.transition = '';
+        target.style.transitionDuration = `${dur}s`;
+        target.style.setProperty('--mos-duration', `${dur}s`);
+        requestAnimationFrame(() => {
+          target.classList.add('mos-animate');
+        });
+      });
+    }
+
+    // ==========================================================================
+    // DEDICATED TYPOGRAPHY BUTTON HANDLERS (ON-CLICK ONLY SHOW TEXT)
+    // ==========================================================================
+    function toggleTypo(id, preset) {
+      const prompt = document.getElementById(`typoPrompt${id}`);
+      const heading = document.getElementById(`typoHeading${id}`);
+      const btn = document.getElementById(`typoBtn${id}`);
+      const hideBtn = document.getElementById(`typoHideBtn${id}`);
+
+      // Hide prompt and display headline
+      prompt.style.display = 'none';
+      heading.style.display = 'block';
+
+      // Reset animation state cleanly
+      heading.classList.remove('mos-animate');
+      heading.style.transition = 'none';
+      heading.setAttribute('data-mos', preset);
+      void heading.offsetWidth;
+
+      // Trigger slow, majestic animation
+      requestAnimationFrame(() => {
+        heading.style.transition = '';
+        heading.style.transitionDuration = '1.8s';
+        heading.style.setProperty('--mos-duration', '1.8s');
+        requestAnimationFrame(() => {
+          heading.classList.add('mos-animate');
+        });
+      });
+
+      // Update button state
+      btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg> Replay Animation`;
+      hideBtn.style.display = 'inline-flex';
+    }
+
+    function hideTypo(id) {
+      const prompt = document.getElementById(`typoPrompt${id}`);
+      const heading = document.getElementById(`typoHeading${id}`);
+      const btn = document.getElementById(`typoBtn${id}`);
+      const hideBtn = document.getElementById(`typoHideBtn${id}`);
+
+      heading.classList.remove('mos-animate');
+      heading.style.display = 'none';
+      prompt.style.display = 'flex';
+
+      const names = {
+        1: 'Show Sliding Reveal',
+        2: 'Show Stretch & Snap',
+        3: 'Show Blur Scroller',
+        4: 'Show 3D Glide'
+      };
+
+      btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg> ${names[id] || 'Show Animation'}`;
+      hideBtn.style.display = 'none';
+    }
+
+    function playAllTypo() {
+      const presets = {
+        1: 'text-slide-up',
+        2: 'text-stretch-snap',
+        3: 'text-blur-scroller',
+        4: 'text-glide'
+      };
+      [1, 2, 3, 4].forEach(id => {
+        toggleTypo(id, presets[id]);
+      });
+      showToast('Playing all 4 kinetic text animations');
+    }
+
+    function resetAllTypo() {
+      [1, 2, 3, 4].forEach(id => {
+        hideTypo(id);
+      });
+      showToast('All text animations reset');
+    }
+
+    // Category Filter for Presets
+    function filterCategory(cat, btn) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const cards = document.querySelectorAll('#catalogGrid .anim-card');
+      cards.forEach(card => {
+        if (cat === 'all' || card.getAttribute('data-category') === cat) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    // Toast and Copy Helpers
+    function showToast(text) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toast-text').textContent = text;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2200);
+    }
+
+    function copyTag(tag) {
+      navigator.clipboard.writeText(tag);
+      showToast(`Copied: ${tag}`);
+    }
+
+    function copySnippet(btn) {
+      const code = btn.parentElement.innerText.replace('Copy\n', '');
+      navigator.clipboard.writeText(code);
+      showToast('Snippet copied to clipboard');
+    }
+  </script>
+</body>
+</html>
