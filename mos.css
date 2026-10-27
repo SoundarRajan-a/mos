@@ -427,27 +427,163 @@
   width: 100%;
   overflow: hidden;
   position: relative;
-  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
-  -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  user-select: none;
+  padding: 0.6rem 0;
+  mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
 }
 
-.mos-ticker-track-left {
-  display: flex;
-  width: max-content;
+.mos-ticker-track-left,
+.ticker-track-left {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  width: max-content !important;
   animation: mosTickerLeft var(--mos-ticker-speed, 26s) linear infinite;
   will-change: transform;
 }
 
-.mos-ticker-track-right {
-  display: flex;
-  width: max-content;
+.mos-ticker-track-right,
+.ticker-track-right {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  width: max-content !important;
   animation: mosTickerRight var(--mos-ticker-speed, 26s) linear infinite;
   will-change: transform;
 }
 
 .mos-ticker-wrap:hover .mos-ticker-track-left,
-.mos-ticker-wrap:hover .mos-ticker-track-right {
+.mos-ticker-wrap:hover .ticker-track-left,
+.mos-ticker-wrap:hover .mos-ticker-track-right,
+.mos-ticker-wrap:hover .ticker-track-right {
   animation-play-state: paused;
+}
+
+.ticker-row {
+  display: inline-flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  flex-shrink: 0 !important;
+  align-items: center !important;
+  white-space: nowrap !important;
+  gap: 1.5rem;
+  padding-right: 1.5rem;
+  font-size: clamp(1.3rem, 3.2vw, 2.2rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+.ticker-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.2rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.ticker-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #3b82f6;
+  opacity: 0.85;
+  box-shadow: 0 0 10px #3b82f6;
+  flex-shrink: 0;
+}
+
+.ticker-item-solid {
+  color: inherit;
+}
+
+.ticker-item-accent {
+  color: #60a5fa;
+  text-shadow: 0 0 20px rgba(96, 165, 250, 0.4);
+}
+
+.ticker-item-outline {
+  color: transparent;
+  -webkit-text-stroke: 1.5px currentColor;
+  opacity: 0.7;
+  transition: -webkit-text-stroke 0.2s, color 0.2s;
+}
+
+.ticker-item:hover .ticker-item-outline {
+  -webkit-text-stroke: 1.5px #38bdf8;
+  color: rgba(56, 189, 248, 0.12);
+}
+
+/* ==========================================================================
+   7. EDITORIAL SCROLL SCRUB (PROGRESSIVE WORD ILLUMINATION)
+   ========================================================================== */
+.scrub-paragraph,
+[data-mos="scrub"] {
+  font-size: clamp(1.2rem, 2.5vw, 1.95rem);
+  font-weight: 700;
+  line-height: 1.55;
+  letter-spacing: -0.025em;
+  color: inherit;
+}
+
+.scrub-word {
+  display: inline-block;
+  margin-right: 0.28em;
+  opacity: 0.18;
+  filter: blur(1.2px);
+  transform: translateY(2px);
+  transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              color 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              text-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  color: inherit;
+  will-change: opacity, filter, transform;
+}
+
+.scrub-word.active {
+  opacity: 1;
+  filter: blur(0px);
+  transform: translateY(0);
+  color: inherit;
+  text-shadow: 0 0 18px rgba(96, 165, 250, 0.25);
+}
+
+.scrub-word.highlight {
+  color: #3b82f6;
+  text-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+}
+
+.scrub-meter-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  font-family: monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  opacity: 0.75;
+}
+
+.scrub-progress-track {
+  flex: 1;
+  height: 6px;
+  background: rgba(125, 125, 125, 0.2);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.scrub-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #3b82f6, #10b981);
+  border-radius: 999px;
+  transition: width 0.08s linear;
 }
 
 /* Accessibility support */

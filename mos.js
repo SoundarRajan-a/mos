@@ -55,11 +55,125 @@
       });
     },
 
+    // 6. Velocity Marquee auto-cloning for seamless looping
+    initMarquee() {
+      const tracks = document.querySelectorAll('.mos-ticker-track-left, .mos-ticker-track-right, .ticker-track-left, .ticker-track-right');
+      if (!tracks.length) return;
+
+      tracks.forEach(track => {
+        if (track.dataset.mosMarqueeReady) return;
+        track.dataset.mosMarqueeReady = 'true';
+
+        // Auto-duplicate if single row so it loops seamlessly
+        if (track.children.length === 1) {
+          const clone = track.children[0].cloneNode(true);
+          clone.setAttribute('aria-hidden', 'true');
+          track.appendChild(clone);
+        }
+      });
+    },
+
+    // 7. Editorial Scroll Scrub (Progressive Word Illumination)
+    initScrub() {
+      const scrubElements = document.querySelectorAll('.scrub-paragraph:not(#scrubParagraphText), [data-mos="scrub"]');
+      if (!scrubElements.length) return;
+
+      scrubElements.forEach(el => {
+        if (el.dataset.mosScrubReady) return;
+        el.dataset.mosScrubReady = 'true';
+
+        if (!el.querySelector('.scrub-word')) {
+          const rawText = el.textContent.trim();
+          if (!rawText) return;
+
+          const words = rawText.split(/\s+/);
+          el.textContent = '';
+          const wordSpans = [];
+
+          const highlightAttr = el.getAttribute('data-mos-scrub-highlight') || 'motion,viewport,scroll,position,dynamic,physics,interface,lightweight,browser,hardware,acceleration,illuminates,brilliance,immersive,zero,fps';
+          const highlightList = highlightAttr.toLowerCase().split(',').map(s => s.trim());
+
+          words.forEach(word => {
+            const span = document.createElement('span');
+            span.className = 'scrub-word';
+            const clean = word.toLowerCase().replace(/[^a-z0-9]/g, '');
+            if (clean && highlightList.includes(clean)) {
+              span.classList.add('highlight');
+            }
+            span.textContent = word;
+            el.appendChild(span);
+            el.appendChild(document.createTextNode(' '));
+            wordSpans.push(span);
+          });
+          el._mosScrubWords = wordSpans;
+        } else {
+          el._mosScrubWords = Array.from(el.querySelectorAll('.scrub-word'));
+        }
+      });
+
+      const updateScrubs = () => {
+        const windowH = window.innerHeight || document.documentElement.clientHeight;
+        const els = document.querySelectorAll('.scrub-paragraph:not(#scrubParagraphText), [data-mos="scrub"]');
+
+        els.forEach(el => {
+          const words = el._mosScrubWords;
+          if (!words || !words.length) return;
+
+          const rect = el.getBoundingClientRect();
+          const start = windowH * 0.90;
+          const end = windowH * 0.20;
+
+          let progress = (start - rect.top) / (start - end);
+          progress = Math.max(0, Math.min(1, progress));
+
+          const parentStage = el.closest('.scrub-stage');
+          if (parentStage) {
+            const fill = parentStage.querySelector('.scrub-progress-fill');
+            const label = parentStage.querySelector('#scrubPercentLabel, .scrub-percent-label');
+            if (fill) fill.style.width = `${Math.round(progress * 100)}%`;
+            if (label) label.textContent = `${Math.round(progress * 100)}%`;
+          }
+
+          const activeCount = Math.floor(progress * words.length);
+          for (let i = 0; i < words.length; i++) {
+            if (i <= activeCount) {
+              words[i].classList.add('active');
+            } else {
+              words[i].classList.remove('active');
+            }
+          }
+        });
+      };
+
+      if (!this._scrubBound) {
+        this._scrubBound = true;
+        let ticking = false;
+        const onScrollOrResize = () => {
+          if (!ticking) {
+            ticking = true;
+            window.requestAnimationFrame(() => {
+              updateScrubs();
+              ticking = false;
+            });
+          }
+        };
+
+        window.addEventListener('scroll', onScrollOrResize, { passive: true });
+        window.addEventListener('resize', onScrollOrResize, { passive: true });
+      }
+
+      window.requestAnimationFrame(updateScrubs);
+    },
+
     init(userOptions = {}) {
       this.options = { ...this.options, ...userOptions };
 
       // Prepare kinetic split text if any exists
       this.prepareSplitText();
+
+      // Initialize velocity marquees and editorial scroll scrub
+      this.initMarquee();
+      this.initScrub();
 
       // Disconnect previous instance if re-initializing
       if (observerInstance) {
@@ -117,6 +231,8 @@
 
     refresh() {
       this.prepareSplitText();
+      this.initMarquee();
+      this.initScrub();
       if (observerInstance) {
         const elements = document.querySelectorAll('[data-mos]:not(#liveTarget):not(#liveTextTarget):not(.typo-headline)');
         elements.forEach(el => observerInstance.observe(el));

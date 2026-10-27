@@ -3433,9 +3433,9 @@
     function copySnippet(type) {
       let code = '';
       if (type === 'ticker') {
-        code = `<div class="mos-ticker-wrap">\n  <div class="mos-ticker-track-left">\n    <div class="ticker-row">YOUR STREAMING TEXT •</div>\n    <div class="ticker-row" aria-hidden="true">YOUR STREAMING TEXT •</div>\n  </div>\n</div>`;
+        code = `<div class="mos-ticker-wrap">\n  <div class="mos-ticker-track-left">\n    <div class="ticker-row">\n      <span class="ticker-item">STREAMING KINETIC TICKER <span class="ticker-dot"></span></span>\n      <span class="ticker-item ticker-item-outline">HIGH VELOCITY MOTION <span class="ticker-dot"></span></span>\n      <span class="ticker-item">120 FPS SMOOTH LOOP <span class="ticker-dot"></span></span>\n    </div>\n    <div class="ticker-row" aria-hidden="true">\n      <span class="ticker-item">STREAMING KINETIC TICKER <span class="ticker-dot"></span></span>\n      <span class="ticker-item ticker-item-outline">HIGH VELOCITY MOTION <span class="ticker-dot"></span></span>\n      <span class="ticker-item">120 FPS SMOOTH LOOP <span class="ticker-dot"></span></span>\n    </div>\n  </div>\n</div>`;
       } else if (type === 'scrub') {
-        code = `<p class="scrub-paragraph" id="editorialScrub">\n  Motion that responds directly to your scroll position...\n</p>`;
+        code = `<div class="scrub-stage">\n  <div class="scrub-meter-bar">\n    <span>SCROLL PROGRESSION</span>\n    <div class="scrub-progress-track"><div class="scrub-progress-fill"></div></div>\n    <span class="scrub-percent-label">0%</span>\n  </div>\n  <p class="scrub-paragraph" id="editorialScrub">\n    Motion that responds directly to your scroll position. As you travel down the page, every single word dynamically illuminates from deep dark to high-contrast brilliance, creating an immersive, narrative reading experience.\n  </p>\n</div>`;
       } else if (type === 'parallax') {
         code = `<div class="parallax-dual-stage">\n  <div class="parallax-track" id="paraTrackTop">\n    <div class="parallax-item">PARALLAX DEPTH VELOCITY •</div>\n  </div>\n  <div class="parallax-track" id="paraTrackBottom">\n    <div class="parallax-item ticker-item-outline">TWO-WAY VIEWPORT DYNAMICS •</div>\n  </div>\n</div>`;
       } else if (type === 'rolodex') {
