@@ -106,6 +106,47 @@
       });
     },
 
+    // Update scrub progressive word illumination
+    updateScrubs() {
+      const windowH = window.innerHeight || document.documentElement.clientHeight;
+      const els = document.querySelectorAll('.scrub-paragraph:not(#scrubParagraphText), [data-mos="scrub"]');
+
+      els.forEach(el => {
+        const words = el._mosScrubWords;
+        if (!words || !words.length) return;
+
+        const rect = el.getBoundingClientRect();
+        const start = windowH * 0.90;
+        const end = windowH * 0.20;
+
+        let progress = (start - rect.top) / (start - end);
+        progress = Math.max(0, Math.min(1, progress));
+
+        const parentStage = el.closest('.scrub-stage');
+        if (parentStage) {
+          const fill = parentStage.querySelector('.scrub-progress-fill');
+          const label = parentStage.querySelector('#scrubPercentLabel, .scrub-percent-label');
+          if (fill) fill.style.width = `${Math.round(progress * 100)}%`;
+          if (label) label.textContent = `${Math.round(progress * 100)}%`;
+        }
+
+        const activeCount = Math.floor(progress * words.length);
+        for (let i = 0; i < words.length; i++) {
+          if (i <= activeCount) {
+            words[i].classList.add('active');
+            words[i].style.opacity = '1';
+            words[i].style.filter = 'blur(0px)';
+            words[i].style.transform = 'translateY(0)';
+          } else {
+            words[i].classList.remove('active');
+            words[i].style.opacity = '0.18';
+            words[i].style.filter = 'blur(1.2px)';
+            words[i].style.transform = 'translateY(2px)';
+          }
+        }
+      });
+    },
+
     // 7. Editorial Scroll Scrub (Progressive Word Illumination)
     initScrub() {
       const scrubElements = document.querySelectorAll('.scrub-paragraph:not(#scrubParagraphText), [data-mos="scrub"]');
@@ -152,56 +193,20 @@
         }
       });
 
-      const updateScrubs = () => {
-        const windowH = window.innerHeight || document.documentElement.clientHeight;
-        const els = document.querySelectorAll('.scrub-paragraph:not(#scrubParagraphText), [data-mos="scrub"]');
-
-        els.forEach(el => {
-          const words = el._mosScrubWords;
-          if (!words || !words.length) return;
-
-          const rect = el.getBoundingClientRect();
-          const start = windowH * 0.90;
-          const end = windowH * 0.20;
-
-          let progress = (start - rect.top) / (start - end);
-          progress = Math.max(0, Math.min(1, progress));
-
-          const parentStage = el.closest('.scrub-stage');
-          if (parentStage) {
-            const fill = parentStage.querySelector('.scrub-progress-fill');
-            const label = parentStage.querySelector('#scrubPercentLabel, .scrub-percent-label');
-            if (fill) fill.style.width = `${Math.round(progress * 100)}%`;
-            if (label) label.textContent = `${Math.round(progress * 100)}%`;
-          }
-
-          const activeCount = Math.floor(progress * words.length);
-          for (let i = 0; i < words.length; i++) {
-            if (i <= activeCount) {
-              words[i].classList.add('active');
-              words[i].style.opacity = '1';
-              words[i].style.filter = 'blur(0px)';
-              words[i].style.transform = 'translateY(0)';
-            } else {
-              words[i].classList.remove('active');
-              words[i].style.opacity = '0.18';
-              words[i].style.filter = 'blur(1.2px)';
-              words[i].style.transform = 'translateY(2px)';
-            }
-          }
-        });
-      };
-
       if (!this._scrubBound) {
         this._scrubBound = true;
         let ticking = false;
         const onScrollOrResize = () => {
           if (!ticking) {
             ticking = true;
-            window.requestAnimationFrame(() => {
-              updateScrubs();
+            const run = () => {
+              this.updateScrubs();
               ticking = false;
-            });
+            };
+            if (typeof window.requestAnimationFrame === 'function') {
+              window.requestAnimationFrame(run);
+            }
+            setTimeout(run, 16);
           }
         };
 
@@ -209,7 +214,7 @@
         window.addEventListener('resize', onScrollOrResize, { passive: true });
       }
 
-      window.requestAnimationFrame(updateScrubs);
+      this.updateScrubs();
     },
 
     init(userOptions = {}) {
