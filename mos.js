@@ -55,14 +55,24 @@
       });
     },
 
-    // 6. Velocity Marquee auto-cloning for seamless looping
+    // 6. Velocity Marquee auto-cloning for seamless looping & guaranteed inline layout
     initMarquee() {
+      const wraps = document.querySelectorAll('.mos-ticker-wrap');
+      wraps.forEach(wrap => {
+        wrap.style.overflow = 'hidden';
+        wrap.style.width = '100%';
+        wrap.style.position = 'relative';
+      });
+
       const tracks = document.querySelectorAll('.mos-ticker-track-left, .mos-ticker-track-right, .ticker-track-left, .ticker-track-right');
       if (!tracks.length) return;
 
       tracks.forEach(track => {
-        if (track.dataset.mosMarqueeReady) return;
-        track.dataset.mosMarqueeReady = 'true';
+        track.style.display = 'flex';
+        track.style.flexDirection = 'row';
+        track.style.flexWrap = 'nowrap';
+        track.style.alignItems = 'center';
+        track.style.width = 'max-content';
 
         // Auto-duplicate if single row so it loops seamlessly
         if (track.children.length === 1) {
@@ -70,6 +80,29 @@
           clone.setAttribute('aria-hidden', 'true');
           track.appendChild(clone);
         }
+
+        Array.from(track.children).forEach(row => {
+          row.style.display = 'inline-flex';
+          row.style.flexDirection = 'row';
+          row.style.flexWrap = 'nowrap';
+          row.style.flexShrink = '0';
+          row.style.alignItems = 'center';
+          row.style.whiteSpace = 'nowrap';
+          row.style.margin = '0 0.5rem';
+
+          // Style ticker dots if present
+          const dots = row.querySelectorAll('.ticker-dot');
+          dots.forEach(d => {
+            d.style.display = 'inline-block';
+            d.style.width = '7px';
+            d.style.height = '7px';
+            d.style.borderRadius = '50%';
+            d.style.background = '#3b82f6';
+            d.style.flexShrink = '0';
+          });
+        });
+
+        track.dataset.mosMarqueeReady = 'true';
       });
     },
 
@@ -96,9 +129,17 @@
           words.forEach(word => {
             const span = document.createElement('span');
             span.className = 'scrub-word';
+            span.style.display = 'inline-block';
+            span.style.marginRight = '0.28em';
+            span.style.opacity = '0.18';
+            span.style.filter = 'blur(1.2px)';
+            span.style.transform = 'translateY(2px)';
+            span.style.transition = 'opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1), filter 0.22s, transform 0.22s, color 0.22s';
+
             const clean = word.toLowerCase().replace(/[^a-z0-9]/g, '');
             if (clean && highlightList.includes(clean)) {
               span.classList.add('highlight');
+              span.style.color = '#3b82f6';
             }
             span.textContent = word;
             el.appendChild(span);
@@ -138,8 +179,14 @@
           for (let i = 0; i < words.length; i++) {
             if (i <= activeCount) {
               words[i].classList.add('active');
+              words[i].style.opacity = '1';
+              words[i].style.filter = 'blur(0px)';
+              words[i].style.transform = 'translateY(0)';
             } else {
               words[i].classList.remove('active');
+              words[i].style.opacity = '0.18';
+              words[i].style.filter = 'blur(1.2px)';
+              words[i].style.transform = 'translateY(2px)';
             }
           }
         });
@@ -201,6 +248,8 @@
       observerInstance = new IntersectionObserver((entries, obs) => {
         entries.forEach(entry => {
           const el = entry.target;
+          const rect = entry.boundingClientRect;
+          const windowH = window.innerHeight || document.documentElement.clientHeight;
 
           if (entry.isIntersecting) {
             const duration = el.getAttribute('data-mos-duration');
@@ -209,16 +258,19 @@
               el.style.setProperty('--mos-duration', dur);
               el.style.transitionDuration = dur;
             }
-            el.style.removeProperty('transition');
             el.classList.add('mos-animate');
 
             if (this.options.once) {
               obs.unobserve(el);
             }
           } else if (!this.options.once) {
-            // TWO-WAY SCROLL: Instant off-screen reset (zero GPU compositing load while off-screen)
-            el.style.setProperty('transition', 'none', 'important');
-            el.classList.remove('mos-animate');
+            // Anti-Flicker Two-Way Scroll:
+            // Only reset elements that have scrolled well below the viewport (> 80px buffer).
+            // Elements that scrolled above the viewport stay rendered, completely eliminating
+            // the rapid boundary-chattering oscillation and flicker during scrolling.
+            if (rect.top > windowH + 80) {
+              el.classList.remove('mos-animate');
+            }
           }
         });
       }, {
