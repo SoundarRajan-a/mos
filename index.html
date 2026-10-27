@@ -44,6 +44,7 @@
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
       max-width: 100vw;
+      padding-top: 60px;
     }
 
     /* Fixed GPU-cached background layer: 0 repaints during scroll (Mild Ambience) */
@@ -65,12 +66,15 @@
       scroll-margin-top: 100px;
     }
 
-    /* Top Bar */
+    /* Always-Visible Fixed Top Bar */
     nav {
-      position: sticky;
+      position: fixed;
       top: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
       z-index: 1000;
-      background: rgba(9, 10, 15, 0.88);
+      background: rgba(9, 10, 15, 0.92);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--card-border);
@@ -579,6 +583,165 @@
       color: #60a5fa;
     }
 
+    /* Studio Kinetic Typography Mode (Pure Text Preview) */
+    .preview-text-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-height: 220px;
+      padding: 1.5rem 1rem;
+      text-align: center;
+      position: relative;
+      box-sizing: border-box;
+    }
+
+    .preview-text-meta {
+      margin-bottom: 1.25rem;
+    }
+
+    .preview-text-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      background: rgba(59, 130, 246, 0.12);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      color: #60a5fa;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 0.3rem 0.85rem;
+      border-radius: 9999px;
+      font-family: var(--font-mono);
+    }
+
+    .preview-text-stage-inner {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 110px;
+      padding: 1.2rem 0.5rem;
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+
+    .studio-typo-headline {
+      font-size: clamp(1.4rem, 3.8vw, 2.6rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+      line-height: 1.25;
+      text-align: center;
+      max-width: 100%;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+      margin: 0;
+      user-select: none;
+      display: inline-block;
+    }
+
+    .preview-text-hint {
+      margin-top: 1.25rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: 0.78rem;
+      color: #64748b;
+      font-family: var(--font-mono);
+      transition: color 0.15s;
+    }
+
+    .stage:hover .preview-text-hint {
+      color: #94a3b8;
+    }
+
+    .studio-text-input {
+      width: 100%;
+      background: #111624;
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      padding: 0.6rem 0.8rem;
+      font-size: 0.85rem;
+      color: #fff;
+      font-family: var(--font-sans);
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      box-sizing: border-box;
+    }
+
+    .studio-text-input:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
+    }
+
+    /* Dedicated CDN Code Boxes */
+    .cdn-box {
+      background: #06070a;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-top: 0.65rem;
+    }
+
+    .cdn-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.45rem 0.85rem;
+      background: rgba(255, 255, 255, 0.025);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .cdn-tag {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    .cdn-tag-css { color: #60a5fa; }
+    .cdn-tag-js { color: #34d399; }
+
+    .copy-btn-action {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--card-border);
+      color: #cbd5e1;
+      padding: 0.25rem 0.65rem;
+      border-radius: 4px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: all 0.15s;
+    }
+
+    .copy-btn-action:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.14);
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+
+    .cdn-code {
+      margin: 0;
+      padding: 0.85rem 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: #e2e8f0;
+      overflow-x: auto;
+      white-space: pre;
+      line-height: 1.5;
+    }
+
+    .cdn-code code {
+      font-family: inherit;
+    }
+
     .controls-panel {
       padding: 1.5rem;
       display: flex;
@@ -652,225 +815,6 @@
       font-size: 0.76rem;
       color: #93c5fd;
       word-break: break-all;
-    }
-
-    /* ==========================================================================
-       DEDICATED KINETIC TYPOGRAPHY SECTION (ON-CLICK SEPARATE BUTTONS)
-       ========================================================================== */
-    .typo-section {
-      margin-bottom: 7rem;
-    }
-
-    .typo-master-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: rgba(59, 130, 246, 0.08);
-      border: 1px solid rgba(59, 130, 246, 0.25);
-      border-radius: 10px;
-      padding: 1rem 1.4rem;
-      margin-bottom: 2rem;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-
-    .typo-master-text {
-      font-size: 0.88rem;
-      color: #93c5fd;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .typo-master-actions {
-      display: flex;
-      gap: 0.6rem;
-    }
-
-    .btn-master-play {
-      background: #3b82f6;
-      color: #fff;
-      border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
-      font-size: 0.82rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      transition: background 0.15s;
-    }
-    .btn-master-play:hover { background: #2563eb; }
-
-    .btn-master-reset {
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid var(--card-border);
-      color: #cbd5e1;
-      padding: 0.5rem 0.9rem;
-      border-radius: 6px;
-      font-size: 0.82rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-    .btn-master-reset:hover { background: rgba(255, 255, 255, 0.12); color: #fff; }
-
-    .typo-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 2.2rem;
-    }
-
-    .typo-card {
-      background: #101524;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      padding: 2.2rem;
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
-      transition: border-color 0.2s, box-shadow 0.2s;
-      content-visibility: auto;
-      contain-intrinsic-size: 0 280px;
-    }
-
-    @media (hover: hover) {
-      .typo-card:hover {
-        border-color: rgba(255, 255, 255, 0.22);
-        box-shadow: 0 14px 38px rgba(0, 0, 0, 0.45);
-      }
-    }
-
-    .typo-meta {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.25rem;
-      padding-bottom: 0.8rem;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .typo-label {
-      font-size: 0.82rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: #94a3b8;
-    }
-
-    .typo-badge {
-      font-size: 0.72rem;
-      font-weight: 700;
-      color: #38bdf8;
-      background: rgba(56, 189, 248, 0.12);
-      border: 1px solid rgba(56, 189, 248, 0.25);
-      padding: 0.2rem 0.6rem;
-      border-radius: 4px;
-      font-family: var(--font-mono);
-    }
-
-    .typo-stage {
-      min-height: 110px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: radial-gradient(circle at center, rgba(56, 189, 248, 0.04) 0%, transparent 70%);
-      border: 1px dashed rgba(255, 255, 255, 0.1);
-      border-radius: 8px;
-      padding: 1.5rem 1rem;
-      margin-bottom: 1.4rem;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .typo-headline {
-      font-size: clamp(1.6rem, 3.8vw, 2.6rem);
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      color: #ffffff;
-      text-align: center;
-      line-height: 1.15;
-    }
-
-    .typo-placeholder {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      color: #64748b;
-      font-size: 0.9rem;
-      font-weight: 500;
-      letter-spacing: 0.02em;
-    }
-
-    .typo-placeholder svg {
-      opacity: 0.6;
-    }
-
-    .typo-bottom {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-
-    .typo-code {
-      font-family: var(--font-mono);
-      font-size: 0.8rem;
-      color: #cbd5e1;
-      background: #080a10;
-      padding: 0.65rem 0.95rem;
-      border-radius: 6px;
-      border: 1px solid var(--card-border);
-      flex: 1;
-      min-width: 260px;
-    }
-
-    .typo-action-group {
-      display: flex;
-      gap: 0.5rem;
-      align-items: center;
-    }
-
-    .typo-btn-trigger {
-      background: linear-gradient(135deg, #2563eb, #1d4ed8);
-      border: 1px solid #3b82f6;
-      color: #ffffff;
-      font-size: 0.82rem;
-      font-weight: 600;
-      padding: 0.65rem 1.1rem;
-      border-radius: 6px;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.45rem;
-      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
-      transition: all 0.15s;
-    }
-
-    .typo-btn-trigger:hover {
-      background: linear-gradient(135deg, #3b82f6, #2563eb);
-      transform: translateY(-1px);
-      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.5);
-    }
-
-    .typo-btn-hide {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--card-border);
-      color: #94a3b8;
-      font-size: 0.8rem;
-      font-weight: 500;
-      padding: 0.65rem 0.85rem;
-      border-radius: 6px;
-      cursor: pointer;
-      display: none;
-      transition: all 0.15s;
-    }
-
-    .typo-btn-hide:hover {
-      background: rgba(255, 255, 255, 0.1);
-      color: #fff;
     }
 
     /* ==========================================================================
@@ -1237,10 +1181,6 @@
         max-width: 100%;
       }
 
-      .typo-section {
-        margin-bottom: 5rem;
-      }
-
       .section-head {
         flex-direction: column;
         align-items: stretch;
@@ -1250,56 +1190,6 @@
       .filter-tabs {
         width: 100%;
         min-width: 0;
-      }
-
-      .typo-master-bar {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 0.8rem;
-      }
-
-      .typo-master-actions {
-        width: 100%;
-      }
-
-      .typo-master-actions button {
-        flex: 1;
-        justify-content: center;
-      }
-
-      .typo-card {
-        padding: 1.35rem 1.1rem;
-      }
-
-      .typo-stage {
-        padding: 1.2rem 0.8rem;
-        min-height: 90px;
-      }
-
-      .typo-headline {
-        font-size: 1.45rem !important;
-      }
-
-      .typo-bottom {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      .typo-code {
-        min-width: 0;
-        width: 100%;
-        overflow-x: auto;
-        font-size: 0.72rem;
-        padding: 0.55rem 0.75rem;
-      }
-
-      .typo-action-group {
-        width: 100%;
-      }
-
-      .typo-btn-trigger, .typo-btn-hide {
-        flex: 1;
-        justify-content: center;
       }
 
       .catalog-stream {
@@ -1370,7 +1260,7 @@
       <!-- Desktop Links (Visible > 768px) -->
       <div class="desktop-nav">
         <a href="#playground">Playground</a>
-        <a href="#typography" class="nav-link-typo">
+        <a href="text-fx.html" class="nav-link-typo">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg>
           Text FX
         </a>
@@ -1410,13 +1300,13 @@
           </div>
         </a>
 
-        <a href="#typography" class="mobile-drawer-link" onclick="closeMobileMenu()">
+        <a href="text-fx.html" class="mobile-drawer-link" onclick="closeMobileMenu()">
           <div class="mobile-link-icon typo-icon">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg>
           </div>
           <div class="mobile-link-text">
-            <span class="link-title">Text Animations</span>
-            <span class="link-desc">4 kinetic typography reveal effects</span>
+            <span class="link-title">Text FX &amp; Scrolling</span>
+            <span class="link-desc">Click triggers, marquees &amp; scroll scrub</span>
           </div>
           <span class="mobile-badge-new">NEW</span>
         </a>
@@ -1469,9 +1359,13 @@
       </p>
 
       <div class="hero-actions">
-        <a href="#typography" class="btn-main">
-          Explore Text Animations
+        <a href="#presets" class="btn-main">
+          Explore 28 Presets
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="text-fx.html" class="btn-outline">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg>
+          Text FX Engine →
         </a>
         <a href="https://github.com/soundarrajan-a/mos" target="_blank" class="btn-outline">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
@@ -1524,26 +1418,61 @@
 
         <div class="studio-body">
           <!-- Stage Area -->
-          <div class="stage">
-            <div id="liveTarget" class="preview-box mos-animate" data-mos="blur-up" onclick="triggerReplay()" style="cursor: pointer;" title="Click box to replay preview animation">
+          <div class="stage" id="studioStage" onclick="triggerReplay()" style="cursor: pointer;" title="Click stage to replay animation">
+            <!-- Mode 1: Element / Box Preview -->
+            <div id="liveTarget" class="preview-box mos-animate" data-mos="blur-up">
               <div class="preview-icon">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
               </div>
               <h4 style="font-size: 1.1rem; color: #fff; margin-bottom: 0.3rem;" id="livePresetLabel">Blur Up</h4>
-              <p style="font-size: 0.82rem; color: var(--text-muted);" id="livePresetSub">Spring-driven focus reveal</p>
+              <p style="font-size: 0.82rem; color: var(--text-muted);" id="livePresetSub">Optical lens bokeh &amp; blur focus</p>
+            </div>
+
+            <!-- Mode 2: Kinetic Typography Text Preview (Pure Text Only) -->
+            <div id="liveTextWrap" class="preview-text-wrapper" style="display: none;">
+              <div class="preview-text-meta">
+                <span class="preview-text-badge">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg>
+                  <span id="liveTextBadge">Sliding Text Reveal</span>
+                </span>
+              </div>
+              <div class="preview-text-stage-inner">
+                <h2 id="liveTextTarget" class="studio-typo-headline mos-animate" data-mos="text-slide-up">
+                  KINETIC TYPOGRAPHY
+                </h2>
+              </div>
+              <div class="preview-text-hint">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                Click text or stage to replay typography animation
+              </div>
             </div>
           </div>
 
           <!-- Controls Sidepanel -->
           <div class="controls-panel">
             <div class="control-group">
-              <label>Preset (32 Types)</label>
+              <label>Preset (47 Total Types)</label>
               <select id="presetSelect" onchange="updateStudio(true)">
-                <optgroup label="Kinetic Typography FX">
+                <optgroup label="Kinetic Typography FX (19 Types)">
                   <option value="text-slide-up">text-slide-up (Sliding Text Reveal)</option>
                   <option value="text-stretch-snap">text-stretch-snap (Stretch & Snap)</option>
                   <option value="text-blur-scroller">text-blur-scroller (Blur Scroller)</option>
                   <option value="text-glide">text-glide (Kinetic 3D Glide)</option>
+                  <option value="text-wave">text-wave (Sine Wave Ripple)</option>
+                  <option value="text-glitch">text-glitch (Cyberpunk Glitch)</option>
+                  <option value="text-zoom-burst">text-zoom-burst (Zoom Blast Reveal)</option>
+                  <option value="text-rotate-drop">text-rotate-drop (3D Flip & Drop)</option>
+                  <option value="text-blur-spread">text-blur-spread (Bokeh Expansion)</option>
+                  <option value="text-skew-shear">text-skew-shear (Skew & Shear)</option>
+                  <option value="text-shutter">text-shutter (Blind Shutter Wipe)</option>
+                  <option value="text-magnetic-pull">text-magnetic-pull (Magnetic Recoil)</option>
+                  <option value="text-neon-flicker">text-neon-flicker (Neon Glow Ignition)</option>
+                  <option value="text-flip-clock">text-flip-clock (Mechanical Split-Flap)</option>
+                  <option value="text-spiral-spin">text-spiral-spin (Vortex Twist)</option>
+                  <option value="text-gradient-flow">text-gradient-flow (Gradient Shift)</option>
+                  <option value="text-elastic-bounce">text-elastic-bounce (Rubber Band Bounce)</option>
+                  <option value="text-masked-curtain">text-masked-curtain (Curtain Unveil)</option>
+                  <option value="text-pixel-converge">text-pixel-converge (Matrix Convergence)</option>
                 </optgroup>
                 <optgroup label="Modern Lens & Blurs">
                   <option value="blur-up" selected>blur-up</option>
@@ -1589,6 +1518,11 @@
               <input type="range" id="durInput" min="0.6" max="3.5" step="0.1" value="1.8" oninput="updateStudio(false)" />
             </div>
 
+            <div class="control-group" id="textInputGroup" style="display: none;">
+              <label>Custom Text</label>
+              <input type="text" id="liveTextInput" class="studio-text-input" value="KINETIC TYPOGRAPHY" placeholder="Type headline text..." oninput="updateLiveText(this.value)">
+            </div>
+
             <div class="control-group">
               <label>Generated Tag</label>
               <div class="snippet-preview" id="snippetPreview">
@@ -1602,164 +1536,6 @@
             </button>
           </div>
         </div>
-      </div>
-    </section>
-
-    <!-- ======================================================================
-         DEDICATED KINETIC TYPOGRAPHY SECTION (ON-CLICK SEPARATE BUTTONS)
-         ====================================================================== -->
-    <section id="typography" class="typo-section">
-      <div class="section-head">
-        <div>
-          <div class="section-title">Kinetic Typography Engine</div>
-          <div class="section-desc">Click each button below to reveal the kinetic text animation on demand.</div>
-        </div>
-      </div>
-
-      <!-- Master Action Bar -->
-      <div class="typo-master-bar">
-        <div class="typo-master-text">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          <span>Text reveals only trigger when you click each button below.</span>
-        </div>
-        <div class="typo-master-actions">
-          <button class="btn-master-play" onclick="playAllTypo()">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-            Play All 4 Text Animations
-          </button>
-          <button class="btn-master-reset" onclick="resetAllTypo()">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
-            Reset All
-          </button>
-        </div>
-      </div>
-
-      <div class="typo-grid">
-
-        <!-- TYPO 1: Sliding Text Reveal -->
-        <div class="typo-card" id="typoCard1">
-          <div class="typo-meta">
-            <span class="typo-label">Typography 01 / Sliding Text Reveal</span>
-            <span class="typo-badge">Masked Baseline Glide</span>
-          </div>
-          <div class="typo-stage">
-            <div id="typoPrompt1" class="typo-placeholder">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill="currentColor"/></svg>
-              Click button below to show text animation
-            </div>
-            <h2 id="typoHeading1" class="typo-headline" data-mos="text-slide-up" data-mos-duration="1800" style="display: none;">
-              CRAFTING NEXT-GEN MOTION
-            </h2>
-          </div>
-          <div class="typo-bottom">
-            <div class="typo-code">
-              &lt;h1 <span class="c-attr">data-mos</span>=<span class="c-val">"text-slide-up"</span> <span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span>&gt;Crafting Next-Gen Motion&lt;/h1&gt;
-            </div>
-            <div class="typo-action-group">
-              <button id="typoBtn1" class="typo-btn-trigger" onclick="toggleTypo(1, 'text-slide-up')">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-                Show Sliding Reveal
-              </button>
-              <button id="typoHideBtn1" class="typo-btn-hide" onclick="hideTypo(1)">
-                Hide
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- TYPO 2: Stretch & Snap -->
-        <div class="typo-card" id="typoCard2">
-          <div class="typo-meta">
-            <span class="typo-label">Typography 02 / Stretch &amp; Snap</span>
-            <span class="typo-badge">Elastic Recoil Snap</span>
-          </div>
-          <div class="typo-stage">
-            <div id="typoPrompt2" class="typo-placeholder">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill="currentColor"/></svg>
-              Click button below to show text animation
-            </div>
-            <h2 id="typoHeading2" class="typo-headline" data-mos="text-stretch-snap" data-mos-duration="1800" style="display: none; color: #f59e0b;">
-              ELASTIC MOMENTUM SNAP
-            </h2>
-          </div>
-          <div class="typo-bottom">
-            <div class="typo-code">
-              &lt;h1 <span class="c-attr">data-mos</span>=<span class="c-val">"text-stretch-snap"</span> <span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span>&gt;Elastic Momentum Snap&lt;/h1&gt;
-            </div>
-            <div class="typo-action-group">
-              <button id="typoBtn2" class="typo-btn-trigger" onclick="toggleTypo(2, 'text-stretch-snap')">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-                Show Stretch &amp; Snap
-              </button>
-              <button id="typoHideBtn2" class="typo-btn-hide" onclick="hideTypo(2)">
-                Hide
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- TYPO 3: Blur Text Scroller -->
-        <div class="typo-card" id="typoCard3">
-          <div class="typo-meta">
-            <span class="typo-label">Typography 03 / Blur Text Scroller</span>
-            <span class="typo-badge">Optical Bokeh Tracking</span>
-          </div>
-          <div class="typo-stage">
-            <div id="typoPrompt3" class="typo-placeholder">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill="currentColor"/></svg>
-              Click button below to show text animation
-            </div>
-            <h2 id="typoHeading3" class="typo-headline" data-mos="text-blur-scroller" data-mos-duration="1800" style="display: none; color: #38bdf8;">
-              CINEMATIC OPTICAL FOCUS
-            </h2>
-          </div>
-          <div class="typo-bottom">
-            <div class="typo-code">
-              &lt;h1 <span class="c-attr">data-mos</span>=<span class="c-val">"text-blur-scroller"</span> <span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span>&gt;Cinematic Optical Focus&lt;/h1&gt;
-            </div>
-            <div class="typo-action-group">
-              <button id="typoBtn3" class="typo-btn-trigger" onclick="toggleTypo(3, 'text-blur-scroller')">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-                Show Blur Scroller
-              </button>
-              <button id="typoHideBtn3" class="typo-btn-hide" onclick="hideTypo(3)">
-                Hide
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- TYPO 4: Kinetic 3D Glide -->
-        <div class="typo-card" id="typoCard4">
-          <div class="typo-meta">
-            <span class="typo-label">Typography 04 / Kinetic 3D Glide</span>
-            <span class="typo-badge">3D Perspective Fold</span>
-          </div>
-          <div class="typo-stage">
-            <div id="typoPrompt4" class="typo-placeholder">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill="currentColor"/></svg>
-              Click button below to show text animation
-            </div>
-            <h2 id="typoHeading4" class="typo-headline" data-mos="text-glide" data-mos-duration="1800" style="display: none; color: #c084fc;">
-              SPATIAL PERSPECTIVE GLIDE
-            </h2>
-          </div>
-          <div class="typo-bottom">
-            <div class="typo-code">
-              &lt;h1 <span class="c-attr">data-mos</span>=<span class="c-val">"text-glide"</span> <span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span>&gt;Spatial Perspective Glide&lt;/h1&gt;
-            </div>
-            <div class="typo-action-group">
-              <button id="typoBtn4" class="typo-btn-trigger" onclick="toggleTypo(4, 'text-glide')">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-                Show 3D Glide
-              </button>
-              <button id="typoHideBtn4" class="typo-btn-hide" onclick="hideTypo(4)">
-                Hide
-              </button>
-            </div>
-          </div>
-        </div>
-
       </div>
     </section>
 
@@ -2165,7 +1941,7 @@
       <div class="step-grid">
         <div class="step-box">
           <h4><span class="step-num">1</span> Direct CDN Link or Download</h4>
-          <p style="font-size: 0.85rem; color: var(--text-muted);">Paste the CDN link or download the file directly:</p>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">Paste the CDN links into your project or download the files:</p>
           <div style="display: flex; gap: 0.5rem; margin: 0.75rem 0 0.85rem; flex-wrap: wrap;">
             <a href="mos.css" download="mos.css" class="btn-download">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
@@ -2176,16 +1952,32 @@
               Download mos.js
             </a>
           </div>
-          <div class="code-snippet">
-            <button class="copy-icon-btn" onclick="copySnippet(this)">Copy</button>
-&lt;!-- In &lt;head&gt; --&gt;
-&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/soundarrajan-a/mos@main/mos.css"&gt;
 
-&lt;!-- Before &lt;/body&gt; --&gt;
-&lt;script src="https://cdn.jsdelivr.net/gh/soundarrajan-a/mos@main/mos.js"&gt;&lt;/script&gt;
+          <!-- Separate CSS Stylesheet Link -->
+          <div class="cdn-box">
+            <div class="cdn-bar">
+              <span class="cdn-tag cdn-tag-css">CSS Link &bull; In &lt;head&gt;</span>
+              <button class="copy-btn-action" onclick="copySnippetDirect(this, '&lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/gh/soundarrajan-a/mos@main/mos.css&quot;&gt;')">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                Copy CSS
+              </button>
+            </div>
+            <pre class="cdn-code"><code>&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/soundarrajan-a/mos@main/mos.css"&gt;</code></pre>
+          </div>
+
+          <!-- Separate JS Script Link -->
+          <div class="cdn-box" style="margin-top: 0.75rem;">
+            <div class="cdn-bar">
+              <span class="cdn-tag cdn-tag-js">JavaScript &bull; Before &lt;/body&gt;</span>
+              <button class="copy-btn-action" onclick="copySnippetDirect(this, '&lt;script src=&quot;https://cdn.jsdelivr.net/gh/soundarrajan-a/mos@main/mos.js&quot;&gt;&lt;/script&gt;\n&lt;script&gt;\n  MOS.init();\n&lt;/script&gt;')">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                Copy JS
+              </button>
+            </div>
+            <pre class="cdn-code"><code>&lt;script src="https://cdn.jsdelivr.net/gh/soundarrajan-a/mos@main/mos.js"&gt;&lt;/script&gt;
 &lt;script&gt;
   MOS.init();
-&lt;/script&gt;
+&lt;/script&gt;</code></pre>
           </div>
         </div>
 
@@ -2239,11 +2031,34 @@ MOS.init({
 
   <!-- Interactive Demo UI Scripts -->
   <script>
+    const TYPO_PRESET_TITLES = {
+      'text-slide-up': 'KINETIC TYPOGRAPHY',
+      'text-stretch-snap': 'ELASTIC MOMENTUM SNAP',
+      'text-blur-scroller': 'CINEMATIC OPTICAL FOCUS',
+      'text-glide': '3D SPATIAL PERSPECTIVE',
+      'text-wave': 'HARMONIC SINE WAVE RIPPLE',
+      'text-glitch': 'CYBERPUNK SCANLINE GLITCH',
+      'text-zoom-burst': 'EXPLOSIVE IMPACT BURST',
+      'text-rotate-drop': 'OVERHEAD 3D AXIS FLIP',
+      'text-blur-spread': 'RADIAL BOKEH EXPANSION',
+      'text-skew-shear': 'ARCHITECTURAL AXIS SHEAR',
+      'text-shutter': 'MECHANICAL BLIND SHUTTER',
+      'text-magnetic-pull': 'MAGNETIC GRAVITY RECOIL',
+      'text-neon-flicker': 'NEON DISCHARGE IGNITION',
+      'text-flip-clock': 'MECHANICAL SPLIT FLAP',
+      'text-spiral-spin': 'CENTRIFUGAL VORTEX TWIST',
+      'text-gradient-flow': 'CHROMATIC SPECTRUM FLOW',
+      'text-elastic-bounce': 'RUBBER BAND OSCILLATION',
+      'text-masked-curtain': 'THEATRICAL CURTAIN UNVEIL',
+      'text-pixel-converge': 'MATRIX GRID CONVERGENCE'
+    };
+
     // Interactive Studio Logic
     function updateStudio(isPresetChange = false) {
       const select = document.getElementById('presetSelect');
       const durInput = document.getElementById('durInput');
       const preset = select.value;
+      const isText = preset.startsWith('text-');
       const wipePresets = ['wipe-up', 'wipe-down', 'wipe-right', 'wipe-left', 'circle-expand', 'diagonal-wipe'];
 
       // When selecting any shape wipe animation, automatically set 3s for preview
@@ -2253,117 +2068,141 @@ MOS.init({
 
       const dur = durInput.value;
       const target = document.getElementById('liveTarget');
+      const textWrap = document.getElementById('liveTextWrap');
+      const textTarget = document.getElementById('liveTextTarget');
+      const textBadge = document.getElementById('liveTextBadge');
+      const textInputGroup = document.getElementById('textInputGroup');
+      const textInput = document.getElementById('liveTextInput');
       const label = document.getElementById('livePresetLabel');
+      const sub = document.getElementById('livePresetSub');
       const snippet = document.getElementById('snippetPreview');
 
       document.getElementById('durVal').textContent = `${dur}s (Slow Demo)`;
-      label.textContent = select.options[select.selectedIndex].text.split(' (')[0];
-
       const durMs = Math.round(dur * 1000);
-      if (preset.startsWith('text-')) {
+
+      if (isText) {
+        // PURE TEXT MODE: Hide element card, show ONLY text typography animation
+        if (target) target.style.display = 'none';
+        if (textWrap) textWrap.style.display = 'flex';
+        if (textInputGroup) textInputGroup.style.display = 'block';
+
+        const optText = select.options[select.selectedIndex].text;
+        const effectName = optText.includes('(') ? optText.split(' (')[1].replace(')', '') : optText;
+        if (textBadge) textBadge.textContent = effectName;
+
+        // Auto-update sample text if user hasn't typed custom override
+        if (textInput) {
+          if (!textInput.dataset.customized || (isPresetChange && textInput.dataset.customized !== 'true')) {
+            const headline = TYPO_PRESET_TITLES[preset] || 'KINETIC TYPOGRAPHY';
+            textInput.value = headline;
+            if (textTarget) textTarget.textContent = headline;
+          }
+        }
+
         snippet.textContent = `<h1 data-mos="${preset}" data-mos-duration="${durMs}">`;
       } else {
+        // ELEMENT MODE: Hide text typography, show element preview box
+        if (textWrap) textWrap.style.display = 'none';
+        if (target) target.style.display = 'block';
+        if (textInputGroup) textInputGroup.style.display = 'none';
+
+        if (label) label.textContent = select.options[select.selectedIndex].text.split(' (')[0];
+        
+        if (sub) {
+          if (preset.startsWith('blur') || preset === 'lens-flare') {
+            sub.textContent = 'Optical lens bokeh & blur focus';
+          } else if (preset.startsWith('tilt') || preset.startsWith('flip') || preset.startsWith('skew')) {
+            sub.textContent = '3D spatial perspective & coordinate tilt';
+          } else if (preset.startsWith('wipe') || preset === 'circle-expand' || preset === 'diagonal-wipe') {
+            sub.textContent = 'SVG & CSS clip-path directional wipe';
+          } else {
+            sub.textContent = 'Spring-driven inertia & scale dynamics';
+          }
+        }
+
         snippet.textContent = `<div data-mos="${preset}" data-mos-duration="${durMs}">`;
       }
 
       triggerReplay();
     }
 
+    function updateLiveText(val) {
+      const textTarget = document.getElementById('liveTextTarget');
+      const textInput = document.getElementById('liveTextInput');
+      if (textInput) textInput.dataset.customized = 'true';
+      if (textTarget) {
+        textTarget.textContent = val.trim() || 'KINETIC TYPOGRAPHY';
+        triggerReplay();
+      }
+    }
+
     function triggerReplay() {
-      const target = document.getElementById('liveTarget');
       const preset = document.getElementById('presetSelect').value;
       const dur = parseFloat(document.getElementById('durInput').value) || 1.8;
+      const isText = preset.startsWith('text-');
 
-      target.classList.remove('mos-animate');
-      target.style.setProperty('transition', 'none', 'important');
-      target.setAttribute('data-mos', preset);
+      if (isText) {
+        const textTarget = document.getElementById('liveTextTarget');
+        if (!textTarget) return;
 
-      // Force layout reflow
-      void target.offsetWidth;
+        textTarget.classList.remove('mos-animate');
+        textTarget.style.setProperty('transition', 'none', 'important');
+        textTarget.style.setProperty('animation', 'none', 'important');
+        textTarget.setAttribute('data-mos', preset);
 
-      requestAnimationFrame(() => {
-        target.style.removeProperty('transition');
-        target.style.transitionDuration = `${dur}s`;
-        target.style.setProperty('--mos-duration', `${dur}s`);
+        // Force reflow
+        void textTarget.offsetWidth;
+
         requestAnimationFrame(() => {
-          target.classList.add('mos-animate');
+          textTarget.style.removeProperty('transition');
+          textTarget.style.removeProperty('animation');
+          textTarget.style.transitionDuration = `${dur}s`;
+          textTarget.style.setProperty('--mos-duration', `${dur}s`);
+
+          requestAnimationFrame(() => {
+            textTarget.classList.add('mos-animate');
+          });
         });
-      });
-    }
+      } else {
+        const target = document.getElementById('liveTarget');
+        if (!target) return;
 
-    // ==========================================================================
-    // DEDICATED TYPOGRAPHY BUTTON HANDLERS (ON-CLICK ONLY SHOW TEXT)
-    // ==========================================================================
-    function toggleTypo(id, preset) {
-      const prompt = document.getElementById(`typoPrompt${id}`);
-      const heading = document.getElementById(`typoHeading${id}`);
-      const btn = document.getElementById(`typoBtn${id}`);
-      const hideBtn = document.getElementById(`typoHideBtn${id}`);
+        target.classList.remove('mos-animate');
+        target.style.setProperty('transition', 'none', 'important');
+        target.style.setProperty('animation', 'none', 'important');
+        target.setAttribute('data-mos', preset);
 
-      // Hide prompt and display headline
-      prompt.style.display = 'none';
-      heading.style.display = 'block';
+        // Force reflow
+        void target.offsetWidth;
 
-      // Reset animation state cleanly
-      heading.classList.remove('mos-animate');
-      heading.style.setProperty('transition', 'none', 'important');
-      heading.setAttribute('data-mos', preset);
-      void heading.offsetWidth;
-
-      // Trigger slow, majestic animation
-      requestAnimationFrame(() => {
-        heading.style.removeProperty('transition');
-        heading.style.transitionDuration = '1.8s';
-        heading.style.setProperty('--mos-duration', '1.8s');
         requestAnimationFrame(() => {
-          heading.classList.add('mos-animate');
+          target.style.removeProperty('transition');
+          target.style.removeProperty('animation');
+          target.style.transitionDuration = `${dur}s`;
+          target.style.setProperty('--mos-duration', `${dur}s`);
+
+          requestAnimationFrame(() => {
+            target.classList.add('mos-animate');
+          });
         });
-      });
-
-      // Update button state
-      btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg> Replay Animation`;
-      hideBtn.style.display = 'inline-flex';
+      }
     }
 
-    function hideTypo(id) {
-      const prompt = document.getElementById(`typoPrompt${id}`);
-      const heading = document.getElementById(`typoHeading${id}`);
-      const btn = document.getElementById(`typoBtn${id}`);
-      const hideBtn = document.getElementById(`typoHideBtn${id}`);
-
-      heading.classList.remove('mos-animate');
-      heading.style.display = 'none';
-      prompt.style.display = 'flex';
-
-      const names = {
-        1: 'Show Sliding Reveal',
-        2: 'Show Stretch & Snap',
-        3: 'Show Blur Scroller',
-        4: 'Show 3D Glide'
-      };
-
-      btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg> ${names[id] || 'Show Animation'}`;
-      hideBtn.style.display = 'none';
-    }
-
-    function playAllTypo() {
-      const presets = {
-        1: 'text-slide-up',
-        2: 'text-stretch-snap',
-        3: 'text-blur-scroller',
-        4: 'text-glide'
-      };
-      [1, 2, 3, 4].forEach(id => {
-        toggleTypo(id, presets[id]);
+    function copySnippetDirect(btn, text) {
+      navigator.clipboard.writeText(text).then(() => {
+        const origHtml = btn.innerHTML;
+        btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Copied!`;
+        btn.style.color = '#34d399';
+        btn.style.borderColor = 'rgba(52, 211, 153, 0.4)';
+        showToast('Copied to clipboard');
+        setTimeout(() => {
+          btn.innerHTML = origHtml;
+          btn.style.removeProperty('color');
+          btn.style.removeProperty('border-color');
+        }, 1800);
+      }).catch(() => {
+        showToast('Press Ctrl+C to copy');
       });
-      showToast('Playing all 4 kinetic text animations');
-    }
-
-    function resetAllTypo() {
-      [1, 2, 3, 4].forEach(id => {
-        hideTypo(id);
-      });
-      showToast('All text animations reset');
     }
 
     // Category Filter for Presets

@@ -48,6 +48,7 @@
           span.setAttribute('data-mos', anim);
           if (duration) span.setAttribute('data-mos-duration', duration);
           span.style.transitionDelay = `${idx * stagger}ms`;
+          span.style.animationDelay = `${idx * stagger}ms`;
           span.textContent = mode === 'chars' ? (item === ' ' ? '\u00A0' : item) : item + '\u00A0';
           el.appendChild(span);
         });
@@ -65,7 +66,7 @@
         observerInstance.disconnect();
       }
 
-      const elements = document.querySelectorAll('[data-mos]:not(#liveTarget):not(.typo-headline)');
+      const elements = document.querySelectorAll('[data-mos]:not(#liveTarget):not(#liveTextTarget):not(.typo-headline)');
 
       // Pre-apply custom durations & delays once to eliminate scroll-time style recalcs
       elements.forEach(el => {
@@ -74,6 +75,7 @@
         if (delay) {
           const d = (!delay.endsWith('s') && !delay.endsWith('ms')) ? `${delay}ms` : delay;
           el.style.transitionDelay = d;
+          el.style.animationDelay = d;
         }
         if (duration) {
           const dur = (!duration.endsWith('s') && !duration.endsWith('ms')) ? `${duration}ms` : duration;
@@ -116,7 +118,7 @@
     refresh() {
       this.prepareSplitText();
       if (observerInstance) {
-        const elements = document.querySelectorAll('[data-mos]:not(#liveTarget):not(.typo-headline)');
+        const elements = document.querySelectorAll('[data-mos]:not(#liveTarget):not(#liveTextTarget):not(.typo-headline)');
         elements.forEach(el => observerInstance.observe(el));
       }
     }

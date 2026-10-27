@@ -19,7 +19,7 @@
   transform: translateZ(0);
 }
 
-[data-mos].mos-animate {
+[data-mos]:not([data-mos^="text-"]).mos-animate {
   opacity: 1 !important;
   transform: none !important;
   filter: none !important;
@@ -48,7 +48,10 @@
 [data-mos="tilt-right"],
 [data-mos="flip-x"],
 [data-mos="flip-y"],
-[data-mos="text-glide"] {
+[data-mos="text-glide"],
+[data-mos="text-rotate-drop"],
+[data-mos="text-flip-clock"],
+[data-mos="text-spiral-spin"] {
   transform-style: preserve-3d;
 }
 
@@ -111,50 +114,340 @@
   white-space: pre-wrap;
 }
 
+/* Kinetic Keyframe Engines for Click-Triggered Typography */
+@keyframes mosSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(115%);
+    -webkit-clip-path: inset(0% 0% 99.9% 0%);
+    clip-path: inset(0% 0% 99.9% 0%);
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    -webkit-clip-path: inset(0% 0% 0% 0%);
+    clip-path: inset(0% 0% 0% 0%);
+  }
+}
+
+@keyframes mosStretchSnap {
+  0% {
+    opacity: 0;
+    transform: scaleY(2.2) scaleX(0.7) translateY(40px);
+    filter: blur(4px);
+  }
+  35% {
+    opacity: 1;
+    filter: blur(0px);
+    transform: scaleY(0.85) scaleX(1.15) translateY(-8px);
+  }
+  70% {
+    transform: scaleY(1.05) scaleX(0.95) translateY(2px);
+  }
+  100% {
+    opacity: 1;
+    transform: scaleY(1) scaleX(1) translateY(0);
+    filter: none;
+  }
+}
+
+@keyframes mosBlurScroller {
+  0% {
+    opacity: 0;
+    filter: blur(12px);
+    letter-spacing: 0.16em;
+    transform: translateY(24px) scale(0.94);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0px);
+    letter-spacing: normal;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes mosTextGlide {
+  0% {
+    opacity: 0;
+    transform: perspective(800px) rotateX(50deg) translateY(45px);
+    filter: blur(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: perspective(800px) rotateX(0deg) translateY(0);
+    filter: none;
+  }
+}
+
+/* 15 Extra High-Velocity Kinetic Scroll Keyframes */
+@keyframes mosWave {
+  0% { opacity: 0; transform: translateY(40px) scale(0.92); }
+  40% { opacity: 1; transform: translateY(-16px) scale(1.05); }
+  75% { transform: translateY(6px) scale(0.98); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes mosGlitch {
+  0% { opacity: 0; transform: skewX(-15deg) translateX(-20px); filter: drop-shadow(-3px 0 #ef4444) drop-shadow(3px 0 #06b6d4); }
+  25% { opacity: 1; transform: skewX(12deg) translateX(12px); filter: drop-shadow(2px 0 #ef4444) drop-shadow(-2px 0 #06b6d4); }
+  50% { transform: skewX(-6deg) translateX(-6px); filter: drop-shadow(-1px 0 #ef4444) drop-shadow(1px 0 #06b6d4); }
+  75% { transform: skewX(3deg) translateX(2px); filter: none; }
+  100% { opacity: 1; transform: skewX(0deg) translateX(0); filter: none; }
+}
+
+@keyframes mosZoomBurst {
+  0% { opacity: 0; transform: scale(2.2); filter: blur(12px); }
+  60% { opacity: 1; transform: scale(0.92); filter: blur(0px); }
+  85% { transform: scale(1.04); }
+  100% { opacity: 1; transform: scale(1); filter: none; }
+}
+
+@keyframes mosRotateDrop {
+  0% { opacity: 0; transform: perspective(900px) rotateX(-90deg) translateY(-50px); filter: blur(6px); }
+  65% { opacity: 1; transform: perspective(900px) rotateX(18deg) translateY(6px); filter: blur(0); }
+  85% { transform: perspective(900px) rotateX(-8deg) translateY(-2px); }
+  100% { opacity: 1; transform: perspective(900px) rotateX(0deg) translateY(0); filter: none; }
+}
+
+@keyframes mosBlurSpread {
+  0% { opacity: 0; filter: blur(16px); letter-spacing: -0.08em; transform: scale(0.88); }
+  60% { opacity: 1; filter: blur(3px); letter-spacing: 0.12em; }
+  100% { opacity: 1; filter: blur(0px); letter-spacing: normal; transform: scale(1); }
+}
+
+@keyframes mosSkewShear {
+  0% { opacity: 0; transform: skewX(-24deg) translateX(-45px); filter: blur(4px); }
+  60% { opacity: 1; transform: skewX(8deg) translateX(8px); filter: none; }
+  85% { transform: skewX(-3deg) translateX(-2px); }
+  100% { opacity: 1; transform: skewX(0deg) translateX(0); filter: none; }
+}
+
+@keyframes mosShutter {
+  0% { opacity: 0; transform: translateY(60px) scaleY(0.1); -webkit-clip-path: inset(100% 0% 0% 0%); clip-path: inset(100% 0% 0% 0%); }
+  50% { opacity: 1; -webkit-clip-path: inset(0% 0% 0% 0%); clip-path: inset(0% 0% 0% 0%); }
+  80% { transform: translateY(-5px) scaleY(1.05); }
+  100% { opacity: 1; transform: translateY(0) scaleY(1); -webkit-clip-path: inset(0% 0% 0% 0%); clip-path: inset(0% 0% 0% 0%); }
+}
+
+@keyframes mosMagneticPull {
+  0% { opacity: 0; transform: scale(0.5) translateY(50px); filter: blur(8px); }
+  50% { opacity: 1; transform: scale(1.15) translateY(-12px); filter: none; }
+  75% { transform: scale(0.95) translateY(4px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); filter: none; }
+}
+
+@keyframes mosNeonFlicker {
+  0% { opacity: 0; filter: brightness(0.2) drop-shadow(0 0 0 transparent); }
+  15% { opacity: 0.8; filter: brightness(1.8) drop-shadow(0 0 15px #38bdf8); }
+  25% { opacity: 0.2; filter: brightness(0.4); }
+  35% { opacity: 0.9; filter: brightness(2) drop-shadow(0 0 25px #38bdf8); }
+  50% { opacity: 0.4; }
+  65% { opacity: 1; filter: brightness(1.4) drop-shadow(0 0 18px #38bdf8); }
+  100% { opacity: 1; filter: drop-shadow(0 0 12px rgba(56, 189, 248, 0.6)); }
+}
+
+@keyframes mosFlipClock {
+  0% { opacity: 0; transform: perspective(800px) rotateX(90deg); transform-origin: top center; filter: blur(4px); }
+  55% { opacity: 1; transform: perspective(800px) rotateX(-20deg); transform-origin: top center; filter: none; }
+  80% { transform: perspective(800px) rotateX(8deg); }
+  100% { opacity: 1; transform: perspective(800px) rotateX(0deg); filter: none; }
+}
+
+@keyframes mosSpiralSpin {
+  0% { opacity: 0; transform: perspective(1000px) rotateZ(-120deg) rotateY(60deg) scale(0.4); filter: blur(8px); }
+  70% { opacity: 1; transform: perspective(1000px) rotateZ(12deg) rotateY(-8deg) scale(1.05); filter: none; }
+  100% { opacity: 1; transform: perspective(1000px) rotateZ(0deg) rotateY(0deg) scale(1); filter: none; }
+}
+
+@keyframes mosGradientFlow {
+  0% { opacity: 0; background-position: 200% center; transform: translateY(25px); }
+  30% { opacity: 1; }
+  100% { opacity: 1; background-position: 0% center; transform: translateY(0); }
+}
+
+@keyframes mosElasticBounce {
+  0% { opacity: 0; transform: scaleY(3.2) scaleX(0.6) translateY(60px); filter: blur(4px); }
+  45% { opacity: 1; transform: scaleY(0.7) scaleX(1.3) translateY(-18px); filter: none; }
+  70% { transform: scaleY(1.15) scaleX(0.9) translateY(6px); }
+  85% { transform: scaleY(0.95) scaleX(1.05) translateY(-2px); }
+  100% { opacity: 1; transform: scaleY(1) scaleX(1) translateY(0); filter: none; }
+}
+
+@keyframes mosMaskedCurtain {
+  0% { opacity: 0; -webkit-clip-path: polygon(0 0, 0 0, 0 100%, 0 100%); clip-path: polygon(0 0, 0 0, 0 100%, 0 100%); transform: translateX(-30px); }
+  50% { opacity: 1; }
+  100% { opacity: 1; -webkit-clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); transform: translateX(0); }
+}
+
+@keyframes mosPixelConverge {
+  0% { opacity: 0; letter-spacing: 0.1em; filter: blur(14px) contrast(180%); transform: scale(1.05); }
+  60% { opacity: 1; letter-spacing: 0.04em; filter: blur(3px) contrast(120%); }
+  100% { opacity: 1; letter-spacing: normal; filter: none; transform: scale(1); }
+}
+
 /* 1. Sliding Text Reveal (Masked Baseline Glide) */
 [data-mos="text-slide-up"] {
-  opacity: 1;
+  opacity: 0;
   transform: translateY(115%);
   -webkit-clip-path: inset(0% 0% 99.9% 0%);
   clip-path: inset(0% 0% 99.9% 0%);
-  --mos-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  transition: none !important;
 }
 [data-mos="text-slide-up"].mos-animate {
-  opacity: 1 !important;
-  transform: translateY(0) !important;
-  -webkit-clip-path: inset(0% 0% 0% 0%) !important;
-  clip-path: inset(0% 0% 0% 0%) !important;
+  opacity: 1;
+  transform: translateY(0);
+  -webkit-clip-path: inset(0% 0% 0% 0%);
+  clip-path: inset(0% 0% 0% 0%);
+  animation: mosSlideUp var(--mos-duration, 1.8s) var(--mos-ease, cubic-bezier(0.16, 1, 0.3, 1)) forwards;
 }
 
 /* 2. Stretch & Snap (Kinetic Elastic Recoil) */
 [data-mos="text-stretch-snap"] {
-  opacity: 0.05;
-  transform: scaleY(2.2) scaleX(0.7) translateY(35px);
+  opacity: 0;
+  transform: scaleY(2.2) scaleX(0.7) translateY(40px);
   transform-origin: bottom center;
-  filter: blur(3px);
-  --mos-ease: cubic-bezier(0.34, 1.56, 0.64, 1);
+  filter: blur(4px);
+  transition: none !important;
 }
 [data-mos="text-stretch-snap"].mos-animate {
-  opacity: 1 !important;
-  transform: none !important;
-  filter: none !important;
+  opacity: 1;
+  transform: scaleY(1) scaleX(1) translateY(0);
+  filter: none;
+  animation: mosStretchSnap var(--mos-duration, 1.8s) var(--mos-ease, cubic-bezier(0.34, 1.56, 0.64, 1)) forwards;
 }
 
 /* 3. Blur Text Scroller (Optical Bokeh & Tracking Expansion) */
 [data-mos="text-blur-scroller"] {
-  filter: blur(8px);
-  letter-spacing: 0.12em;
-  transform: translateY(20px) scale(0.96);
   opacity: 0;
-  --mos-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  filter: blur(14px);
+  letter-spacing: 0.16em;
+  transform: translateY(24px) scale(0.94);
+  transition: none !important;
+}
+[data-mos="text-blur-scroller"].mos-animate {
+  opacity: 1;
+  filter: none;
+  letter-spacing: normal;
+  transform: translateY(0) scale(1);
+  animation: mosBlurScroller var(--mos-duration, 1.8s) var(--mos-ease, cubic-bezier(0.16, 1, 0.3, 1)) forwards;
 }
 
 /* 4. Kinetic 3D Glide */
 [data-mos="text-glide"] {
-  transform: perspective(800px) rotateX(45deg) translateY(45px);
-  filter: blur(5px);
   opacity: 0;
-  --mos-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  transform: perspective(800px) rotateX(50deg) translateY(45px);
+  filter: blur(6px);
+  transform-style: preserve-3d;
+  transition: none !important;
+}
+[data-mos="text-glide"].mos-animate {
+  opacity: 1;
+  transform: perspective(800px) rotateX(0deg) translateY(0);
+  filter: none;
+  animation: mosTextGlide var(--mos-duration, 1.8s) var(--mos-ease, cubic-bezier(0.16, 1, 0.3, 1)) forwards;
+}
+
+/* 5. Sine Wave Ripple */
+[data-mos="text-wave"] { opacity: 0; transform: translateY(40px) scale(0.92); transition: none !important; }
+[data-mos="text-wave"].mos-animate { opacity: 1; transform: translateY(0) scale(1); animation: mosWave var(--mos-duration, 1.4s) cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+/* 6. Cyberpunk Scanline Glitch */
+[data-mos="text-glitch"] { opacity: 0; transform: skewX(-15deg); transition: none !important; }
+[data-mos="text-glitch"].mos-animate { opacity: 1; transform: none; animation: mosGlitch var(--mos-duration, 1.2s) cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
+
+/* 7. Kinetic Zoom Blast */
+[data-mos="text-zoom-burst"] { opacity: 0; transform: scale(2.2); filter: blur(12px); transition: none !important; }
+[data-mos="text-zoom-burst"].mos-animate { opacity: 1; transform: scale(1); filter: none; animation: mosZoomBurst var(--mos-duration, 1.3s) cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+/* 8. 3D Overhead Flip & Drop */
+[data-mos="text-rotate-drop"] { opacity: 0; transform: perspective(900px) rotateX(-90deg) translateY(-50px); filter: blur(6px); transform-style: preserve-3d; transition: none !important; }
+[data-mos="text-rotate-drop"].mos-animate { opacity: 1; transform: perspective(900px) rotateX(0deg) translateY(0); filter: none; animation: mosRotateDrop var(--mos-duration, 1.4s) cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+/* 9. Radial Bokeh Expansion */
+[data-mos="text-blur-spread"] { opacity: 0; filter: blur(16px); letter-spacing: -0.08em; transform: scale(0.88); transition: none !important; }
+[data-mos="text-blur-spread"].mos-animate { opacity: 1; filter: none; letter-spacing: normal; transform: scale(1); animation: mosBlurSpread var(--mos-duration, 1.5s) cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+/* 10. Architectural Skew & Shear */
+[data-mos="text-skew-shear"] { opacity: 0; transform: skewX(-24deg) translateX(-45px); filter: blur(4px); transition: none !important; }
+[data-mos="text-skew-shear"].mos-animate { opacity: 1; transform: none; filter: none; animation: mosSkewShear var(--mos-duration, 1.3s) cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+/* 11. Staggered Blind Shutter */
+[data-mos="text-shutter"] { opacity: 0; transform: translateY(60px) scaleY(0.1); -webkit-clip-path: inset(100% 0% 0% 0%); clip-path: inset(100% 0% 0% 0%); transition: none !important; }
+[data-mos="text-shutter"].mos-animate { opacity: 1; transform: none; -webkit-clip-path: inset(0% 0% 0% 0%); clip-path: inset(0% 0% 0% 0%); animation: mosShutter var(--mos-duration, 1.4s) cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+/* 12. Magnetic Spring Recoil */
+[data-mos="text-magnetic-pull"] { opacity: 0; transform: scale(0.5) translateY(50px); filter: blur(8px); transition: none !important; }
+[data-mos="text-magnetic-pull"].mos-animate { opacity: 1; transform: none; filter: none; animation: mosMagneticPull var(--mos-duration, 1.3s) cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+
+/* 13. Neon Glow Ignition */
+[data-mos="text-neon-flicker"] { opacity: 0; filter: brightness(0.2); transition: none !important; }
+[data-mos="text-neon-flicker"].mos-animate { opacity: 1; animation: mosNeonFlicker var(--mos-duration, 1.5s) ease-out forwards; }
+
+/* 14. Mechanical Split-Flap */
+[data-mos="text-flip-clock"] { opacity: 0; transform: perspective(800px) rotateX(90deg); transform-origin: top center; filter: blur(4px); transform-style: preserve-3d; transition: none !important; }
+[data-mos="text-flip-clock"].mos-animate { opacity: 1; transform: perspective(800px) rotateX(0deg); filter: none; animation: mosFlipClock var(--mos-duration, 1.3s) cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+/* 15. Spatial Vortex Twist */
+[data-mos="text-spiral-spin"] { opacity: 0; transform: perspective(1000px) rotateZ(-120deg) rotateY(60deg) scale(0.4); filter: blur(8px); transform-style: preserve-3d; transition: none !important; }
+[data-mos="text-spiral-spin"].mos-animate { opacity: 1; transform: perspective(1000px) rotateZ(0deg) rotateY(0deg) scale(1); filter: none; animation: mosSpiralSpin var(--mos-duration, 1.5s) cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+/* 16. Chromatic Gradient Shift */
+[data-mos="text-gradient-flow"] { opacity: 0; background: linear-gradient(90deg, #60a5fa, #a855f7, #ec4899, #38bdf8); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; transform: translateY(25px); transition: none !important; }
+[data-mos="text-gradient-flow"].mos-animate { opacity: 1; background: linear-gradient(90deg, #60a5fa, #a855f7, #ec4899, #38bdf8); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; transform: translateY(0); animation: mosGradientFlow var(--mos-duration, 1.6s) ease-out forwards; }
+
+/* 17. Rubber Band Rebound */
+[data-mos="text-elastic-bounce"] { opacity: 0; transform: scaleY(3.2) scaleX(0.6) translateY(60px); filter: blur(4px); transform-origin: bottom center; transition: none !important; }
+[data-mos="text-elastic-bounce"].mos-animate { opacity: 1; transform: none; filter: none; animation: mosElasticBounce var(--mos-duration, 1.5s) cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+
+/* 18. Diagonal Curtain Unveil */
+[data-mos="text-masked-curtain"] { opacity: 0; -webkit-clip-path: polygon(0 0, 0 0, 0 100%, 0 100%); clip-path: polygon(0 0, 0 0, 0 100%, 0 100%); transform: translateX(-30px); transition: none !important; }
+[data-mos="text-masked-curtain"].mos-animate { opacity: 1; -webkit-clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); transform: translateX(0); animation: mosMaskedCurtain var(--mos-duration, 1.4s) cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+/* 19. Optical Matrix Convergence */
+[data-mos="text-pixel-converge"] { opacity: 0; letter-spacing: 0.1em; filter: blur(14px) contrast(180%); transform: scale(1.05); transition: none !important; }
+[data-mos="text-pixel-converge"].mos-animate { opacity: 1; letter-spacing: normal; filter: none; transform: scale(1); animation: mosPixelConverge var(--mos-duration, 1.4s) cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+/* ==========================================================================
+   6. VELOCITY MARQUEE / INFINITE TEXT SCROLLER
+   ========================================================================== */
+@keyframes mosTickerLeft {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-50%, 0, 0); }
+}
+
+@keyframes mosTickerRight {
+  0% { transform: translate3d(-50%, 0, 0); }
+  100% { transform: translate3d(0, 0, 0); }
+}
+
+.mos-ticker-wrap {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+}
+
+.mos-ticker-track-left {
+  display: flex;
+  width: max-content;
+  animation: mosTickerLeft var(--mos-ticker-speed, 26s) linear infinite;
+  will-change: transform;
+}
+
+.mos-ticker-track-right {
+  display: flex;
+  width: max-content;
+  animation: mosTickerRight var(--mos-ticker-speed, 26s) linear infinite;
+  will-change: transform;
+}
+
+.mos-ticker-wrap:hover .mos-ticker-track-left,
+.mos-ticker-wrap:hover .mos-ticker-track-right {
+  animation-play-state: paused;
 }
 
 /* Accessibility support */

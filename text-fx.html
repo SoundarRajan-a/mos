@@ -1,0 +1,4432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MOS — Kinetic Typography Engine</title>
+  
+  <!-- Inter & JetBrains Mono Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Core Standalone MOS Library -->
+  <link rel="stylesheet" href="mos.css" />
+
+  <style>
+    /* ==========================================================================
+       MODERN DEVELOPER PLATFORM DESIGN
+       ========================================================================== */
+    :root {
+      color-scheme: dark;
+      --bg: #090a0f;
+      --card-bg: rgba(18, 20, 29, 0.65);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-hover: rgba(255, 255, 255, 0.16);
+      --accent: #3b82f6;
+      --text: #f3f4f6;
+      --text-muted: #8b949e;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html {
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+      max-width: 100vw;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      max-width: 100vw;
+      padding-top: 60px;
+    }
+
+    /* Fixed GPU-cached background layer: 0 repaints during scroll (Mild Ambience) */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.04) 0%, transparent 60%),
+        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 100% 100%, 48px 48px, 48px 48px;
+      pointer-events: none;
+      z-index: -1;
+      transform: translateZ(0);
+    }
+
+    section, [id] {
+      scroll-margin-top: 100px;
+    }
+
+    /* Always-Visible Fixed Navigation */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      z-index: 1000;
+      background: rgba(9, 10, 15, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--card-border);
+      transition: background 0.2s;
+    }
+
+    .nav-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0.85rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      font-weight: 800;
+      font-size: 1.15rem;
+      color: #fff;
+      text-decoration: none;
+      letter-spacing: -0.03em;
+    }
+
+    .brand-tag {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-weight: 600;
+      background: rgba(59, 130, 246, 0.15);
+      color: #60a5fa;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      padding: 0.15rem 0.5rem;
+      border-radius: 9999px;
+    }
+
+    .desktop-nav {
+      display: flex;
+      align-items: center;
+      gap: 1.75rem;
+    }
+
+    .desktop-nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: color 0.15s;
+    }
+
+    .desktop-nav a:hover { color: #fff; }
+
+    .nav-link-typo {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      color: #60a5fa !important;
+      background: rgba(59, 130, 246, 0.12);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      padding: 0.35rem 0.75rem;
+      border-radius: 9999px;
+      font-weight: 600 !important;
+      font-size: 0.82rem !important;
+    }
+
+    .btn-github {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: #e2e8f0;
+      padding: 0.4rem 0.85rem;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .btn-github:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Mobile Menu Toggle Button */
+    .mobile-menu-btn {
+      display: none;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--card-border);
+      color: #e2e8f0;
+      width: 36px;
+      height: 36px;
+      border-radius: 6px;
+      padding: 0;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .mobile-drawer {
+      display: none;
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+      background: rgba(10, 12, 18, 0.98);
+      border-bottom: 1px solid var(--card-border);
+      transition: max-height 0.32s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+    }
+
+    nav.menu-open .mobile-drawer {
+      display: block;
+      max-height: 480px;
+      opacity: 1;
+    }
+
+    .mobile-drawer-links {
+      display: flex;
+      flex-direction: column;
+      padding: 1rem 1.5rem 1.5rem;
+      gap: 0.35rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .mobile-drawer-link {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 0.85rem;
+      color: #cbd5e1;
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      border-radius: 6px;
+      transition: background 0.15s;
+    }
+    .mobile-drawer-link:hover, .mobile-drawer-link.active {
+      background: rgba(255, 255, 255, 0.06);
+      color: #fff;
+    }
+
+    /* Layout Container */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 6rem;
+    }
+
+    /* Back Link */
+    .back-nav {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
+      margin-bottom: 2rem;
+      transition: color 0.15s, transform 0.15s;
+    }
+    .back-nav:hover {
+      color: #60a5fa;
+      transform: translateX(-3px);
+    }
+
+    /* Page Header */
+    .page-header {
+      margin-bottom: 2.5rem;
+    }
+
+    .page-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: #60a5fa;
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      padding: 0.3rem 0.75rem;
+      border-radius: 9999px;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .page-title {
+      font-size: clamp(2rem, 4.5vw, 3rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+      color: #fff;
+    }
+
+    .page-desc {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 680px;
+      line-height: 1.6;
+    }
+
+    /* Master Action Bar */
+    .typo-master-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(59, 130, 246, 0.08);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      border-radius: 10px;
+      padding: 1.1rem 1.5rem;
+      margin-bottom: 2.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .typo-master-text {
+      font-size: 0.88rem;
+      color: #93c5fd;
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+    }
+
+    .typo-master-actions {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .btn-master-play {
+      background: #3b82f6;
+      color: #fff;
+      border: none;
+      padding: 0.55rem 1.1rem;
+      border-radius: 6px;
+      font-size: 0.84rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      transition: background 0.15s;
+    }
+    .btn-master-play:hover { background: #2563eb; }
+
+    .btn-master-reset {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--card-border);
+      color: #cbd5e1;
+      padding: 0.55rem 1rem;
+      border-radius: 6px;
+      font-size: 0.84rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      transition: all 0.15s;
+    }
+    .btn-master-reset:hover { background: rgba(255, 255, 255, 0.12); color: #fff; }
+
+    /* Cards Grid */
+    .typo-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+      margin-bottom: 4rem;
+    }
+
+    .typo-card {
+      background: #101524;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 1.8rem 1.8rem;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      transition: border-color 0.2s, box-shadow 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .extra-card.is-hidden {
+      display: none !important;
+    }
+
+    @media (hover: hover) {
+      .typo-card:hover {
+        border-color: rgba(255, 255, 255, 0.22);
+        box-shadow: 0 14px 38px rgba(0, 0, 0, 0.45);
+      }
+    }
+
+    .typo-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      padding-bottom: 0.8rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .typo-label {
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #94a3b8;
+      word-break: break-word;
+    }
+
+    .typo-badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      padding: 0.25rem 0.65rem;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      white-space: nowrap;
+    }
+
+    .typo-stage {
+      min-height: 110px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at center, rgba(56, 189, 248, 0.04) 0%, transparent 70%);
+      border: 1px dashed rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      padding: 1.4rem 1rem;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+      transition: border-color 0.2s;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .typo-stage:hover {
+      border-color: rgba(59, 130, 246, 0.4);
+    }
+
+    .typo-headline {
+      font-size: clamp(1.05rem, 3.2vw, 2.1rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+      text-align: center;
+      line-height: 1.25;
+      max-width: 100%;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+    }
+
+    .typo-placeholder {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      color: #64748b;
+      font-size: 0.92rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      pointer-events: none;
+      text-align: center;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .typo-placeholder svg {
+      opacity: 0.7;
+      color: #60a5fa;
+      flex-shrink: 0;
+    }
+
+    .typo-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .typo-code {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: #cbd5e1;
+      background: #080a10;
+      padding: 0.65rem 0.95rem;
+      border-radius: 6px;
+      border: 1px solid var(--card-border);
+      flex: 1;
+      min-width: 0;
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: nowrap;
+      box-sizing: border-box;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255, 255, 255, 0.15) rgba(0, 0, 0, 0.2);
+    }
+
+    .typo-code::-webkit-scrollbar {
+      height: 4px;
+    }
+    .typo-code::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 2px;
+    }
+    .typo-code::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 2px;
+    }
+    .typo-code::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.28);
+    }
+
+    .typo-action-group {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .typo-btn-trigger {
+      background: #3b82f6;
+      color: #ffffff;
+      border: none;
+      padding: 0.6rem 1.1rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      transition: all 0.15s;
+      box-shadow: 0 4px 14px rgba(59, 130, 246, 0.3);
+    }
+
+    .typo-btn-trigger:hover {
+      background: #2563eb;
+      transform: translateY(-1px);
+    }
+
+    .typo-btn-hide {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: #94a3b8;
+      padding: 0.6rem 0.85rem;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      cursor: pointer;
+      display: none;
+      transition: all 0.15s;
+    }
+
+    .typo-btn-hide:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+
+    .c-tag  { color: #f43f5e; }
+    .c-attr { color: #38bdf8; }
+    .c-val  { color: #f59e0b; }
+    .c-num  { color: #a855f7; }
+
+    /* Return Bar */
+    .return-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #101524;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 1.5rem 2rem;
+      flex-wrap: wrap;
+      gap: 1.2rem;
+      margin-top: 2rem;
+    }
+
+    .return-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #60a5fa;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: color 0.15s, transform 0.15s;
+    }
+    .return-link:hover {
+      color: #93c5fd;
+      transform: translateY(-1px);
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--card-border);
+      padding: 3rem 1.5rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      background: #06070a;
+    }
+
+    footer a {
+      color: #cbd5e1;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      color: #fff;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: #111624;
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      padding: 0.75rem 1.25rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      opacity: 0;
+      transform: translateY(15px);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+      z-index: 2000;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ==========================================================================
+       TEXT SCROLLING EFFECTS & MARQUEE STYLES
+       ========================================================================== */
+    .fx-nav-tabs {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .fx-tab-btn {
+      padding: 0.55rem 1.15rem;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      transition: all 0.2s;
+    }
+
+    .fx-tab-btn:hover, .fx-tab-btn.active {
+      background: rgba(59, 130, 246, 0.15);
+      border-color: rgba(59, 130, 246, 0.4);
+      color: #93c5fd;
+    }
+
+    .section-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.35), rgba(255, 255, 255, 0.1), transparent);
+      margin: 4.5rem 0 3.5rem;
+    }
+
+    .scroll-fx-section {
+      margin-top: 1rem;
+      margin-bottom: 3rem;
+    }
+
+    .scroll-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 2.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      margin-bottom: 2.2rem;
+      transition: border-color 0.2s;
+    }
+
+    .scroll-card:hover {
+      border-color: var(--card-hover);
+    }
+
+    /* Velocity Marquee Ticker */
+    .ticker-stage {
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px dashed rgba(255, 255, 255, 0.14);
+      border-radius: 10px;
+      padding: 1.8rem 0;
+      overflow: hidden;
+      position: relative;
+      mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+      -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+    }
+
+    .ticker-row {
+      display: flex;
+      white-space: nowrap;
+      margin: 0.6rem 0;
+    }
+
+    .ticker-item {
+      font-size: clamp(1.3rem, 3.2vw, 2.1rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      padding: 0 1.5rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 1.5rem;
+      user-select: none;
+    }
+
+    .ticker-item-solid {
+      color: #ffffff;
+    }
+
+    .ticker-item-accent {
+      color: #60a5fa;
+      text-shadow: 0 0 25px rgba(96, 165, 250, 0.4);
+    }
+
+    .ticker-item-outline {
+      color: transparent;
+      -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.5);
+      transition: -webkit-text-stroke 0.2s, color 0.2s;
+    }
+
+    .ticker-item:hover .ticker-item-outline {
+      -webkit-text-stroke: 1.5px #38bdf8;
+      color: rgba(56, 189, 248, 0.1);
+    }
+
+    .ticker-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #3b82f6;
+      display: inline-block;
+      box-shadow: 0 0 10px #3b82f6;
+      flex-shrink: 0;
+    }
+
+    /* Editorial Scroll Scrub */
+    .scrub-stage {
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px dashed rgba(255, 255, 255, 0.14);
+      border-radius: 10px;
+      padding: 2.2rem 2rem;
+      position: relative;
+    }
+
+    .scrub-meter-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.85rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: #94a3b8;
+    }
+
+    .scrub-progress-track {
+      flex: 1;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 9999px;
+      margin: 0 1.25rem;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .scrub-progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #3b82f6, #10b981);
+      border-radius: 9999px;
+      transition: width 0.08s linear;
+    }
+
+    .scrub-paragraph {
+      font-size: clamp(1.3rem, 2.7vw, 1.95rem);
+      font-weight: 700;
+      line-height: 1.5;
+      letter-spacing: -0.025em;
+    }
+
+    .scrub-word {
+      display: inline-block;
+      margin-right: 0.28em;
+      opacity: 0.16;
+      filter: blur(2px);
+      transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1), filter 0.22s cubic-bezier(0.16, 1, 0.3, 1), transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      transform: translateY(2px);
+      color: #fff;
+    }
+
+    .scrub-word.active {
+      opacity: 1;
+      filter: blur(0px);
+      transform: translateY(0);
+      color: #ffffff;
+      text-shadow: 0 0 20px rgba(96, 165, 250, 0.28);
+    }
+
+    .scrub-word.highlight {
+      color: #60a5fa;
+      text-shadow: 0 0 22px rgba(96, 165, 250, 0.45);
+    }
+
+    /* Viewport Stagger Headlines */
+    .stagger-stage {
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px dashed rgba(255, 255, 255, 0.14);
+      border-radius: 10px;
+      padding: 2.2rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+      min-height: 110px;
+    }
+
+    .stagger-headline {
+      font-size: clamp(1.6rem, 3.8vw, 2.4rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+    }
+
+    /* ==========================================================================
+       SCROLLING 04-13 ADVANCED SCROLL EFFECTS STYLES
+       ========================================================================== */
+
+    /* 04. Dual-Track Parallax Split */
+    .parallax-dual-stage {
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px dashed rgba(255, 255, 255, 0.14);
+      border-radius: 10px;
+      padding: 1.8rem 0;
+      overflow: hidden;
+      position: relative;
+      mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+      -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+    }
+    .parallax-track {
+      display: flex;
+      white-space: nowrap;
+      will-change: transform;
+      margin: 0.5rem 0;
+      transition: transform 0.08s linear;
+    }
+    .parallax-item {
+      font-size: clamp(1.2rem, 3.2vw, 2rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      padding: 0 1.25rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 1.25rem;
+      user-select: none;
+    }
+
+    /* 05. 3D Cylindrical Perspective Rolodex */
+    .rolodex-stage {
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px dashed rgba(255, 255, 255, 0.14);
+      border-radius: 10px;
+      padding: 2.5rem 1.5rem;
+      perspective: 900px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 240px;
+      position: relative;
+    }
+    .rolodex-drum {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      transform-style: preserve-3d;
+      transition: transform 0.15s ease-out;
+      width: 100%;
+      align-items: center;
+    }
+    .rolodex-item {
+      font-size: clamp(1rem, 2.6vw, 1.55rem);
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      padding: 0.5rem 1.25rem;
+      border-radius: 8px;
+      transition: all 0.25s ease-out;
+      transform-origin: center center;
+      text-align: center;
+      user-select: none;
+      width: 100%;
+      max-width: 580px;
+      box-sizing: border-box;
+    }
+
+    /* 06. Velocity Sine Waveform */
+    .waveform-stage {
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px dashed rgba(255, 255, 255, 0.14);
+      border-radius: 10px;
+      padding: 2.8rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      min-height: 140px;
+      position: relative;
+    }
+    .waveform-text {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: clamp(1.2rem, 3.2vw, 2.2rem);
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      user-select: none;
+      flex-wrap: wrap;
+    }
+    .wave-char {
+      display: inline-block;
+      transition: transform 0.08s ease-out, color 0.15s;
+      will-change: transform;
+    }
+
+    /* 07. Spotlight Beam Mask */
+    .spotlight-stage {
+      background: #050608;
+      border: 1px dashed rgba(255, 255, 255, 0.14);
+      border-radius: 10px;
+      padding: 3rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .spotlight-headline {
+      font-size: clamp(1.4rem, 3.6vw, 2.4rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      text-align: center;
+      line-height: 1.3;
+      user-select: none;
+      background: radial-gradient(circle 160px at var(--spot-x, 50%) 50%, #ffffff 0%, #38bdf8 35%, rgba(255, 255, 255, 0.12) 75%, rgba(255, 255, 255, 0.04) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      transition: background 0.05s linear;
+    }
+
+    /* 08. Mechanical Rolling Odometer */
+    .odometer-stage {
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px dashed rgba(255, 255, 255, 0.14);
+      border-radius: 10px;
+      padding: 2.2rem 1.5rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+    }
+    .odometer-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      padding: 1.25rem 1rem;
+      text-align: center;
+    }
+    .odometer-value-box {
+      font-size: clamp(1.8rem, 3.8vw, 2.6rem);
+      font-weight: 800;
+      font-family: var(--font-mono);
+      color: #60a5fa;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-bottom: 0.35rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.2rem;
+    }
+    .odometer-digit-col {
+      display: inline-block;
+      height: 1.2em;
+      overflow: hidden;
+      line-height: 1.2em;
+      position: relative;
+    }
+    .odometer-digit-strip {
+      display: flex;
+      flex-direction: column;
+      transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .odometer-digit-strip span {
+      height: 1.2em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .odometer-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    /* 09. Pinned Horizontal Slide Track */
+    .pinned-track-stage {
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px dashed rgba(255, 255, 255, 0.14);
+      border-radius: 10px;
+      padding: 2.2rem 0;
+      overflow: hidden;
+      position: relative;
+    }
+    .pinned-slider-content {
+      display: flex;
+      white-space: nowrap;
+      transition: transform 0.1s linear;
+      will-change: transform;
+      padding: 0 1.5rem;
+    }
+    .pinned-slide-headline {
+      font-size: clamp(1.8rem, 4.5vw, 3.2rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    /* 10. Cyberpunk Matrix Decryptor */
+    .decryptor-stage {
+      background: #05080c;
+      border: 1px dashed rgba(56, 189, 248, 0.25);
+      border-radius: 10px;
+      padding: 2.8rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .decryptor-text {
+      font-family: var(--font-mono);
+      font-size: clamp(1.1rem, 2.8vw, 1.85rem);
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: #38bdf8;
+      text-shadow: 0 0 16px rgba(56, 189, 248, 0.5);
+      word-break: break-word;
+      user-select: none;
+    }
+
+    /* 11. 3D Isometric Card Stack */
+    .isometric-stage {
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px dashed rgba(255, 255, 255, 0.14);
+      border-radius: 10px;
+      padding: 3rem 1.5rem;
+      perspective: 1200px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 260px;
+    }
+    .iso-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 0px;
+      transform: rotateX(55deg) rotateZ(-28deg);
+      transform-style: preserve-3d;
+      transition: transform 0.3s ease-out;
+    }
+    .iso-card {
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.9));
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      border-radius: 10px;
+      padding: 1.1rem 2rem;
+      font-size: clamp(1rem, 2.4vw, 1.45rem);
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      color: #fff;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s;
+      white-space: nowrap;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    /* 12. Deep Focus Optical Zoom */
+    .deep-focus-stage {
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px dashed rgba(255, 255, 255, 0.14);
+      border-radius: 10px;
+      padding: 3.5rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      min-height: 180px;
+      position: relative;
+    }
+    .deep-focus-headline {
+      font-size: clamp(1.4rem, 4vw, 2.8rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+      text-align: center;
+      line-height: 1.25;
+      user-select: none;
+      will-change: transform, filter, opacity;
+      transition: transform 0.15s ease-out, filter 0.15s ease-out;
+    }
+
+    /* 13. Chromatic Border Beam */
+    .chroma-beam-stage {
+      background: #06080e;
+      border-radius: 10px;
+      padding: 3rem 2rem;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .chroma-beam-stage::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      background: conic-gradient(from var(--beam-angle, 0deg), transparent 70%, #60a5fa 85%, #ec4899 92%, #38bdf8 100%);
+      border-radius: 12px;
+      z-index: 0;
+    }
+    .chroma-beam-stage::after {
+      content: '';
+      position: absolute;
+      inset: 1px;
+      background: #090b12;
+      border-radius: 9px;
+      z-index: 1;
+    }
+    .chroma-beam-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+    }
+    .chroma-beam-headline {
+      font-size: clamp(1.4rem, 3.8vw, 2.6rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: #fff;
+      margin-bottom: 0.5rem;
+    }
+    .chroma-beam-sub {
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      color: #94a3b8;
+    }
+
+    /* ==========================================================================
+       SCROLLING 14-23 ADVANCED SCROLL EFFECTS STYLES
+       ========================================================================== */
+
+    /* 14. Liquid Fluid Refraction Wave */
+    .liquid-wave-stage {
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px dashed rgba(255, 255, 255, 0.14);
+      border-radius: 10px;
+      padding: 3rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      min-height: 140px;
+    }
+    .liquid-headline {
+      font-size: clamp(1.3rem, 3.5vw, 2.4rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #38bdf8;
+      text-align: center;
+      line-height: 1.25;
+      user-select: none;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.15rem;
+    }
+    .liquid-char {
+      display: inline-block;
+      transition: transform 0.12s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.12s;
+      will-change: transform;
+    }
+
+    /* 15. High-Voltage Neon Tube Ignition */
+    .neon-tube-stage {
+      background: #050508;
+      border: 1px dashed rgba(255, 255, 255, 0.14);
+      border-radius: 10px;
+      padding: 3.2rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      min-height: 140px;
+    }
+    .neon-tube-headline {
+      font-size: clamp(1.3rem, 3.4vw, 2.3rem);
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-align: center;
+      user-select: none;
+      transition: color 0.15s, text-shadow 0.15s;
+    }
+    .neon-tube-cyan {
+      color: #38bdf8;
+      text-shadow: 0 0 10px rgba(56, 189, 248, var(--neon-op, 0.8)), 0 0 25px rgba(56, 189, 248, var(--neon-op, 0.8)), 0 0 50px rgba(56, 189, 248, 0.5);
+    }
+    .neon-tube-amber {
+      color: #f59e0b;
+      text-shadow: 0 0 10px rgba(245, 158, 11, var(--neon-op, 0.8)), 0 0 25px rgba(245, 158, 11, var(--neon-op, 0.8)), 0 0 50px rgba(245, 158, 11, 0.5);
+    }
+    .neon-tube-magenta {
+      color: #ec4899;
+      text-shadow: 0 0 10px rgba(236, 72, 153, var(--neon-op, 0.8)), 0 0 25px rgba(236, 72, 153, var(--neon-op, 0.8)), 0 0 50px rgba(236, 72, 153, 0.5);
+    }
+
+    /* 16. Anamorphic Lens Flare & Streak */
+    .anamorphic-flare-stage {
+      background: #040508;
+      border: 1px dashed rgba(255, 255, 255, 0.14);
+      border-radius: 10px;
+      padding: 3.2rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      min-height: 140px;
+    }
+    .anamorphic-headline {
+      font-size: clamp(1.3rem, 3.6vw, 2.4rem);
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      color: #e2e8f0;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+      user-select: none;
+    }
+    .anamorphic-flare-streak {
+      position: absolute;
+      top: 50%;
+      left: var(--flare-x, 50%);
+      transform: translate(-50%, -50%);
+      width: 480px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent 0%, rgba(56, 189, 248, 0.8) 40%, #ffffff 50%, rgba(56, 189, 248, 0.8) 60%, transparent 100%);
+      box-shadow: 0 0 25px 6px rgba(56, 189, 248, 0.65), 0 0 60px 14px rgba(96, 165, 250, 0.4);
+      pointer-events: none;
+      z-index: 3;
+      transition: left 0.05s linear;
+    }
+
+    /* 17. Infinite Circular Topology Ribbon */
+    .circular-loop-stage {
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px dashed rgba(255, 255, 255, 0.14);
+      border-radius: 10px;
+      padding: 2.5rem 1.5rem;
+      perspective: 1000px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 200px;
+      position: relative;
+    }
+    .circular-orbit-wrap {
+      transform-style: preserve-3d;
+      transition: transform 0.1s linear;
+      will-change: transform;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .orbit-item {
+      font-size: clamp(1.1rem, 2.8vw, 1.7rem);
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      color: #fff;
+      white-space: nowrap;
+      padding: 0.6rem 1.5rem;
+      border-radius: 9999px;
+      background: rgba(59, 130, 246, 0.12);
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      user-select: none;
+    }
+
+    /* 18. Architectural Louver Shutter Slats */
+    .louver-shutter-stage {
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px dashed rgba(255, 255, 255, 0.14);
+      border-radius: 10px;
+      padding: 3rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 140px;
+      perspective: 800px;
+      position: relative;
+    }
+    .louver-wrapper {
+      position: relative;
+      display: inline-block;
+      transform-style: preserve-3d;
+    }
+    .louver-slat {
+      display: block;
+      transform-origin: top center;
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s;
+      font-size: clamp(1.4rem, 3.8vw, 2.5rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #60a5fa;
+      user-select: none;
+    }
+
+    /* 19. Variable Typographic Weight & Tracking Axis */
+    .variable-axis-stage {
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px dashed rgba(255, 255, 255, 0.14);
+      border-radius: 10px;
+      padding: 3rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-height: 140px;
+      position: relative;
+    }
+    .variable-headline {
+      font-size: clamp(1.3rem, 3.6vw, 2.4rem);
+      letter-spacing: var(--var-track, -0.02em);
+      font-weight: var(--var-weight, 700);
+      color: #ffffff;
+      line-height: 1.25;
+      user-select: none;
+      transition: font-weight 0.05s linear, letter-spacing 0.05s linear;
+    }
+
+    /* 20. Chromatic RGB Holographic Aberration Shift */
+    .chroma-hologram-stage {
+      background: #030508;
+      border: 1px dashed rgba(255, 255, 255, 0.14);
+      border-radius: 10px;
+      padding: 3.2rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-height: 140px;
+      position: relative;
+    }
+    .hologram-headline {
+      font-size: clamp(1.4rem, 3.8vw, 2.5rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+      text-shadow: calc(-1 * var(--rgb-offset, 4px)) 0 rgba(244, 63, 94, 0.85), var(--rgb-offset, 4px) 0 rgba(56, 189, 248, 0.85);
+      user-select: none;
+      transition: text-shadow 0.06s ease-out;
+    }
+
+    /* 21. Magnetic Cursor Gravity & Repulsion Field */
+    .magnetic-gravity-stage {
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px dashed rgba(255, 255, 255, 0.14);
+      border-radius: 10px;
+      padding: 3rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 140px;
+      position: relative;
+      cursor: crosshair;
+    }
+    .magnetic-text {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      font-size: clamp(1.2rem, 3.2vw, 2.2rem);
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      user-select: none;
+    }
+    .mag-char {
+      display: inline-block;
+      transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), color 0.15s;
+      will-change: transform;
+    }
+
+    /* 22. Spectral Audio Equalizer Frequency Bars */
+    .spectral-eq-stage {
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px dashed rgba(255, 255, 255, 0.14);
+      border-radius: 10px;
+      padding: 2.8rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 150px;
+      position: relative;
+    }
+    .spectral-headline {
+      font-size: clamp(1.3rem, 3.4vw, 2.3rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+      margin-bottom: 1.25rem;
+      text-align: center;
+      user-select: none;
+    }
+    .spectral-bars-row {
+      display: flex;
+      align-items: flex-end;
+      gap: 5px;
+      height: 38px;
+    }
+    .eq-bar {
+      width: 7px;
+      height: 12px;
+      background: linear-gradient(180deg, #60a5fa, #34d399);
+      border-radius: 3px 3px 0 0;
+      transition: height 0.08s ease-out;
+    }
+
+    /* 23. Sub-Pixel Quantization Grid Dissolve */
+    .pixel-grid-stage {
+      background: #03060a;
+      border: 1px dashed rgba(56, 189, 248, 0.3);
+      border-radius: 10px;
+      padding: 3.2rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 140px;
+      position: relative;
+      overflow: hidden;
+    }
+    .pixel-headline {
+      font-family: var(--font-mono);
+      font-size: clamp(1.2rem, 3.2vw, 2.2rem);
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: #38bdf8;
+      text-shadow: 0 0 16px rgba(56, 189, 248, 0.4);
+      user-select: none;
+      transition: filter 0.2s ease-out, letter-spacing 0.2s ease-out;
+    }
+
+    /* Toolbar & Buttons */
+    .fx-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.85rem;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+    }
+
+    .fx-btn-group {
+      display: flex;
+      gap: 0.45rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .fx-btn-pill {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      border-radius: 6px;
+      padding: 0.4rem 0.8rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: all 0.15s;
+    }
+
+    .fx-btn-pill:hover, .fx-btn-pill.active {
+      background: rgba(59, 130, 246, 0.22);
+      border-color: rgba(59, 130, 246, 0.45);
+      color: #fff;
+    }
+
+    .scrub-slider-box {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+    }
+
+    .scrub-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 140px;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 9999px;
+      outline: none;
+    }
+
+    .scrub-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #3b82f6;
+      cursor: pointer;
+      box-shadow: 0 0 8px #3b82f6;
+    }
+
+    @media (max-width: 900px) {
+      .container {
+        padding: 2rem 1.25rem 5rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .desktop-nav { display: none; }
+      .mobile-menu-btn { display: inline-flex; }
+      .container { padding: 1.5rem 1rem 4rem; }
+      .page-header { margin-bottom: 1.75rem; }
+      .page-title { font-size: 1.85rem; }
+      .page-desc { font-size: 0.95rem; }
+      .fx-nav-tabs {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        padding-bottom: 0.5rem;
+      }
+      .fx-tab-btn {
+        flex-shrink: 0;
+        white-space: nowrap;
+        font-size: 0.8rem;
+        padding: 0.45rem 0.85rem;
+      }
+      .typo-card, .scroll-card {
+        padding: 1.35rem 1.1rem;
+        border-radius: 10px;
+        gap: 1rem;
+      }
+      .typo-meta {
+        flex-direction: row;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .typo-label {
+        font-size: 0.78rem;
+      }
+      .typo-badge {
+        font-size: 0.68rem;
+      }
+      .typo-stage {
+        min-height: 95px;
+        padding: 1.2rem 0.75rem;
+      }
+      .typo-headline {
+        font-size: clamp(0.95rem, 3.8vw, 1.45rem);
+        line-height: 1.25;
+      }
+      .typo-bottom {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.65rem;
+      }
+      .typo-code {
+        width: 100%;
+        font-size: 0.72rem;
+        padding: 0.55rem 0.75rem;
+      }
+      .typo-action-group {
+        width: 100%;
+        display: flex;
+        gap: 0.5rem;
+      }
+      .typo-btn-trigger {
+        width: 100%;
+        justify-content: center;
+        font-size: 0.82rem;
+        padding: 0.65rem 1rem;
+      }
+      .fx-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.75rem;
+        padding: 0.85rem;
+      }
+      .fx-btn-group {
+        width: 100%;
+        flex-wrap: wrap;
+        gap: 0.35rem;
+      }
+      .fx-btn-pill {
+        flex: 1 1 auto;
+        justify-content: center;
+        font-size: 0.76rem;
+        padding: 0.4rem 0.6rem;
+      }
+      .scrub-stage {
+        padding: 1.5rem 1rem;
+      }
+      .scrub-paragraph {
+        font-size: 1.25rem;
+      }
+      .scrub-slider-box {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+      }
+      .scrub-slider {
+        flex: 1;
+      }
+      .return-bar {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 1.4rem 1.2rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container { padding: 1.25rem 0.75rem 3.5rem; }
+      .page-title { font-size: 1.6rem; }
+      .typo-master-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.85rem;
+        padding: 1rem;
+      }
+      .typo-master-actions {
+        width: 100%;
+        display: flex;
+        gap: 0.5rem;
+      }
+      .btn-master-play, .btn-master-reset {
+        flex: 1;
+        justify-content: center;
+      }
+      .ticker-stage {
+        padding: 1.25rem 0;
+      }
+      .ticker-item {
+        font-size: 1.15rem;
+        padding: 0 0.85rem;
+        gap: 0.85rem;
+      }
+      .scrub-paragraph {
+        font-size: 1.1rem;
+        line-height: 1.4;
+      }
+      .stagger-stage {
+        padding: 1.5rem 0.85rem;
+        min-height: 90px;
+      }
+      .stagger-headline, .typo-headline {
+        font-size: clamp(0.88rem, 4.4vw, 1.2rem);
+        line-height: 1.2;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sticky Top Navigation -->
+  <nav>
+    <div class="nav-container">
+      <a href="index.html" class="brand">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: #60a5fa;"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        MOS
+        <span class="brand-tag">v1.0</span>
+      </a>
+
+      <div class="desktop-nav">
+        <a href="index.html#playground">Playground</a>
+        <a href="#click-fx">Click FX</a>
+        <a href="#scroll-fx">Scroll FX</a>
+        <a href="#extra-text-fx" class="nav-link-typo">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          15 Extra FX
+        </a>
+        <a href="index.html#presets">28 Presets</a>
+        <a href="index.html#docs">Docs</a>
+        <a href="https://github.com/soundarrajan-a/mos" target="_blank" rel="noopener" class="btn-github">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+          Source
+        </a>
+      </div>
+
+      <!-- Mobile Hamburger Button -->
+      <button id="mobileMenuBtn" class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle navigation menu" aria-expanded="false">
+        <svg class="icon-hamburger" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+
+    <!-- Mobile Slide-Down Drawer -->
+    <div class="mobile-drawer" id="mobileDrawer">
+      <div class="mobile-drawer-links">
+        <a href="index.html#playground" class="mobile-drawer-link" onclick="closeMobileMenu()">
+          Playground Studio
+        </a>
+        <a href="#click-fx" class="mobile-drawer-link" onclick="closeMobileMenu()">
+          Click-To-Play Typography
+        </a>
+        <a href="#scroll-fx" class="mobile-drawer-link active" onclick="closeMobileMenu()">
+          Text Scrolling Effects
+        </a>
+        <a href="index.html#presets" class="mobile-drawer-link" onclick="closeMobileMenu()">
+          28 Preset Animations
+        </a>
+        <a href="index.html#docs" class="mobile-drawer-link" onclick="closeMobileMenu()">
+          Documentation
+        </a>
+        <a href="https://github.com/soundarrajan-a/mos" target="_blank" rel="noopener" class="mobile-drawer-link" onclick="closeMobileMenu()">
+          GitHub Repository
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Container -->
+  <div class="container">
+    
+    <a href="index.html" class="back-nav">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Back to Home
+    </a>
+
+    <div class="page-header">
+      <div class="page-badge">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg>
+        Kinetic Typography Engine
+      </div>
+      <h1 class="page-title">Kinetic Typography & Text Scrolling</h1>
+      <p class="page-desc">High-performance typography suite: trigger on-demand click reveals or experience kinetic horizontal velocity marquees and scroll-scrubbed highlights.</p>
+    </div>
+
+    <!-- Mode Selector Navigation Tabs -->
+    <div class="fx-nav-tabs">
+      <a href="#click-fx" class="fx-tab-btn active">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        Click-To-Play Typography (4)
+      </a>
+      <a href="#scroll-fx" class="fx-tab-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+        Scrolling Suite (23)
+      </a>
+      <a href="#extra-text-fx" class="fx-tab-btn" style="border-color: rgba(168, 85, 247, 0.35); color: #c084fc;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        15 Extra Scroll FX (15)
+      </a>
+    </div>
+
+    <!-- SECTION 1: ON-DEMAND CLICK TYPOGRAPHY -->
+    <section id="click-fx">
+      <!-- Master Action Bar -->
+      <div class="typo-master-bar">
+        <div class="typo-master-text">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span>Text reveals trigger strictly when you click each button or stage box below.</span>
+        </div>
+        <div class="typo-master-actions">
+          <button class="btn-master-play" onclick="playAllTypo()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Play All 4
+          </button>
+          <button class="btn-master-reset" onclick="resetAllTypo()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+            Reset All
+          </button>
+        </div>
+      </div>
+
+    <div class="typo-grid">
+
+      <!-- TYPO 1: Sliding Text Reveal -->
+      <div class="typo-card" id="typoCard1">
+        <div class="typo-meta">
+          <span class="typo-label">Typography 01 / Sliding Text Reveal</span>
+          <span class="typo-badge">Masked Baseline Glide</span>
+        </div>
+        <div class="typo-stage" id="typoStage1" onclick="toggleTypo(1, 'text-slide-up')" title="Click stage to trigger text animation">
+          <div id="typoPrompt1" class="typo-placeholder">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill="currentColor"/></svg>
+            Click button below to show text animation
+          </div>
+          <h2 id="typoHeading1" class="typo-headline" data-mos="text-slide-up" data-mos-duration="1800" style="display: none;">
+            CRAFTING NEXT-GEN MOTION
+          </h2>
+        </div>
+        <div class="typo-bottom">
+          <div class="typo-code">
+            &lt;h1 <span class="c-attr">data-mos</span>=<span class="c-val">"text-slide-up"</span> <span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span>&gt;Crafting Next-Gen Motion&lt;/h1&gt;
+          </div>
+          <div class="typo-action-group">
+            <button id="typoBtn1" class="typo-btn-trigger" onclick="toggleTypo(1, 'text-slide-up')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Show Sliding Reveal
+            </button>
+            <button id="typoHideBtn1" class="typo-btn-hide" onclick="hideTypo(1)">
+              Hide
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TYPO 2: Stretch & Snap -->
+      <div class="typo-card" id="typoCard2">
+        <div class="typo-meta">
+          <span class="typo-label">Typography 02 / Stretch &amp; Snap</span>
+          <span class="typo-badge">Elastic Recoil Snap</span>
+        </div>
+        <div class="typo-stage" id="typoStage2" onclick="toggleTypo(2, 'text-stretch-snap')" title="Click stage to trigger text animation">
+          <div id="typoPrompt2" class="typo-placeholder">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill="currentColor"/></svg>
+            Click button below to show text animation
+          </div>
+          <h2 id="typoHeading2" class="typo-headline" data-mos="text-stretch-snap" data-mos-duration="1800" style="display: none; color: #f59e0b;">
+            ELASTIC MOMENTUM SNAP
+          </h2>
+        </div>
+        <div class="typo-bottom">
+          <div class="typo-code">
+            &lt;h1 <span class="c-attr">data-mos</span>=<span class="c-val">"text-stretch-snap"</span> <span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span>&gt;Elastic Momentum Snap&lt;/h1&gt;
+          </div>
+          <div class="typo-action-group">
+            <button id="typoBtn2" class="typo-btn-trigger" onclick="toggleTypo(2, 'text-stretch-snap')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Show Stretch &amp; Snap
+            </button>
+            <button id="typoHideBtn2" class="typo-btn-hide" onclick="hideTypo(2)">
+              Hide
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TYPO 3: Blur Text Scroller -->
+      <div class="typo-card" id="typoCard3">
+        <div class="typo-meta">
+          <span class="typo-label">Typography 03 / Blur Text Scroller</span>
+          <span class="typo-badge">Optical Bokeh Tracking</span>
+        </div>
+        <div class="typo-stage" id="typoStage3" onclick="toggleTypo(3, 'text-blur-scroller')" title="Click stage to trigger text animation">
+          <div id="typoPrompt3" class="typo-placeholder">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill="currentColor"/></svg>
+            Click button below to show text animation
+          </div>
+          <h2 id="typoHeading3" class="typo-headline" data-mos="text-blur-scroller" data-mos-duration="1800" style="display: none; color: #38bdf8;">
+            CINEMATIC OPTICAL FOCUS
+          </h2>
+        </div>
+        <div class="typo-bottom">
+          <div class="typo-code">
+            &lt;h1 <span class="c-attr">data-mos</span>=<span class="c-val">"text-blur-scroller"</span> <span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span>&gt;Cinematic Optical Focus&lt;/h1&gt;
+          </div>
+          <div class="typo-action-group">
+            <button id="typoBtn3" class="typo-btn-trigger" onclick="toggleTypo(3, 'text-blur-scroller')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Show Blur Scroller
+            </button>
+            <button id="typoHideBtn3" class="typo-btn-hide" onclick="hideTypo(3)">
+              Hide
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TYPO 4: Kinetic 3D Glide -->
+      <div class="typo-card" id="typoCard4">
+        <div class="typo-meta">
+          <span class="typo-label">Typography 04 / Kinetic 3D Glide</span>
+          <span class="typo-badge">3D Perspective Fold</span>
+        </div>
+        <div class="typo-stage" id="typoStage4" onclick="toggleTypo(4, 'text-glide')" title="Click stage to trigger text animation">
+          <div id="typoPrompt4" class="typo-placeholder">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill="currentColor"/></svg>
+            Click button below to show text animation
+          </div>
+          <h2 id="typoHeading4" class="typo-headline" data-mos="text-glide" data-mos-duration="1800" style="display: none; color: #c084fc;">
+            SPATIAL PERSPECTIVE GLIDE
+          </h2>
+        </div>
+        <div class="typo-bottom">
+          <div class="typo-code">
+            &lt;h1 <span class="c-attr">data-mos</span>=<span class="c-val">"text-glide"</span> <span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span>&gt;Spatial Perspective Glide&lt;/h1&gt;
+          </div>
+          <div class="typo-action-group">
+            <button id="typoBtn4" class="typo-btn-trigger" onclick="toggleTypo(4, 'text-glide')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Show 3D Glide
+            </button>
+            <button id="typoHideBtn4" class="typo-btn-hide" onclick="hideTypo(4)">
+              Hide
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    </section> <!-- /#click-fx -->
+
+    <div class="section-divider"></div>
+
+    <!-- SECTION 2: TEXT SCROLLING EFFECTS -->
+    <section id="scroll-fx" class="scroll-fx-section">
+      <div class="page-header" style="margin-bottom: 2rem;">
+        <div class="page-badge" style="border-color: rgba(16, 185, 129, 0.4); background: rgba(16, 185, 129, 0.12); color: #34d399;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+          Viewport Motion Engine
+        </div>
+        <h2 style="font-size: clamp(1.8rem, 3.5vw, 2.5rem); font-weight: 800; letter-spacing: -0.03em; color: #fff; margin-bottom: 0.6rem;">Text Scrolling Effects</h2>
+        <p class="page-desc">Kinetic typography streams, continuous velocity marquees, and scroll-scrubbed editorial highlights that animate with your viewport.</p>
+      </div>
+
+      <!-- SCROLL 01: VELOCITY MARQUEE TICKER -->
+      <div class="scroll-card" id="scrollCard1">
+        <div class="typo-meta">
+          <span class="typo-label" style="color: #38bdf8;">Scrolling 01 / Velocity Marquee Ticker</span>
+          <span class="typo-badge" style="color: #38bdf8; border-color: rgba(56, 189, 248, 0.3); background: rgba(56, 189, 248, 0.1);">Continuous Infinite Stream</span>
+        </div>
+
+        <!-- Ticker Stage with 2 Alternating Tracks -->
+        <div class="ticker-stage" id="tickerStage" title="Hover to pause stream">
+          <!-- Track 1: Flowing Left -->
+          <div class="mos-ticker-wrap">
+            <div class="mos-ticker-track-left" id="tickerTrack1">
+              <div class="ticker-row">
+                <span class="ticker-item ticker-item-solid">120 FPS CRAFT <span class="ticker-dot"></span></span>
+                <span class="ticker-item ticker-item-accent">HARDWARE ACCELERATED <span class="ticker-dot"></span></span>
+                <span class="ticker-item ticker-item-solid">ZERO DEPENDENCIES <span class="ticker-dot"></span></span>
+                <span class="ticker-item ticker-item-accent">KINETIC MOTION ENGINE <span class="ticker-dot"></span></span>
+                <span class="ticker-item ticker-item-solid">PURE CSS &amp; JS <span class="ticker-dot"></span></span>
+              </div>
+              <!-- Duplicate row for seamless infinite looping -->
+              <div class="ticker-row" aria-hidden="true">
+                <span class="ticker-item ticker-item-solid">120 FPS CRAFT <span class="ticker-dot"></span></span>
+                <span class="ticker-item ticker-item-accent">HARDWARE ACCELERATED <span class="ticker-dot"></span></span>
+                <span class="ticker-item ticker-item-solid">ZERO DEPENDENCIES <span class="ticker-dot"></span></span>
+                <span class="ticker-item ticker-item-accent">KINETIC MOTION ENGINE <span class="ticker-dot"></span></span>
+                <span class="ticker-item ticker-item-solid">PURE CSS &amp; JS <span class="ticker-dot"></span></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Track 2: Flowing Right -->
+          <div class="mos-ticker-wrap" style="margin-top: 0.8rem;">
+            <div class="mos-ticker-track-right" id="tickerTrack2">
+              <div class="ticker-row">
+                <span class="ticker-item ticker-item-outline">OPTICAL BOKEH FOCUS <span class="ticker-dot" style="background:#a855f7; box-shadow:0 0 10px #a855f7;"></span></span>
+                <span class="ticker-item ticker-item-outline">ELASTIC RECOIL SNAP <span class="ticker-dot" style="background:#a855f7; box-shadow:0 0 10px #a855f7;"></span></span>
+                <span class="ticker-item ticker-item-outline">3D PERSPECTIVE GLIDE <span class="ticker-dot" style="background:#a855f7; box-shadow:0 0 10px #a855f7;"></span></span>
+                <span class="ticker-item ticker-item-outline">DYNAMIC VIEWPORT TRACKING <span class="ticker-dot" style="background:#a855f7; box-shadow:0 0 10px #a855f7;"></span></span>
+              </div>
+              <!-- Duplicate row for seamless infinite looping -->
+              <div class="ticker-row" aria-hidden="true">
+                <span class="ticker-item ticker-item-outline">OPTICAL BOKEH FOCUS <span class="ticker-dot" style="background:#a855f7; box-shadow:0 0 10px #a855f7;"></span></span>
+                <span class="ticker-item ticker-item-outline">ELASTIC RECOIL SNAP <span class="ticker-dot" style="background:#a855f7; box-shadow:0 0 10px #a855f7;"></span></span>
+                <span class="ticker-item ticker-item-outline">3D PERSPECTIVE GLIDE <span class="ticker-dot" style="background:#a855f7; box-shadow:0 0 10px #a855f7;"></span></span>
+                <span class="ticker-item ticker-item-outline">DYNAMIC VIEWPORT TRACKING <span class="ticker-dot" style="background:#a855f7; box-shadow:0 0 10px #a855f7;"></span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ticker Interactive Controls -->
+        <div class="fx-toolbar">
+          <div class="fx-btn-group">
+            <span style="font-family: var(--font-mono); font-size: 0.78rem; color: #94a3b8; margin-right: 0.3rem;">Speed:</span>
+            <button class="fx-btn-pill" id="speedSlowBtn" onclick="setTickerSpeed(50, this)">0.5x Slow</button>
+            <button class="fx-btn-pill active" id="speedNormBtn" onclick="setTickerSpeed(26, this)">1x Normal</button>
+            <button class="fx-btn-pill" id="speedFastBtn" onclick="setTickerSpeed(13, this)">2x Fast</button>
+            <button class="fx-btn-pill" id="tickerPauseBtn" onclick="toggleTickerPlay()">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+              Pause
+            </button>
+            <button class="fx-btn-pill" onclick="toggleTickerDirection()">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 3l4 4-4 4M20 7H4M8 21l-4-4 4-4M4 17h16"/></svg>
+              Reverse
+            </button>
+          </div>
+          <button class="fx-btn-pill" onclick="copySnippet('ticker')">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy HTML &amp; CSS
+          </button>
+        </div>
+      </div>
+
+      <!-- SCROLL 02: EDITORIAL SCROLL SCRUB (PROGRESSIVE WORD ILLUMINATION) -->
+      <div class="scroll-card" id="scrollCard2">
+        <div class="typo-meta">
+          <span class="typo-label" style="color: #10b981;">Scrolling 02 / Editorial Scroll Scrub</span>
+          <span class="typo-badge" style="color: #34d399; border-color: rgba(52, 211, 153, 0.3); background: rgba(52, 211, 153, 0.1);">Progressive Word Illumination</span>
+        </div>
+
+        <!-- Scrub Stage -->
+        <div class="scrub-stage" id="scrubStage">
+          <!-- Real-Time Progress Meter -->
+          <div class="scrub-meter-bar">
+            <span>SCROLL PROGRESSION</span>
+            <div class="scrub-progress-track">
+              <div class="scrub-progress-fill" id="scrubProgressFill"></div>
+            </div>
+            <span id="scrubPercentLabel" style="color: #34d399; font-weight: 700; min-width: 42px; text-align: right;">0%</span>
+          </div>
+
+          <!-- Paragraph Words -->
+          <p class="scrub-paragraph" id="scrubParagraphText">
+            Motion that responds directly to your scroll position. As you travel down the page, every single word dynamically illuminates from deep dark to high-contrast brilliance, creating an immersive, narrative reading experience with zero layout shift and 120 FPS GPU hardware acceleration.
+          </p>
+        </div>
+
+        <!-- Scrub Controls & Manual Slider -->
+        <div class="fx-toolbar">
+          <div class="scrub-slider-box">
+            <span>Manual Test:</span>
+            <input type="range" id="scrubManualSlider" class="scrub-slider" min="0" max="100" value="0" oninput="manualScrub(this.value)">
+            <span id="sliderValDisplay">0%</span>
+          </div>
+          <div class="fx-btn-group">
+            <button class="fx-btn-pill" onclick="demoScrubFlow()">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Auto Demo Scrub
+            </button>
+            <button class="fx-btn-pill" onclick="copySnippet('scrub')">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              Copy Scrub Code
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCROLL 03: VIEWPORT IN-VIEW STAGGERED HEADLINES -->
+      <div class="scroll-card" id="scrollCard3">
+        <div class="typo-meta">
+          <span class="typo-label" style="color: #f59e0b;">Scrolling 03 / Viewport In-View Stagger</span>
+          <span class="typo-badge" style="color: #fbbf24; border-color: rgba(251, 191, 36, 0.3); background: rgba(251, 191, 36, 0.1);">Two-Way Viewport Motion</span>
+        </div>
+
+        <!-- Stagger Stage A: Character Cascade -->
+        <div style="margin-bottom: 1.25rem;">
+          <div style="font-family: var(--font-mono); font-size: 0.76rem; color: #94a3b8; margin-bottom: 0.5rem;">
+            Character-by-character masked baseline cascade (stagger: 32ms):
+          </div>
+          <div class="stagger-stage" id="staggerStageChars">
+            <h2 class="stagger-headline" id="staggerHeadlineChars" data-mos-split="chars" data-mos="text-slide-up" data-mos-stagger="32" data-mos-duration="1400" style="color: #60a5fa;">
+              KINETIC CHARACTER CASCADE
+            </h2>
+          </div>
+        </div>
+
+        <!-- Stagger Stage B: Word Optical Focus -->
+        <div style="margin-bottom: 0.5rem;">
+          <div style="font-family: var(--font-mono); font-size: 0.76rem; color: #94a3b8; margin-bottom: 0.5rem;">
+            Word-by-word optical bokeh tracking expand (stagger: 90ms):
+          </div>
+          <div class="stagger-stage" id="staggerStageWords">
+            <h2 class="stagger-headline" id="staggerHeadlineWords" data-mos-split="words" data-mos="text-blur-scroller" data-mos-stagger="90" data-mos-duration="1600" style="color: #c084fc;">
+              OPTICAL BOKEH DEPTH OF FIELD
+            </h2>
+          </div>
+        </div>
+
+        <!-- Toolbar -->
+        <div class="fx-toolbar">
+          <div class="fx-btn-group">
+            <button class="fx-btn-pill" onclick="replayStaggerHeadlines()">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+              Replay Both In-View Staggers
+            </button>
+          </div>
+          <div class="typo-code" style="margin: 0; font-size: 0.74rem;">
+            &lt;h1 <span class="c-attr">data-mos-split</span>=<span class="c-val">"chars"</span> <span class="c-attr">data-mos</span>=<span class="c-val">"text-slide-up"</span>&gt;
+          </div>
+        </div>
+      </div>
+
+      <!-- SCROLL 04: DUAL-TRACK PARALLAX SPLIT -->
+      <div class="scroll-card" id="scrollCard4">
+        <div class="typo-meta">
+          <span class="typo-label" style="color: #38bdf8;">Scrolling 04 / Dual-Track Parallax Split</span>
+          <span class="typo-badge" style="color: #38bdf8; border-color: rgba(56, 189, 248, 0.3); background: rgba(56, 189, 248, 0.1);">Opposing Dual-Axis Parallax</span>
+        </div>
+
+        <div class="parallax-dual-stage" id="parallaxDualStage">
+          <!-- Top Track (Moves Left) -->
+          <div class="parallax-track" id="paraTrackTop" style="transform: translateX(0px);">
+            <div class="parallax-item" style="color: #ffffff;">
+              <span>PARALLAX DEPTH VELOCITY</span> <span class="ticker-dot"></span>
+              <span style="color: #38bdf8;">SYNCHRONIZED SCROLL</span> <span class="ticker-dot"></span>
+              <span>120 FPS FLUID MOTION</span> <span class="ticker-dot"></span>
+              <span style="color: #38bdf8;">SUB-PIXEL SMOOTHING</span> <span class="ticker-dot"></span>
+              <span>PARALLAX DEPTH VELOCITY</span> <span class="ticker-dot"></span>
+            </div>
+          </div>
+          <!-- Bottom Track (Moves Right) -->
+          <div class="parallax-track" id="paraTrackBottom" style="transform: translateX(-180px);">
+            <div class="parallax-item ticker-item-outline" style="-webkit-text-stroke: 1.5px #a855f7;">
+              <span>TWO-WAY VIEWPORT DYNAMICS</span> <span class="ticker-dot" style="background: #a855f7; box-shadow: 0 0 10px #a855f7;"></span>
+              <span>KINETIC ELASTIC DRIFT</span> <span class="ticker-dot" style="background: #a855f7; box-shadow: 0 0 10px #a855f7;"></span>
+              <span>OPPOSING AXIS TRANSLATION</span> <span class="ticker-dot" style="background: #a855f7; box-shadow: 0 0 10px #a855f7;"></span>
+              <span>TWO-WAY VIEWPORT DYNAMICS</span> <span class="ticker-dot" style="background: #a855f7; box-shadow: 0 0 10px #a855f7;"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="fx-toolbar">
+          <div class="scrub-slider-box">
+            <span>Parallax Offset:</span>
+            <input type="range" id="parallaxManualSlider" class="scrub-slider" min="-300" max="300" value="0" oninput="manualParallax(this.value)">
+            <span id="parallaxValDisplay">0px</span>
+          </div>
+          <div class="fx-btn-group">
+            <button class="fx-btn-pill" onclick="demoParallaxFlow()">Auto Flow</button>
+            <button class="fx-btn-pill" onclick="copySnippet('parallax')">Copy Code</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCROLL 05: 3D CYLINDRICAL PERSPECTIVE ROLODEX -->
+      <div class="scroll-card" id="scrollCard5">
+        <div class="typo-meta">
+          <span class="typo-label" style="color: #a855f7;">Scrolling 05 / 3D Cylindrical Perspective</span>
+          <span class="typo-badge" style="color: #c084fc; border-color: rgba(192, 132, 252, 0.3); background: rgba(192, 132, 252, 0.1);">3D Spatial Rolodex Drum</span>
+        </div>
+
+        <div class="rolodex-stage" id="rolodexStage">
+          <div class="rolodex-drum" id="rolodexDrum">
+            <div class="rolodex-item" id="rolo0" style="transform: rotateX(40deg) translateZ(-60px); opacity: 0.3; color: #94a3b8;">01 • KINETIC INTERFACE PHYSICS</div>
+            <div class="rolodex-item" id="rolo1" style="transform: rotateX(20deg) translateZ(-20px); opacity: 0.65; color: #cbd5e1;">02 • EDITORIAL TYPOGRAPHY COMPOSITING</div>
+            <div class="rolodex-item" id="rolo2" style="transform: rotateX(0deg) translateZ(40px) scale(1.05); opacity: 1; color: #60a5fa; text-shadow: 0 0 20px rgba(96,165,250,0.5); background: rgba(59,130,246,0.12); border: 1px solid rgba(59,130,246,0.3);">03 • 120 FPS HARDWARE ACCELERATION</div>
+            <div class="rolodex-item" id="rolo3" style="transform: rotateX(-20deg) translateZ(-20px); opacity: 0.65; color: #cbd5e1;">04 • TWO-WAY SCROLL LIFECYCLE</div>
+            <div class="rolodex-item" id="rolo4" style="transform: rotateX(-40deg) translateZ(-60px); opacity: 0.3; color: #94a3b8;">05 • BROWSER NATIVE VIEWPORT OBSERVER</div>
+          </div>
+        </div>
+
+        <div class="fx-toolbar">
+          <div class="scrub-slider-box">
+            <span>Rotate Drum:</span>
+            <input type="range" id="rolodexManualSlider" class="scrub-slider" min="-50" max="50" value="0" oninput="manualRolodex(this.value)">
+            <span id="rolodexValDisplay">0°</span>
+          </div>
+          <div class="fx-btn-group">
+            <button class="fx-btn-pill" onclick="demoRolodexTumble()">Auto Tumble</button>
+            <button class="fx-btn-pill" onclick="copySnippet('rolodex')">Copy Code</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCROLL 06: VELOCITY SINE WAVEFORM -->
+      <div class="scroll-card" id="scrollCard6">
+        <div class="typo-meta">
+          <span class="typo-label" style="color: #06b6d4;">Scrolling 06 / Velocity Sine Waveform</span>
+          <span class="typo-badge" style="color: #22d3ee; border-color: rgba(34, 211, 238, 0.3); background: rgba(34, 211, 238, 0.1);">Mathematical Sine Wave Ribbon</span>
+        </div>
+
+        <div class="waveform-stage" id="waveformStage">
+          <div class="waveform-text" id="waveformText">
+            <!-- Dynamically populated harmonic sine wave characters -->
+          </div>
+        </div>
+
+        <div class="fx-toolbar">
+          <div class="scrub-slider-box">
+            <span>Wave Amplitude:</span>
+            <input type="range" id="waveAmpSlider" class="scrub-slider" min="5" max="38" value="20" oninput="setWaveAmplitude(this.value)">
+            <span id="waveAmpDisplay">20px</span>
+          </div>
+          <div class="fx-btn-group">
+            <button class="fx-btn-pill active" id="waveAnimBtn" onclick="toggleWaveAnim()">Oscillating</button>
+            <button class="fx-btn-pill" onclick="copySnippet('waveform')">Copy Code</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCROLL 07: SPOTLIGHT BEAM MASK -->
+      <div class="scroll-card" id="scrollCard7">
+        <div class="typo-meta">
+          <span class="typo-label" style="color: #eab308;">Scrolling 07 / Spotlight Beam Shader Mask</span>
+          <span class="typo-badge" style="color: #facc15; border-color: rgba(250, 204, 21, 0.3); background: rgba(250, 204, 21, 0.1);">Radial Laser Illuminator</span>
+        </div>
+
+        <div class="spotlight-stage" id="spotlightStage" onmousemove="handleSpotlightHover(event)">
+          <h2 class="spotlight-headline" id="spotlightHeadline">
+            ILLUMINATING THE DARKEST CORNERS OF MODERN DIGITAL CRAFT
+          </h2>
+        </div>
+
+        <div class="fx-toolbar">
+          <div class="scrub-slider-box">
+            <span>Beam Position:</span>
+            <input type="range" id="spotlightSlider" class="scrub-slider" min="0" max="100" value="50" oninput="manualSpotlight(this.value)">
+            <span id="spotlightValDisplay">50%</span>
+          </div>
+          <div class="fx-btn-group">
+            <button class="fx-btn-pill" onclick="demoSpotlightSweep()">Auto Sweep Beam</button>
+            <button class="fx-btn-pill" onclick="copySnippet('spotlight')">Copy Code</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCROLL 08: MECHANICAL ROLLING ODOMETER -->
+      <div class="scroll-card" id="scrollCard8">
+        <div class="typo-meta">
+          <span class="typo-label" style="color: #10b981;">Scrolling 08 / Mechanical Rolling Metric Odometer</span>
+          <span class="typo-badge" style="color: #34d399; border-color: rgba(52, 211, 153, 0.3); background: rgba(52, 211, 153, 0.1);">Split-Flap Rolling Digits</span>
+        </div>
+
+        <div class="odometer-stage" id="odometerStage">
+          <div class="odometer-card">
+            <div class="odometer-value-box" id="odoVal1">
+              <span class="odometer-digit-col"><span class="odometer-digit-strip" id="odoStrip1_1"><span>0</span><span>1</span></span></span>
+              <span class="odometer-digit-col"><span class="odometer-digit-strip" id="odoStrip1_2"><span>0</span><span>1</span><span>2</span></span></span>
+              <span class="odometer-digit-col"><span class="odometer-digit-strip" id="odoStrip1_3"><span>0</span></span></span>
+              <span style="font-size: 1.1rem; color: #60a5fa; margin-left: 0.2rem;">FPS</span>
+            </div>
+            <div class="odometer-label">Hardware Render Velocity</div>
+          </div>
+
+          <div class="odometer-card">
+            <div class="odometer-value-box" id="odoVal2" style="color: #38bdf8;">
+              <span class="odometer-digit-col"><span class="odometer-digit-strip" id="odoStrip2_1"><span>0</span></span></span>
+              <span>.</span>
+              <span class="odometer-digit-col"><span class="odometer-digit-strip" id="odoStrip2_2"><span>0</span></span></span>
+              <span class="odometer-digit-col"><span class="odometer-digit-strip" id="odoStrip2_3"><span>0</span><span>1</span><span>2</span></span></span>
+              <span style="font-size: 1.1rem; color: #38bdf8; margin-left: 0.2rem;">MS</span>
+            </div>
+            <div class="odometer-label">Observer Dispatch Latency</div>
+          </div>
+
+          <div class="odometer-card">
+            <div class="odometer-value-box" id="odoVal3" style="color: #34d399;">
+              <span class="odometer-digit-col"><span class="odometer-digit-strip" id="odoStrip3_1"><span>0</span><span>9</span></span></span>
+              <span class="odometer-digit-col"><span class="odometer-digit-strip" id="odoStrip3_2"><span>0</span><span>9</span></span></span>
+              <span>.</span>
+              <span class="odometer-digit-col"><span class="odometer-digit-strip" id="odoStrip3_3"><span>0</span><span>9</span></span></span>
+              <span style="font-size: 1.1rem; color: #34d399; margin-left: 0.2rem;">%</span>
+            </div>
+            <div class="odometer-label">GPU Frame Stability</div>
+          </div>
+        </div>
+
+        <div class="fx-toolbar">
+          <div class="fx-btn-group">
+            <button class="fx-btn-pill" onclick="rollAllOdometers()">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+              Roll Counters Again
+            </button>
+            <button class="fx-btn-pill" onclick="randomizeOdometers()">Randomize Metrics</button>
+          </div>
+          <button class="fx-btn-pill" onclick="copySnippet('odometer')">Copy Code</button>
+        </div>
+      </div>
+
+      <!-- SCROLL 09: PINNED HORIZONTAL SLIDE TRACK -->
+      <div class="scroll-card" id="scrollCard9">
+        <div class="typo-meta">
+          <span class="typo-label" style="color: #ec4899;">Scrolling 09 / Horizontal Pinned Slide Track</span>
+          <span class="typo-badge" style="color: #f472b6; border-color: rgba(244, 114, 182, 0.3); background: rgba(244, 114, 182, 0.1);">Pinned Cross-Axis Track</span>
+        </div>
+
+        <div class="pinned-track-stage" id="pinnedTrackStage">
+          <div class="pinned-slider-content" id="pinnedSlideContent" style="transform: translateX(0%);">
+            <h2 class="pinned-slide-headline">
+              <span>EXPLORING</span>
+              <span style="color: #ec4899;">MODERN VIEWPORT</span>
+              <span>BOUNDARIES</span>
+              <span style="color: #38bdf8;">WITH ZERO JANK</span>
+              <span>• 120 FPS</span>
+            </h2>
+          </div>
+        </div>
+
+        <div class="fx-toolbar">
+          <div class="scrub-slider-box">
+            <span>Slide Progress:</span>
+            <input type="range" id="pinnedSlideSlider" class="scrub-slider" min="0" max="65" value="0" oninput="manualPinnedSlide(this.value)">
+            <span id="pinnedSlideDisplay">0%</span>
+          </div>
+          <div class="fx-btn-group">
+            <button class="fx-btn-pill" onclick="demoPinnedSlide()">Auto Slide Demo</button>
+            <button class="fx-btn-pill" onclick="copySnippet('pinned')">Copy Code</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCROLL 10: CYBERPUNK MATRIX DECRYPTOR -->
+      <div class="scroll-card" id="scrollCard10">
+        <div class="typo-meta">
+          <span class="typo-label" style="color: #00f5d4;">Scrolling 10 / Cyberpunk Matrix Decryptor</span>
+          <span class="typo-badge" style="color: #00f5d4; border-color: rgba(0, 245, 212, 0.3); background: rgba(0, 245, 212, 0.1);">Cryptographic Glyph Decryption</span>
+        </div>
+
+        <div class="decryptor-stage" id="decryptorStage">
+          <div class="decryptor-text" id="decryptorText">
+            QUANTUM SYSTEM DECRYPTION COMPLETED
+          </div>
+        </div>
+
+        <div class="fx-toolbar">
+          <div class="fx-btn-group">
+            <button class="fx-btn-pill" onclick="triggerMatrixDecrypt()">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+              Re-Scramble &amp; Decrypt
+            </button>
+            <button class="fx-btn-pill" id="decryptPhraseBtn" onclick="cycleDecryptPhrase()">Switch Phrase</button>
+          </div>
+          <button class="fx-btn-pill" onclick="copySnippet('decryptor')">Copy Code</button>
+        </div>
+      </div>
+
+      <!-- SCROLL 11: 3D ISOMETRIC CARD STACK -->
+      <div class="scroll-card" id="scrollCard11">
+        <div class="typo-meta">
+          <span class="typo-label" style="color: #818cf8;">Scrolling 11 / 3D Isometric Card Stack</span>
+          <span class="typo-badge" style="color: #a5b4fc; border-color: rgba(165, 180, 252, 0.3); background: rgba(165, 180, 252, 0.1);">Spatial Z-Index Dispersion</span>
+        </div>
+
+        <div class="isometric-stage" id="isometricStage">
+          <div class="iso-stack" id="isoStack">
+            <div class="iso-card" id="isoCard1" style="transform: translateZ(50px);">
+              <span style="color: #60a5fa;">01.</span> MODERN VIEWPORT MOTION ENGINE
+            </div>
+            <div class="iso-card" id="isoCard2" style="transform: translateZ(25px); margin-top: -10px; border-color: rgba(168,85,247,0.4);">
+              <span style="color: #c084fc;">02.</span> HARDWARE COMPOSITING LAYER
+            </div>
+            <div class="iso-card" id="isoCard3" style="transform: translateZ(0px); margin-top: -10px; border-color: rgba(52,211,153,0.4);">
+              <span style="color: #34d399;">03.</span> SUB-PIXEL PRECISION TYPOGRAPHY
+            </div>
+          </div>
+        </div>
+
+        <div class="fx-toolbar">
+          <div class="scrub-slider-box">
+            <span>Stack Spread:</span>
+            <input type="range" id="isoSpreadSlider" class="scrub-slider" min="0" max="90" value="45" oninput="setIsoSpread(this.value)">
+            <span id="isoSpreadDisplay">45px</span>
+          </div>
+          <div class="fx-btn-group">
+            <button class="fx-btn-pill" onclick="toggleIsoTilt()">Toggle Angle</button>
+            <button class="fx-btn-pill" onclick="copySnippet('isometric')">Copy Code</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCROLL 12: DEEP FOCUS OPTICAL ZOOM -->
+      <div class="scroll-card" id="scrollCard12">
+        <div class="typo-meta">
+          <span class="typo-label" style="color: #f97316;">Scrolling 12 / Deep Focus Optical Zoom &amp; Bokeh Warp</span>
+          <span class="typo-badge" style="color: #fb923c; border-color: rgba(251, 146, 60, 0.3); background: rgba(251, 146, 60, 0.1);">Optical Focal Length Convergence</span>
+        </div>
+
+        <div class="deep-focus-stage" id="deepFocusStage">
+          <h2 class="deep-focus-headline" id="deepFocusHeadline" style="transform: scale(1); filter: blur(0px); opacity: 1;">
+            OPTICAL FIELD CONVERGENCE
+          </h2>
+        </div>
+
+        <div class="fx-toolbar">
+          <div class="scrub-slider-box">
+            <span>Focal Distance:</span>
+            <input type="range" id="deepFocusSlider" class="scrub-slider" min="0" max="100" value="100" oninput="manualDeepFocus(this.value)">
+            <span id="deepFocusDisplay">In Focus</span>
+          </div>
+          <div class="fx-btn-group">
+            <button class="fx-btn-pill" onclick="demoDeepFocus()">Depth Lens Demo</button>
+            <button class="fx-btn-pill" onclick="copySnippet('deepfocus')">Copy Code</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCROLL 13: CHROMATIC BORDER BEAM -->
+      <div class="scroll-card" id="scrollCard13">
+        <div class="typo-meta">
+          <span class="typo-label" style="color: #38bdf8;">Scrolling 13 / Chromatic Border Beam Edge Lighting</span>
+          <span class="typo-badge" style="color: #38bdf8; border-color: rgba(56, 189, 248, 0.3); background: rgba(56, 189, 248, 0.1);">Perimeter Conic Luminescence</span>
+        </div>
+
+        <div class="chroma-beam-stage" id="chromaBeamStage">
+          <div class="chroma-beam-content">
+            <h2 class="chroma-beam-headline">LUMINESCENT CHROMATIC BEAM</h2>
+            <div class="chroma-beam-sub">Speed increases proportionally to viewport scroll velocity</div>
+          </div>
+        </div>
+
+        <div class="fx-toolbar">
+          <div class="scrub-slider-box">
+            <span>Beam Speed:</span>
+            <input type="range" id="beamSpeedSlider" class="scrub-slider" min="1" max="10" value="4" oninput="setBeamSpeed(this.value)">
+            <span id="beamSpeedDisplay">4x</span>
+          </div>
+          <div class="fx-btn-group">
+            <button class="fx-btn-pill" id="chromaColorBtn" onclick="cycleChromaPalette()">Palette: Cyan/Pink</button>
+            <button class="fx-btn-pill" onclick="copySnippet('chromabeam')">Copy Code</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCROLL 14: LIQUID FLUID REFRACTION WAVE -->
+      <div class="scroll-card" id="scrollCard14">
+        <div class="typo-meta">
+          <span class="typo-label" style="color: #38bdf8;">Scrolling 14 / Liquid Fluid Refraction Wave</span>
+          <span class="typo-badge" style="color: #38bdf8; border-color: rgba(56, 189, 248, 0.3); background: rgba(56, 189, 248, 0.1);">Surface Ripple Displacement</span>
+        </div>
+
+        <div class="liquid-wave-stage" id="liquidWaveStage">
+          <div class="liquid-headline" id="liquidHeadline">
+            <!-- Dynamically populated liquid characters -->
+          </div>
+        </div>
+
+        <div class="fx-toolbar">
+          <div class="scrub-slider-box">
+            <span>Fluid Viscosity:</span>
+            <input type="range" id="liquidViscositySlider" class="scrub-slider" min="1" max="8" value="3" oninput="setLiquidViscosity(this.value)">
+            <span id="liquidViscosityDisplay">3x</span>
+          </div>
+          <div class="fx-btn-group">
+            <button class="fx-btn-pill" onclick="triggerLiquidSplash()">Surface Splash</button>
+            <button class="fx-btn-pill" onclick="copySnippet('liquid')">Copy Code</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCROLL 15: HIGH-VOLTAGE NEON TUBE IGNITION -->
+      <div class="scroll-card" id="scrollCard15">
+        <div class="typo-meta">
+          <span class="typo-label" style="color: #f59e0b;">Scrolling 15 / High-Voltage Neon Tube Ignition</span>
+          <span class="typo-badge" style="color: #fbbf24; border-color: rgba(251, 191, 36, 0.3); background: rgba(251, 191, 36, 0.1);">Gas Discharge Voltage Glow</span>
+        </div>
+
+        <div class="neon-tube-stage" id="neonTubeStage">
+          <h2 class="neon-tube-headline neon-tube-cyan" id="neonTubeHeadline">
+            HIGH VOLTAGE GAS DISCHARGE
+          </h2>
+        </div>
+
+        <div class="fx-toolbar">
+          <div class="scrub-slider-box">
+            <span>Tube Voltage:</span>
+            <input type="range" id="neonVoltageSlider" class="scrub-slider" min="0" max="100" value="80" oninput="manualNeonVoltage(this.value)">
+            <span id="neonVoltageDisplay">80%</span>
+          </div>
+          <div class="fx-btn-group">
+            <button class="fx-btn-pill" onclick="triggerNeonIgnition()">Ignite Discharge</button>
+            <button class="fx-btn-pill" id="neonPaletteBtn" onclick="cycleNeonTubeColor()">Gas: Electric Cyan</button>
+            <button class="fx-btn-pill" onclick="copySnippet('neontube')">Copy Code</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCROLL 16: ANAMORPHIC LENS FLARE & STREAK -->
+      <div class="scroll-card" id="scrollCard16">
+        <div class="typo-meta">
+          <span class="typo-label" style="color: #60a5fa;">Scrolling 16 / Anamorphic Lens Flare &amp; Streak</span>
+          <span class="typo-badge" style="color: #60a5fa; border-color: rgba(96, 165, 250, 0.3); background: rgba(96, 165, 250, 0.1);">Horizontal Optical Glare</span>
+        </div>
+
+        <div class="anamorphic-flare-stage" id="anamorphicStage" onmousemove="handleAnamorphicHover(event)">
+          <div class="anamorphic-flare-streak" id="flareStreak"></div>
+          <h2 class="anamorphic-headline">ANAMORPHIC CINEMATIC GLARE</h2>
+        </div>
+
+        <div class="fx-toolbar">
+          <div class="scrub-slider-box">
+            <span>Flare Position:</span>
+            <input type="range" id="flarePositionSlider" class="scrub-slider" min="0" max="100" value="50" oninput="manualFlarePosition(this.value)">
+            <span id="flarePositionDisplay">50%</span>
+          </div>
+          <div class="fx-btn-group">
+            <button class="fx-btn-pill" onclick="demoFlareSweep()">Auto Sweep Flare</button>
+            <button class="fx-btn-pill" onclick="copySnippet('anamorphic')">Copy Code</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCROLL 17: INFINITE CIRCULAR TOPOLOGY RIBBON -->
+      <div class="scroll-card" id="scrollCard17">
+        <div class="typo-meta">
+          <span class="typo-label" style="color: #a855f7;">Scrolling 17 / Infinite Circular Topology Ribbon</span>
+          <span class="typo-badge" style="color: #c084fc; border-color: rgba(192, 132, 252, 0.3); background: rgba(192, 132, 252, 0.1);">3D Orbital Spatial Carousel</span>
+        </div>
+
+        <div class="circular-loop-stage" id="circularLoopStage">
+          <div class="circular-orbit-wrap" id="orbitWrap">
+            <div class="orbit-item" id="orbitItem">
+              <span>INFINITE TOPOLOGY MOTION LOOP • CONTINUOUS FLUIDITY • 120 FPS CRAFT •</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="fx-toolbar">
+          <div class="scrub-slider-box">
+            <span>Orbit Angle:</span>
+            <input type="range" id="orbitAngleSlider" class="scrub-slider" min="-180" max="180" value="0" oninput="manualOrbitAngle(this.value)">
+            <span id="orbitAngleDisplay">0°</span>
+          </div>
+          <div class="fx-btn-group">
+            <button class="fx-btn-pill" onclick="demoOrbitSpin()">Continuous Orbit</button>
+            <button class="fx-btn-pill" onclick="copySnippet('circularloop')">Copy Code</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCROLL 18: ARCHITECTURAL LOUVER SHUTTER SLATS -->
+      <div class="scroll-card" id="scrollCard18">
+        <div class="typo-meta">
+          <span class="typo-label" style="color: #38bdf8;">Scrolling 18 / Architectural Louver Shutter Slats</span>
+          <span class="typo-badge" style="color: #38bdf8; border-color: rgba(56, 189, 248, 0.3); background: rgba(56, 189, 248, 0.1);">Segmented Venetian Rotation</span>
+        </div>
+
+        <div class="louver-shutter-stage" id="louverStage">
+          <div class="louver-wrapper" id="louverWrapper">
+            <span class="louver-slat" id="slat1" style="transform: rotateX(0deg);">ARCHITECTURAL</span>
+            <span class="louver-slat" id="slat2" style="transform: rotateX(0deg); color: #fff;">LOUVER SHUTTER</span>
+            <span class="louver-slat" id="slat3" style="transform: rotateX(0deg); color: #a855f7;">PRECISION SLATS</span>
+          </div>
+        </div>
+
+        <div class="fx-toolbar">
+          <div class="scrub-slider-box">
+            <span>Slat Angle:</span>
+            <input type="range" id="louverAngleSlider" class="scrub-slider" min="0" max="90" value="0" oninput="manualLouverAngle(this.value)">
+            <span id="louverAngleDisplay">0° Open</span>
+          </div>
+          <div class="fx-btn-group">
+            <button class="fx-btn-pill" onclick="demoLouverFlip()">Toggle 90° Slat Flip</button>
+            <button class="fx-btn-pill" onclick="copySnippet('louver')">Copy Code</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCROLL 19: VARIABLE TYPOGRAPHIC WEIGHT & TRACKING AXIS -->
+      <div class="scroll-card" id="scrollCard19">
+        <div class="typo-meta">
+          <span class="typo-label" style="color: #ec4899;">Scrolling 19 / Variable Weight &amp; Tracking Axis</span>
+          <span class="typo-badge" style="color: #f472b6; border-color: rgba(244, 114, 182, 0.3); background: rgba(244, 114, 182, 0.1);">Continuous Dynamic Axis</span>
+        </div>
+
+        <div class="variable-axis-stage" id="variableAxisStage">
+          <h2 class="variable-headline" id="variableHeadline">
+            CONTINUOUS VARIABLE MOTION AXIS
+          </h2>
+        </div>
+
+        <div class="fx-toolbar">
+          <div class="scrub-slider-box">
+            <span>Font Weight:</span>
+            <input type="range" id="varWeightSlider" class="scrub-slider" min="200" max="900" step="50" value="800" oninput="setVarWeight(this.value)">
+            <span id="varWeightDisplay">800</span>
+          </div>
+          <div class="scrub-slider-box">
+            <span>Letter Spacing:</span>
+            <input type="range" id="varTrackSlider" class="scrub-slider" min="-3" max="25" value="0" oninput="setVarTracking(this.value)">
+            <span id="varTrackDisplay">Normal</span>
+          </div>
+          <div class="fx-btn-group">
+            <button class="fx-btn-pill" onclick="demoVariableBreathe()">Auto Breathe Axis</button>
+            <button class="fx-btn-pill" onclick="copySnippet('variable')">Copy Code</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCROLL 20: CHROMATIC RGB HOLOGRAPHIC ABERRATION -->
+      <div class="scroll-card" id="scrollCard20">
+        <div class="typo-meta">
+          <span class="typo-label" style="color: #f43f5e;">Scrolling 20 / Chromatic RGB Hologram Shift</span>
+          <span class="typo-badge" style="color: #fb7185; border-color: rgba(251, 113, 133, 0.3); background: rgba(251, 113, 133, 0.1);">Sub-Pixel Lateral Channel Split</span>
+        </div>
+
+        <div class="chroma-hologram-stage" id="chromaHoloStage" onmousemove="handleHoloHover(event)">
+          <h2 class="hologram-headline" id="hologramHeadline">
+            CHROMATIC RGB CHANNEL DISPERSION
+          </h2>
+        </div>
+
+        <div class="fx-toolbar">
+          <div class="scrub-slider-box">
+            <span>Aberration Split:</span>
+            <input type="range" id="rgbSplitSlider" class="scrub-slider" min="0" max="18" value="5" oninput="setRgbOffset(this.value)">
+            <span id="rgbSplitDisplay">5px</span>
+          </div>
+          <div class="fx-btn-group">
+            <button class="fx-btn-pill" onclick="triggerHoloGlitch()">Optic Jitter Burst</button>
+            <button class="fx-btn-pill" onclick="copySnippet('hologram')">Copy Code</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCROLL 21: MAGNETIC CURSOR GRAVITY & REPULSION FIELD -->
+      <div class="scroll-card" id="scrollCard21">
+        <div class="typo-meta">
+          <span class="typo-label" style="color: #10b981;">Scrolling 21 / Magnetic Cursor Gravity Field</span>
+          <span class="typo-badge" style="color: #34d399; border-color: rgba(52, 211, 153, 0.3); background: rgba(52, 211, 153, 0.1);">Spring Force Spatial Repulsion</span>
+        </div>
+
+        <div class="magnetic-gravity-stage" id="magneticStage" onmousemove="handleMagneticHover(event)" onmouseleave="resetMagneticHover()">
+          <div class="magnetic-text" id="magneticText">
+            <!-- Dynamically populated magnetic characters -->
+          </div>
+        </div>
+
+        <div class="fx-toolbar">
+          <div class="scrub-slider-box">
+            <span>Magnetic Force:</span>
+            <input type="range" id="magForceSlider" class="scrub-slider" min="15" max="90" value="45" oninput="setMagneticForce(this.value)">
+            <span id="magForceDisplay">45px</span>
+          </div>
+          <div class="fx-btn-group">
+            <button class="fx-btn-pill" id="magModeBtn" onclick="toggleMagneticMode()">Mode: Repel Cursor</button>
+            <button class="fx-btn-pill" onclick="resetMagneticHover()">Center Gravity</button>
+            <button class="fx-btn-pill" onclick="copySnippet('magnetic')">Copy Code</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCROLL 22: SPECTRAL AUDIO EQUALIZER FREQUENCY BARS -->
+      <div class="scroll-card" id="scrollCard22">
+        <div class="typo-meta">
+          <span class="typo-label" style="color: #60a5fa;">Scrolling 22 / Spectral Audio Equalizer Frequency Bars</span>
+          <span class="typo-badge" style="color: #60a5fa; border-color: rgba(96, 165, 250, 0.3); background: rgba(96, 165, 250, 0.1);">Real-Time Velocity Equalizer</span>
+        </div>
+
+        <div class="spectral-eq-stage" id="spectralEqStage">
+          <h2 class="spectral-headline">SPECTRAL FREQUENCY EQUALIZER</h2>
+          <div class="spectral-bars-row" id="spectralBarsRow">
+            <!-- Generated Equalizer Bars -->
+          </div>
+        </div>
+
+        <div class="fx-toolbar">
+          <div class="scrub-slider-box">
+            <span>Frequency Gain:</span>
+            <input type="range" id="eqGainSlider" class="scrub-slider" min="10" max="38" value="24" oninput="setEqGain(this.value)">
+            <span id="eqGainDisplay">24px</span>
+          </div>
+          <div class="fx-btn-group">
+            <button class="fx-btn-pill" onclick="triggerEqBassDrop()">Bass Impact Pulse</button>
+            <button class="fx-btn-pill" onclick="copySnippet('equalizer')">Copy Code</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCROLL 23: SUB-PIXEL QUANTIZATION GRID DISSOLVE -->
+      <div class="scroll-card" id="scrollCard23">
+        <div class="typo-meta">
+          <span class="typo-label" style="color: #00f5d4;">Scrolling 23 / Sub-Pixel Quantization Grid Dissolve</span>
+          <span class="typo-badge" style="color: #00f5d4; border-color: rgba(0, 245, 212, 0.3); background: rgba(0, 245, 212, 0.1);">Modular Matrix Reconstruction</span>
+        </div>
+
+        <div class="pixel-grid-stage" id="pixelGridStage">
+          <h2 class="pixel-headline" id="pixelGridHeadline">
+            SUB-PIXEL QUANTIZATION GRID
+          </h2>
+        </div>
+
+        <div class="fx-toolbar">
+          <div class="scrub-slider-box">
+            <span>Quantization:</span>
+            <input type="range" id="pixelQuantSlider" class="scrub-slider" min="0" max="10" value="0" oninput="setPixelQuantization(this.value)">
+            <span id="pixelQuantDisplay">Sharp 0</span>
+          </div>
+          <div class="fx-btn-group">
+            <button class="fx-btn-pill" onclick="triggerPixelDissolve()">Dissolve &amp; Materialize</button>
+            <button class="fx-btn-pill" onclick="copySnippet('quantization')">Copy Code</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- SECTION 3: 15 NEW EXTRA TEXT SCROLL EFFECTS -->
+    <section id="extra-text-fx" class="scroll-fx-section">
+      <div class="page-header" style="margin-bottom: 2rem;">
+        <div class="page-badge" style="border-color: rgba(168, 85, 247, 0.4); background: rgba(168, 85, 247, 0.12); color: #c084fc;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Expanded Suite • 15 New Presets
+        </div>
+        <h2 style="font-size: clamp(1.8rem, 3.5vw, 2.5rem); font-weight: 800; letter-spacing: -0.03em; color: #fff; margin-bottom: 0.6rem;">15 Extra Text Scroll Animations</h2>
+        <p class="page-desc">Every kinetic typography animation triggers smoothly as you scroll down the page and resets off-screen. Click any stage or Replay button to test on demand.</p>
+      </div>
+
+      <!-- Category Filter Pills -->
+      <div class="fx-nav-tabs" id="extraFilterTabs" style="margin-bottom: 2rem;">
+        <button class="fx-tab-btn active" onclick="filterExtraCards('all', this)">All 15 Effects</button>
+        <button class="fx-tab-btn" onclick="filterExtraCards('kinetic', this)">Kinetic &amp; Springs (4)</button>
+        <button class="fx-tab-btn" onclick="filterExtraCards('3d', this)">3D &amp; Spatial (4)</button>
+        <button class="fx-tab-btn" onclick="filterExtraCards('optical', this)">Optical &amp; Neon (4)</button>
+        <button class="fx-tab-btn" onclick="filterExtraCards('masked', this)">Shear &amp; Masked (3)</button>
+      </div>
+
+      <div class="typo-grid" id="extraCardsGrid">
+
+        <!-- 05: Sine Wave Ripple -->
+        <div class="typo-card extra-card" data-category="kinetic" id="extraCard5">
+          <div class="typo-meta">
+            <span class="typo-label">Typography 05 / Sine Wave Ripple</span>
+            <span class="typo-badge">Harmonic Damping Wave</span>
+          </div>
+          <div class="typo-stage" id="extraStage5" onclick="replayExtraFx(5, 'text-wave')" title="Click stage to trigger animation">
+            <h2 id="extraHeading5" class="typo-headline" data-mos="text-wave" data-mos-duration="1400" style="display: block; color: #38bdf8;">
+              HARMONIC SINE WAVE RIPPLE
+            </h2>
+          </div>
+          <div class="typo-bottom">
+            <div class="typo-code">
+              &lt;h1 <span class="c-attr">data-mos</span>=<span class="c-val">"text-wave"</span> <span class="c-attr">data-mos-duration</span>=<span class="c-num">"1400"</span>&gt;Harmonic Wave&lt;/h1&gt;
+            </div>
+            <div class="typo-action-group">
+              <button class="typo-btn-trigger" onclick="replayExtraFx(5, 'text-wave')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                Replay Animation
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 06: Cyberpunk Scanline Glitch -->
+        <div class="typo-card extra-card" data-category="optical" id="extraCard6">
+          <div class="typo-meta">
+            <span class="typo-label">Typography 06 / Cyberpunk Scanline Glitch</span>
+            <span class="typo-badge">Chromatic Aberration Jitter</span>
+          </div>
+          <div class="typo-stage" id="extraStage6" onclick="replayExtraFx(6, 'text-glitch')" title="Click stage to trigger animation">
+            <h2 id="extraHeading6" class="typo-headline" data-mos="text-glitch" data-mos-duration="1200" style="display: block; color: #06b6d4;">
+              CYBERNETIC DATA SHIFT
+            </h2>
+          </div>
+          <div class="typo-bottom">
+            <div class="typo-code">
+              &lt;h1 <span class="c-attr">data-mos</span>=<span class="c-val">"text-glitch"</span> <span class="c-attr">data-mos-duration</span>=<span class="c-num">"1200"</span>&gt;Cybernetic Shift&lt;/h1&gt;
+            </div>
+            <div class="typo-action-group">
+              <button class="typo-btn-trigger" onclick="replayExtraFx(6, 'text-glitch')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                Replay Animation
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 07: Kinetic Zoom Blast -->
+        <div class="typo-card extra-card" data-category="kinetic" id="extraCard7">
+          <div class="typo-meta">
+            <span class="typo-label">Typography 07 / Kinetic Zoom Blast</span>
+            <span class="typo-badge">Radial Impact Blast</span>
+          </div>
+          <div class="typo-stage" id="extraStage7" onclick="replayExtraFx(7, 'text-zoom-burst')" title="Click stage to trigger animation">
+            <h2 id="extraHeading7" class="typo-headline" data-mos="text-zoom-burst" data-mos-duration="1300" style="display: block; color: #f43f5e;">
+              HIGH-VELOCITY IMPACT BLAST
+            </h2>
+          </div>
+          <div class="typo-bottom">
+            <div class="typo-code">
+              &lt;h1 <span class="c-attr">data-mos</span>=<span class="c-val">"text-zoom-burst"</span> <span class="c-attr">data-mos-duration</span>=<span class="c-num">"1300"</span>&gt;Impact Blast&lt;/h1&gt;
+            </div>
+            <div class="typo-action-group">
+              <button class="typo-btn-trigger" onclick="replayExtraFx(7, 'text-zoom-burst')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                Replay Animation
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 08: 3D Overhead Flip & Drop -->
+        <div class="typo-card extra-card" data-category="3d" id="extraCard8">
+          <div class="typo-meta">
+            <span class="typo-label">Typography 08 / 3D Flip &amp; Drop</span>
+            <span class="typo-badge">90° Perspective Flip</span>
+          </div>
+          <div class="typo-stage" id="extraStage8" onclick="replayExtraFx(8, 'text-rotate-drop')" title="Click stage to trigger animation">
+            <h2 id="extraHeading8" class="typo-headline" data-mos="text-rotate-drop" data-mos-duration="1400" style="display: block; color: #a855f7;">
+              3D SPATIAL TUMBLE DROP
+            </h2>
+          </div>
+          <div class="typo-bottom">
+            <div class="typo-code">
+              &lt;h1 <span class="c-attr">data-mos</span>=<span class="c-val">"text-rotate-drop"</span> <span class="c-attr">data-mos-duration</span>=<span class="c-num">"1400"</span>&gt;Spatial Drop&lt;/h1&gt;
+            </div>
+            <div class="typo-action-group">
+              <button class="typo-btn-trigger" onclick="replayExtraFx(8, 'text-rotate-drop')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                Replay Animation
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 09: Radial Bokeh Expansion -->
+        <div class="typo-card extra-card" data-category="optical" id="extraCard9">
+          <div class="typo-meta">
+            <span class="typo-label">Typography 09 / Radial Bokeh Expansion</span>
+            <span class="typo-badge">16px Optical Tracking</span>
+          </div>
+          <div class="typo-stage" id="extraStage9" onclick="replayExtraFx(9, 'text-blur-spread')" title="Click stage to trigger animation">
+            <h2 id="extraHeading9" class="typo-headline" data-mos="text-blur-spread" data-mos-duration="1500" style="display: block; color: #60a5fa;">
+              CINEMATIC OPTICAL TRACKING
+            </h2>
+          </div>
+          <div class="typo-bottom">
+            <div class="typo-code">
+              &lt;h1 <span class="c-attr">data-mos</span>=<span class="c-val">"text-blur-spread"</span> <span class="c-attr">data-mos-duration</span>=<span class="c-num">"1500"</span>&gt;Optical Tracking&lt;/h1&gt;
+            </div>
+            <div class="typo-action-group">
+              <button class="typo-btn-trigger" onclick="replayExtraFx(9, 'text-blur-spread')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                Replay Animation
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 10: Architectural Skew & Shear -->
+        <div class="typo-card extra-card" data-category="masked" id="extraCard10">
+          <div class="typo-meta">
+            <span class="typo-label">Typography 10 / Architectural Skew &amp; Shear</span>
+            <span class="typo-badge">-24° Angle Transition</span>
+          </div>
+          <div class="typo-stage" id="extraStage10" onclick="replayExtraFx(10, 'text-skew-shear')" title="Click stage to trigger animation">
+            <h2 id="extraHeading10" class="typo-headline" data-mos="text-skew-shear" data-mos-duration="1300" style="display: block; color: #eab308;">
+              STRUCTURAL SHEAR DYNAMICS
+            </h2>
+          </div>
+          <div class="typo-bottom">
+            <div class="typo-code">
+              &lt;h1 <span class="c-attr">data-mos</span>=<span class="c-val">"text-skew-shear"</span> <span class="c-attr">data-mos-duration</span>=<span class="c-num">"1300"</span>&gt;Shear Dynamics&lt;/h1&gt;
+            </div>
+            <div class="typo-action-group">
+              <button class="typo-btn-trigger" onclick="replayExtraFx(10, 'text-skew-shear')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                Replay Animation
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 11: Staggered Blind Shutter -->
+        <div class="typo-card extra-card" data-category="masked" id="extraCard11">
+          <div class="typo-meta">
+            <span class="typo-label">Typography 11 / Staggered Blind Shutter</span>
+            <span class="typo-badge">Slat Geometry Wipe</span>
+          </div>
+          <div class="typo-stage" id="extraStage11" onclick="replayExtraFx(11, 'text-shutter')" title="Click stage to trigger animation">
+            <h2 id="extraHeading11" class="typo-headline" data-mos="text-shutter" data-mos-duration="1400" style="display: block; color: #10b981;">
+              VERTICAL SHUTTER APERTURE
+            </h2>
+          </div>
+          <div class="typo-bottom">
+            <div class="typo-code">
+              &lt;h1 <span class="c-attr">data-mos</span>=<span class="c-val">"text-shutter"</span> <span class="c-attr">data-mos-duration</span>=<span class="c-num">"1400"</span>&gt;Shutter Aperture&lt;/h1&gt;
+            </div>
+            <div class="typo-action-group">
+              <button class="typo-btn-trigger" onclick="replayExtraFx(11, 'text-shutter')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                Replay Animation
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 12: Magnetic Spring Recoil -->
+        <div class="typo-card extra-card" data-category="kinetic" id="extraCard12">
+          <div class="typo-meta">
+            <span class="typo-label">Typography 12 / Magnetic Spring Recoil</span>
+            <span class="typo-badge">Overshoot Damping Snap</span>
+          </div>
+          <div class="typo-stage" id="extraStage12" onclick="replayExtraFx(12, 'text-magnetic-pull')" title="Click stage to trigger animation">
+            <h2 id="extraHeading12" class="typo-headline" data-mos="text-magnetic-pull" data-mos-duration="1300" style="display: block; color: #ec4899;">
+              MAGNETIC VECTOR ATTRACTION
+            </h2>
+          </div>
+          <div class="typo-bottom">
+            <div class="typo-code">
+              &lt;h1 <span class="c-attr">data-mos</span>=<span class="c-val">"text-magnetic-pull"</span> <span class="c-attr">data-mos-duration</span>=<span class="c-num">"1300"</span>&gt;Vector Attraction&lt;/h1&gt;
+            </div>
+            <div class="typo-action-group">
+              <button class="typo-btn-trigger" onclick="replayExtraFx(12, 'text-magnetic-pull')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                Replay Animation
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 13: Neon Glow Ignition -->
+        <div class="typo-card extra-card" data-category="optical" id="extraCard13">
+          <div class="typo-meta">
+            <span class="typo-label">Typography 13 / Neon Glow Ignition</span>
+            <span class="typo-badge">Luminous Gas Arc Ignition</span>
+          </div>
+          <div class="typo-stage" id="extraStage13" onclick="replayExtraFx(13, 'text-neon-flicker')" title="Click stage to trigger animation">
+            <h2 id="extraHeading13" class="typo-headline" data-mos="text-neon-flicker" data-mos-duration="1500" style="display: block; color: #38bdf8;">
+              HIGH-VOLTAGE NEON BEAM
+            </h2>
+          </div>
+          <div class="typo-bottom">
+            <div class="typo-code">
+              &lt;h1 <span class="c-attr">data-mos</span>=<span class="c-val">"text-neon-flicker"</span> <span class="c-attr">data-mos-duration</span>=<span class="c-num">"1500"</span>&gt;Neon Beam&lt;/h1&gt;
+            </div>
+            <div class="typo-action-group">
+              <button class="typo-btn-trigger" onclick="replayExtraFx(13, 'text-neon-flicker')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                Replay Animation
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 14: Mechanical Split-Flap Clock -->
+        <div class="typo-card extra-card" data-category="3d" id="extraCard14">
+          <div class="typo-meta">
+            <span class="typo-label">Typography 14 / Mechanical Split-Flap</span>
+            <span class="typo-badge">Horizontal Hinge Fold</span>
+          </div>
+          <div class="typo-stage" id="extraStage14" onclick="replayExtraFx(14, 'text-flip-clock')" title="Click stage to trigger animation">
+            <h2 id="extraHeading14" class="typo-headline" data-mos="text-flip-clock" data-mos-duration="1300" style="display: block; color: #f97316;">
+              MECHANICAL SPLIT-FLAP TRANSIT
+            </h2>
+          </div>
+          <div class="typo-bottom">
+            <div class="typo-code">
+              &lt;h1 <span class="c-attr">data-mos</span>=<span class="c-val">"text-flip-clock"</span> <span class="c-attr">data-mos-duration</span>=<span class="c-num">"1300"</span>&gt;Split-Flap Transit&lt;/h1&gt;
+            </div>
+            <div class="typo-action-group">
+              <button class="typo-btn-trigger" onclick="replayExtraFx(14, 'text-flip-clock')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                Replay Animation
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 15: Spatial Vortex Twist -->
+        <div class="typo-card extra-card" data-category="3d" id="extraCard15">
+          <div class="typo-meta">
+            <span class="typo-label">Typography 15 / Spatial Vortex Twist</span>
+            <span class="typo-badge">120° Spatial Orbit Spiral</span>
+          </div>
+          <div class="typo-stage" id="extraStage15" onclick="replayExtraFx(15, 'text-spiral-spin')" title="Click stage to trigger animation">
+            <h2 id="extraHeading15" class="typo-headline" data-mos="text-spiral-spin" data-mos-duration="1500" style="display: block; color: #8b5cf6;">
+              CENTRIFUGAL 3D VORTEX
+            </h2>
+          </div>
+          <div class="typo-bottom">
+            <div class="typo-code">
+              &lt;h1 <span class="c-attr">data-mos</span>=<span class="c-val">"text-spiral-spin"</span> <span class="c-attr">data-mos-duration</span>=<span class="c-num">"1500"</span>&gt;Centrifugal Vortex&lt;/h1&gt;
+            </div>
+            <div class="typo-action-group">
+              <button class="typo-btn-trigger" onclick="replayExtraFx(15, 'text-spiral-spin')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                Replay Animation
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 16: Chromatic Gradient Shift -->
+        <div class="typo-card extra-card" data-category="optical" id="extraCard16">
+          <div class="typo-meta">
+            <span class="typo-label">Typography 16 / Chromatic Gradient Shift</span>
+            <span class="typo-badge">Luminous Sweep Gradient</span>
+          </div>
+          <div class="typo-stage" id="extraStage16" onclick="replayExtraFx(16, 'text-gradient-flow')" title="Click stage to trigger animation">
+            <h2 id="extraHeading16" class="typo-headline" data-mos="text-gradient-flow" data-mos-duration="1600" style="display: block;">
+              SPECTRUM CHROMATIC FLOW
+            </h2>
+          </div>
+          <div class="typo-bottom">
+            <div class="typo-code">
+              &lt;h1 <span class="c-attr">data-mos</span>=<span class="c-val">"text-gradient-flow"</span> <span class="c-attr">data-mos-duration</span>=<span class="c-num">"1600"</span>&gt;Chromatic Flow&lt;/h1&gt;
+            </div>
+            <div class="typo-action-group">
+              <button class="typo-btn-trigger" onclick="replayExtraFx(16, 'text-gradient-flow')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                Replay Animation
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 17: Rubber Band Elastic Rebound -->
+        <div class="typo-card extra-card" data-category="kinetic" id="extraCard17">
+          <div class="typo-meta">
+            <span class="typo-label">Typography 17 / Rubber Band Rebound</span>
+            <span class="typo-badge">Triple Elastic Recoil</span>
+          </div>
+          <div class="typo-stage" id="extraStage17" onclick="replayExtraFx(17, 'text-elastic-bounce')" title="Click stage to trigger animation">
+            <h2 id="extraHeading17" class="typo-headline" data-mos="text-elastic-bounce" data-mos-duration="1500" style="display: block; color: #facc15;">
+              EXTREME RUBBER COMPRESSION
+            </h2>
+          </div>
+          <div class="typo-bottom">
+            <div class="typo-code">
+              &lt;h1 <span class="c-attr">data-mos</span>=<span class="c-val">"text-elastic-bounce"</span> <span class="c-attr">data-mos-duration</span>=<span class="c-num">"1500"</span>&gt;Rubber Compression&lt;/h1&gt;
+            </div>
+            <div class="typo-action-group">
+              <button class="typo-btn-trigger" onclick="replayExtraFx(17, 'text-elastic-bounce')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                Replay Animation
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 18: Diagonal Curtain Unveil -->
+        <div class="typo-card extra-card" data-category="masked" id="extraCard18">
+          <div class="typo-meta">
+            <span class="typo-label">Typography 18 / Diagonal Curtain Unveil</span>
+            <span class="typo-badge">45° Diagonal Slicing Reveal</span>
+          </div>
+          <div class="typo-stage" id="extraStage18" onclick="replayExtraFx(18, 'text-masked-curtain')" title="Click stage to trigger animation">
+            <h2 id="extraHeading18" class="typo-headline" data-mos="text-masked-curtain" data-mos-duration="1400" style="display: block; color: #2dd4bf;">
+              ANGULAR POLYGONAL CURTAIN
+            </h2>
+          </div>
+          <div class="typo-bottom">
+            <div class="typo-code">
+              &lt;h1 <span class="c-attr">data-mos</span>=<span class="c-val">"text-masked-curtain"</span> <span class="c-attr">data-mos-duration</span>=<span class="c-num">"1400"</span>&gt;Polygonal Curtain&lt;/h1&gt;
+            </div>
+            <div class="typo-action-group">
+              <button class="typo-btn-trigger" onclick="replayExtraFx(18, 'text-masked-curtain')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                Replay Animation
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 19: Optical Matrix Convergence -->
+        <div class="typo-card extra-card" data-category="optical" id="extraCard19">
+          <div class="typo-meta">
+            <span class="typo-label">Typography 19 / Optical Matrix Convergence</span>
+            <span class="typo-badge">Contrast Blur Tracking</span>
+          </div>
+          <div class="typo-stage" id="extraStage19" onclick="replayExtraFx(19, 'text-pixel-converge')" title="Click stage to trigger animation">
+            <h2 id="extraHeading19" class="typo-headline" data-mos="text-pixel-converge" data-mos-duration="1400" style="display: block; color: #00f5d4;">
+              MATRIX GRID CONVERGENCE
+            </h2>
+          </div>
+          <div class="typo-bottom">
+            <div class="typo-code">
+              &lt;h1 <span class="c-attr">data-mos</span>=<span class="c-val">"text-pixel-converge"</span> <span class="c-attr">data-mos-duration</span>=<span class="c-num">"1400"</span>&gt;Grid Converge&lt;/h1&gt;
+            </div>
+            <div class="typo-action-group">
+              <button class="typo-btn-trigger" onclick="replayExtraFx(19, 'text-pixel-converge')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                Replay Animation
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Navigation Return Bar -->
+    <div class="return-bar">
+      <div>
+        <h4 style="font-size: 1.05rem; color: #fff; margin-bottom: 0.25rem;">Explore Full Animation Suite</h4>
+        <p style="font-size: 0.85rem; color: var(--text-muted);">View the 28-preset viewport motion catalog and interactive playground.</p>
+      </div>
+      <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+        <a href="index.html#playground" class="return-link">
+          Interactive Studio →
+        </a>
+        <a href="index.html#presets" class="return-link" style="color: #38bdf8;">
+          28 Presets Catalog →
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+    <span id="toast-text">Notification</span>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div style="max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+      <div>MOS Engine &copy; 2026. Released under the MIT License.</div>
+      <div style="display: flex; gap: 1.5rem;">
+        <a href="index.html">Home</a>
+        <a href="index.html#playground">Playground</a>
+        <a href="text-fx.html">Text FX</a>
+        <a href="index.html#presets">28 Presets</a>
+        <a href="index.html#docs">Docs</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Core Standalone Script -->
+  <script src="mos.js"></script>
+
+  <!-- Interactive Logic -->
+  <script>
+    // Dedicated Typography Handlers
+    function toggleTypo(id, preset) {
+      const prompt = document.getElementById(`typoPrompt${id}`);
+      const heading = document.getElementById(`typoHeading${id}`);
+      const btn = document.getElementById(`typoBtn${id}`);
+      const hideBtn = document.getElementById(`typoHideBtn${id}`);
+
+      // Hide placeholder prompt & display headline element
+      if (prompt) prompt.style.display = 'none';
+      if (heading) {
+        heading.style.display = 'block';
+        heading.setAttribute('data-mos', preset);
+        heading.style.removeProperty('transition');
+        heading.classList.remove('mos-animate');
+        void heading.offsetWidth; // Force instant reflow
+        heading.classList.add('mos-animate');
+      }
+
+      // Update button state
+      if (btn) {
+        btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg> Replay Animation`;
+      }
+      if (hideBtn) {
+        hideBtn.style.display = 'inline-flex';
+      }
+    }
+
+    function hideTypo(id) {
+      const prompt = document.getElementById(`typoPrompt${id}`);
+      const heading = document.getElementById(`typoHeading${id}`);
+      const btn = document.getElementById(`typoBtn${id}`);
+      const hideBtn = document.getElementById(`typoHideBtn${id}`);
+
+      if (heading) {
+        heading.classList.remove('mos-animate');
+        heading.style.display = 'none';
+      }
+      if (prompt) {
+        prompt.style.display = 'flex';
+      }
+
+      const names = {
+        1: 'Show Sliding Reveal',
+        2: 'Show Stretch & Snap',
+        3: 'Show Blur Scroller',
+        4: 'Show 3D Glide'
+      };
+
+      if (btn) {
+        btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg> ${names[id] || 'Show Animation'}`;
+      }
+      if (hideBtn) {
+        hideBtn.style.display = 'none';
+      }
+    }
+
+    function playAllTypo() {
+      const presets = {
+        1: 'text-slide-up',
+        2: 'text-stretch-snap',
+        3: 'text-blur-scroller',
+        4: 'text-glide'
+      };
+      [1, 2, 3, 4].forEach(id => {
+        toggleTypo(id, presets[id]);
+      });
+      showToast('Playing all 4 kinetic text animations');
+    }
+
+    function resetAllTypo() {
+      [1, 2, 3, 4].forEach(id => {
+        hideTypo(id);
+      });
+      showToast('All text animations reset');
+    }
+
+    // Mobile Drawer Navigation Controls
+    function toggleMobileMenu() {
+      const nav = document.querySelector('nav');
+      const btn = document.getElementById('mobileMenuBtn');
+      const isOpen = nav.classList.toggle('menu-open');
+      btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    }
+
+    function closeMobileMenu() {
+      const nav = document.querySelector('nav');
+      const btn = document.getElementById('mobileMenuBtn');
+      if (nav) nav.classList.remove('menu-open');
+      if (btn) btn.setAttribute('aria-expanded', 'false');
+    }
+
+    document.addEventListener('click', (e) => {
+      const nav = document.querySelector('nav');
+      if (nav && nav.classList.contains('menu-open') && !nav.contains(e.target)) {
+        closeMobileMenu();
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeMobileMenu();
+    });
+
+    // Toast Helper
+    function showToast(text) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toast-text').textContent = text;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2200);
+    }
+
+    // ==========================================================================
+    // TEXT SCROLLING EFFECTS LOGIC
+    // ==========================================================================
+    let isTickerPaused = false;
+    let isTickerReversed = false;
+    let scrubWords = [];
+
+    // 1. Initialize Editorial Scroll Scrub Paragraph
+    function initScrubParagraph() {
+      const el = document.getElementById('scrubParagraphText');
+      if (!el) return;
+
+      const text = el.textContent.trim();
+      el.textContent = '';
+      const words = text.split(/\s+/);
+      const highlightWords = ['scroll', 'position', 'illuminates', 'brilliance', 'immersive', '120', 'FPS', 'acceleration'];
+
+      scrubWords = words.map((w) => {
+        const span = document.createElement('span');
+        span.className = 'scrub-word';
+        const clean = w.replace(/[^a-zA-Z0-9]/g, '');
+        if (highlightWords.includes(clean)) {
+          span.classList.add('highlight');
+        }
+        span.textContent = w;
+        el.appendChild(span);
+        el.appendChild(document.createTextNode(' '));
+        return span;
+      });
+
+      // Passive scroll listener (120 FPS requestAnimationFrame throttled)
+      let ticking = false;
+      window.addEventListener('scroll', () => {
+        if (!ticking) {
+          window.requestAnimationFrame(() => {
+            updateScrubFromScroll();
+            updateScrollFeatures();
+            ticking = false;
+          });
+          ticking = true;
+        }
+      }, { passive: true });
+
+      // Run once on load
+      updateScrubFromScroll();
+    }
+
+    function updateScrubFromScroll() {
+      const stage = document.getElementById('scrubStage');
+      if (!stage || scrubWords.length === 0) return;
+
+      const rect = stage.getBoundingClientRect();
+      const windowH = window.innerHeight;
+
+      // Start lighting when top of card reaches 85% of viewport, fully lit when center reaches 40%
+      const start = windowH * 0.85;
+      const end = windowH * 0.35;
+      let progress = (start - rect.top) / (start - end);
+      progress = Math.max(0, Math.min(1, progress));
+
+      applyScrubFraction(progress, false);
+    }
+
+    function applyScrubFraction(progress, fromSlider = false) {
+      const pct = Math.round(progress * 100);
+
+      const fill = document.getElementById('scrubProgressFill');
+      const label = document.getElementById('scrubPercentLabel');
+      const slider = document.getElementById('scrubManualSlider');
+      const sliderVal = document.getElementById('sliderValDisplay');
+
+      if (fill) fill.style.width = `${pct}%`;
+      if (label) label.textContent = `${pct}%`;
+      if (sliderVal) sliderVal.textContent = `${pct}%`;
+      if (slider && !fromSlider) slider.value = pct;
+
+      const activeCount = Math.floor(progress * scrubWords.length);
+      scrubWords.forEach((wordSpan, idx) => {
+        if (idx <= activeCount) {
+          wordSpan.classList.add('active');
+        } else {
+          wordSpan.classList.remove('active');
+        }
+      });
+    }
+
+    function manualScrub(val) {
+      const progress = parseInt(val, 10) / 100;
+      applyScrubFraction(progress, true);
+    }
+
+    let demoInterval = null;
+    function demoScrubFlow() {
+      if (demoInterval) clearInterval(demoInterval);
+      let p = 0;
+      applyScrubFraction(0, false);
+      demoInterval = setInterval(() => {
+        p += 0.02;
+        if (p > 1) {
+          p = 1;
+          clearInterval(demoInterval);
+        }
+        applyScrubFraction(p, false);
+      }, 35);
+      showToast('Running automated editorial scrub demo');
+    }
+
+    // 2. Velocity Marquee Controls
+    function setTickerSpeed(seconds, btn) {
+      const t1 = document.getElementById('tickerTrack1');
+      const t2 = document.getElementById('tickerTrack2');
+      if (t1) t1.style.animationDuration = `${seconds}s`;
+      if (t2) t2.style.animationDuration = `${seconds}s`;
+
+      document.querySelectorAll('.fx-toolbar .fx-btn-pill').forEach(b => {
+        if (b.id && b.id.startsWith('speed')) b.classList.remove('active');
+      });
+      if (btn) btn.classList.add('active');
+      showToast(`Ticker speed set to ${seconds}s`);
+    }
+
+    function toggleTickerPlay() {
+      const t1 = document.getElementById('tickerTrack1');
+      const t2 = document.getElementById('tickerTrack2');
+      const btn = document.getElementById('tickerPauseBtn');
+      isTickerPaused = !isTickerPaused;
+
+      const state = isTickerPaused ? 'paused' : 'running';
+      if (t1) t1.style.animationPlayState = state;
+      if (t2) t2.style.animationPlayState = state;
+
+      if (btn) {
+        btn.innerHTML = isTickerPaused 
+          ? `<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg> Resume`
+          : `<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg> Pause`;
+      }
+      showToast(isTickerPaused ? 'Marquee stream paused' : 'Marquee stream resumed');
+    }
+
+    function toggleTickerDirection() {
+      const t1 = document.getElementById('tickerTrack1');
+      const t2 = document.getElementById('tickerTrack2');
+      isTickerReversed = !isTickerReversed;
+      const dir = isTickerReversed ? 'reverse' : 'normal';
+      if (t1) t1.style.animationDirection = dir;
+      if (t2) t2.style.animationDirection = dir;
+      showToast(isTickerReversed ? 'Marquee direction reversed' : 'Marquee direction normal');
+    }
+
+    // 3. Staggered Viewport Headings Replay
+    function replayStaggerHeadlines() {
+      const c1 = document.getElementById('staggerHeadlineChars');
+      const c2 = document.getElementById('staggerHeadlineWords');
+      
+      [c1, c2].forEach(parent => {
+        if (!parent) return;
+        const items = parent.querySelectorAll('.mos-split-item');
+        items.forEach(item => {
+          item.classList.remove('mos-animate');
+          item.style.opacity = '0';
+        });
+        void parent.offsetWidth; // Force instant reflow
+        items.forEach(item => {
+          item.style.removeProperty('opacity');
+          item.classList.add('mos-animate');
+        });
+      });
+      showToast('Replaying staggered in-view typography');
+    }
+
+    // 4. Code Snippet Copy Handler
+    function copySnippet(type) {
+      let code = '';
+      if (type === 'ticker') {
+        code = `<div class="mos-ticker-wrap">\n  <div class="mos-ticker-track-left">\n    <div class="ticker-row">YOUR STREAMING TEXT •</div>\n    <div class="ticker-row" aria-hidden="true">YOUR STREAMING TEXT •</div>\n  </div>\n</div>`;
+      } else if (type === 'scrub') {
+        code = `<p class="scrub-paragraph" id="editorialScrub">\n  Motion that responds directly to your scroll position...\n</p>`;
+      } else if (type === 'parallax') {
+        code = `<div class="parallax-dual-stage">\n  <div class="parallax-track" id="paraTrackTop">\n    <div class="parallax-item">PARALLAX DEPTH VELOCITY •</div>\n  </div>\n  <div class="parallax-track" id="paraTrackBottom">\n    <div class="parallax-item ticker-item-outline">TWO-WAY VIEWPORT DYNAMICS •</div>\n  </div>\n</div>`;
+      } else if (type === 'rolodex') {
+        code = `<div class="rolodex-stage">\n  <div class="rolodex-drum" id="rolodexDrum">\n    <div class="rolodex-item">01 • KINETIC INTERFACE</div>\n    <div class="rolodex-item active">02 • 120 FPS ACCELERATION</div>\n  </div>\n</div>`;
+      } else if (type === 'waveform') {
+        code = `<div class="waveform-stage">\n  <div class="waveform-text" id="waveformText">DYNAMIC SINE WAVEFORM</div>\n</div>`;
+      } else if (type === 'spotlight') {
+        code = `<div class="spotlight-stage">\n  <h2 class="spotlight-headline">ILLUMINATING MODERN CRAFT</h2>\n</div>`;
+      } else if (type === 'odometer') {
+        code = `<div class="odometer-value-box">\n  <span class="odometer-digit-col"><span class="odometer-digit-strip"><span>0</span><span>1</span></span></span>\n  <span>FPS</span>\n</div>`;
+      } else if (type === 'pinned') {
+        code = `<div class="pinned-track-stage">\n  <div class="pinned-slider-content">\n    <h2 class="pinned-slide-headline">EXPLORING MODERN VIEWPORTS</h2>\n  </div>\n</div>`;
+      } else if (type === 'decryptor') {
+        code = `<div class="decryptor-stage">\n  <div class="decryptor-text" id="decryptorText">QUANTUM SYSTEM DECRYPTION</div>\n</div>`;
+      } else if (type === 'isometric') {
+        code = `<div class="isometric-stage">\n  <div class="iso-stack">\n    <div class="iso-card">01. VIEWPORT ENGINE</div>\n    <div class="iso-card">02. COMPOSITING LAYER</div>\n  </div>\n</div>`;
+      } else if (type === 'deepfocus') {
+        code = `<div class="deep-focus-stage">\n  <h2 class="deep-focus-headline">OPTICAL FIELD CONVERGENCE</h2>\n</div>`;
+      } else if (type === 'chromabeam') {
+        code = `<div class="chroma-beam-stage">\n  <div class="chroma-beam-content">\n    <h2>LUMINESCENT CHROMATIC BEAM</h2>\n  </div>\n</div>`;
+      } else if (type === 'liquid') {
+        code = `<div class="liquid-wave-stage">\n  <div class="liquid-headline">LIQUID FLUID REFRACTION</div>\n</div>`;
+      } else if (type === 'neontube') {
+        code = `<div class="neon-tube-stage">\n  <h2 class="neon-tube-headline neon-tube-cyan">HIGH VOLTAGE GAS DISCHARGE</h2>\n</div>`;
+      } else if (type === 'anamorphic') {
+        code = `<div class="anamorphic-flare-stage">\n  <div class="anamorphic-flare-streak"></div>\n  <h2 class="anamorphic-headline">ANAMORPHIC CINEMATIC GLARE</h2>\n</div>`;
+      } else if (type === 'circularloop') {
+        code = `<div class="circular-loop-stage">\n  <div class="circular-orbit-wrap">\n    <div class="orbit-item">INFINITE TOPOLOGY MOTION LOOP •</div>\n  </div>\n</div>`;
+      } else if (type === 'louver') {
+        code = `<div class="louver-shutter-stage">\n  <div class="louver-wrapper">\n    <span class="louver-slat">ARCHITECTURAL LOUVER</span>\n  </div>\n</div>`;
+      } else if (type === 'variable') {
+        code = `<div class="variable-axis-stage">\n  <h2 class="variable-headline">CONTINUOUS VARIABLE MOTION AXIS</h2>\n</div>`;
+      } else if (type === 'hologram') {
+        code = `<div class="chroma-hologram-stage">\n  <h2 class="hologram-headline">CHROMATIC RGB CHANNEL DISPERSION</h2>\n</div>`;
+      } else if (type === 'magnetic') {
+        code = `<div class="magnetic-gravity-stage">\n  <div class="magnetic-text">MAGNETIC GRAVITATIONAL FIELD</div>\n</div>`;
+      } else if (type === 'equalizer') {
+        code = `<div class="spectral-eq-stage">\n  <h2>SPECTRAL FREQUENCY EQUALIZER</h2>\n  <div class="spectral-bars-row"></div>\n</div>`;
+      } else if (type === 'quantization') {
+        code = `<div class="pixel-grid-stage">\n  <h2 class="pixel-headline">SUB-PIXEL QUANTIZATION GRID</h2>\n</div>`;
+      }
+      navigator.clipboard.writeText(code).then(() => {
+        showToast('Code snippet copied to clipboard');
+      }).catch(() => {
+        showToast('Snippet ready');
+      });
+    }
+
+    // ==========================================================================
+    // 10 NEW ADVANCED SCROLLING EFFECTS LOGIC
+    // ==========================================================================
+
+    // 04. Dual-Track Parallax Split
+    let parallaxOffset = 0;
+    function manualParallax(val) {
+      parallaxOffset = parseFloat(val);
+      updateParallaxTracks();
+      const disp = document.getElementById('parallaxValDisplay');
+      if (disp) disp.textContent = `${Math.round(val)}px`;
+    }
+
+    function updateParallaxTracks() {
+      const top = document.getElementById('paraTrackTop');
+      const bottom = document.getElementById('paraTrackBottom');
+      if (top) top.style.transform = `translateX(${-parallaxOffset}px)`;
+      if (bottom) bottom.style.transform = `translateX(${-180 + parallaxOffset}px)`;
+    }
+
+    let parallaxDemoInterval = null;
+    function demoParallaxFlow() {
+      if (parallaxDemoInterval) {
+        clearInterval(parallaxDemoInterval);
+        parallaxDemoInterval = null;
+        showToast('Parallax auto flow paused');
+        return;
+      }
+      let dir = 1;
+      let curr = parallaxOffset;
+      parallaxDemoInterval = setInterval(() => {
+        curr += dir * 4;
+        if (curr > 240) dir = -1;
+        if (curr < -240) dir = 1;
+        const slider = document.getElementById('parallaxManualSlider');
+        if (slider) slider.value = curr;
+        manualParallax(curr);
+      }, 30);
+      showToast('Running Parallax dual auto flow');
+    }
+
+    // 05. 3D Cylindrical Perspective Rolodex
+    let rolodexAngle = 0;
+    function manualRolodex(val) {
+      rolodexAngle = parseFloat(val);
+      const drum = document.getElementById('rolodexDrum');
+      if (drum) drum.style.transform = `rotateX(${rolodexAngle}deg)`;
+      const disp = document.getElementById('rolodexValDisplay');
+      if (disp) disp.textContent = `${Math.round(val)}°`;
+    }
+
+    let rolodexInterval = null;
+    function demoRolodexTumble() {
+      if (rolodexInterval) {
+        clearInterval(rolodexInterval);
+        rolodexInterval = null;
+        showToast('Rolodex tumble paused');
+        return;
+      }
+      let a = rolodexAngle;
+      let dir = 1;
+      rolodexInterval = setInterval(() => {
+        a += dir * 1.5;
+        if (a > 45) dir = -1;
+        if (a < -45) dir = 1;
+        const slider = document.getElementById('rolodexManualSlider');
+        if (slider) slider.value = a;
+        manualRolodex(a);
+      }, 35);
+      showToast('Running 3D Rolodex spatial tumble');
+    }
+
+    // 06. Velocity Sine Waveform
+    let waveAmp = 20;
+    let wavePhase = 0;
+    let waveAnimActive = true;
+    let waveRafId = null;
+
+    function initWaveformText() {
+      const container = document.getElementById('waveformText');
+      if (!container) return;
+      const text = 'DYNAMIC WAVEFORM KINETIC FLOW';
+      container.textContent = '';
+      for (let i = 0; i < text.length; i++) {
+        const span = document.createElement('span');
+        span.className = 'wave-char';
+        span.textContent = text[i] === ' ' ? '\u00A0' : text[i];
+        container.appendChild(span);
+      }
+      renderWave();
+    }
+
+    function renderWave() {
+      const chars = document.querySelectorAll('#waveformText .wave-char');
+      chars.forEach((c, idx) => {
+        const y = Math.sin(idx * 0.35 + wavePhase) * waveAmp;
+        c.style.transform = `translateY(${y.toFixed(2)}px)`;
+        const intensity = (Math.sin(idx * 0.35 + wavePhase) + 1) / 2;
+        c.style.color = intensity > 0.6 ? '#38bdf8' : (intensity > 0.3 ? '#e2e8f0' : '#64748b');
+      });
+      if (waveAnimActive) {
+        wavePhase += 0.045;
+        waveRafId = requestAnimationFrame(renderWave);
+      }
+    }
+
+    function setWaveAmplitude(val) {
+      waveAmp = parseFloat(val);
+      const disp = document.getElementById('waveAmpDisplay');
+      if (disp) disp.textContent = `${val}px`;
+    }
+
+    function toggleWaveAnim() {
+      waveAnimActive = !waveAnimActive;
+      const btn = document.getElementById('waveAnimBtn');
+      if (btn) {
+        btn.classList.toggle('active', waveAnimActive);
+        btn.textContent = waveAnimActive ? 'Oscillating' : 'Paused';
+      }
+      if (waveAnimActive) {
+        renderWave();
+        showToast('Waveform oscillation active');
+      } else {
+        cancelAnimationFrame(waveRafId);
+        showToast('Waveform paused');
+      }
+    }
+
+    // 07. Spotlight Beam Mask
+    function manualSpotlight(val) {
+      const headline = document.getElementById('spotlightHeadline');
+      if (headline) headline.style.setProperty('--spot-x', `${val}%`);
+      const disp = document.getElementById('spotlightValDisplay');
+      if (disp) disp.textContent = `${Math.round(val)}%`;
+    }
+
+    function handleSpotlightHover(e) {
+      const stage = document.getElementById('spotlightStage');
+      if (!stage) return;
+      const rect = stage.getBoundingClientRect();
+      const xPct = Math.max(0, Math.min(100, ((e.clientX - rect.left) / rect.width) * 100));
+      manualSpotlight(xPct);
+      const slider = document.getElementById('spotlightSlider');
+      if (slider) slider.value = xPct;
+    }
+
+    let spotlightInterval = null;
+    function demoSpotlightSweep() {
+      if (spotlightInterval) {
+        clearInterval(spotlightInterval);
+        spotlightInterval = null;
+        showToast('Spotlight sweep paused');
+        return;
+      }
+      let pos = 0;
+      let dir = 1;
+      spotlightInterval = setInterval(() => {
+        pos += dir * 1.5;
+        if (pos >= 100) dir = -1;
+        if (pos <= 0) dir = 1;
+        const slider = document.getElementById('spotlightSlider');
+        if (slider) slider.value = pos;
+        manualSpotlight(pos);
+      }, 25);
+      showToast('Running Spotlight sweep beam');
+    }
+
+    // 08. Mechanical Rolling Odometer
+    function rollAllOdometers() {
+      const strips = [
+        { id: 'odoStrip1_1', offset: -1 },
+        { id: 'odoStrip1_2', offset: -2 },
+        { id: 'odoStrip2_2', offset: 0 },
+        { id: 'odoStrip2_3', offset: -2 },
+        { id: 'odoStrip3_1', offset: -1 },
+        { id: 'odoStrip3_2', offset: -1 },
+        { id: 'odoStrip3_3', offset: -1 }
+      ];
+
+      strips.forEach(s => {
+        const el = document.getElementById(s.id);
+        if (el) {
+          el.style.transition = 'none';
+          el.style.transform = 'translateY(0em)';
+        }
+      });
+
+      void document.body.offsetWidth;
+
+      requestAnimationFrame(() => {
+        strips.forEach(s => {
+          const el = document.getElementById(s.id);
+          if (el) {
+            el.style.transition = 'transform 1.2s cubic-bezier(0.16, 1, 0.3, 1)';
+            el.style.transform = `translateY(${s.offset * 1.2}em)`;
+          }
+        });
+      });
+      showToast('Rolling metric odometer counters');
+    }
+
+    function randomizeOdometers() {
+      const fps = Math.floor(90 + Math.random() * 30);
+      const lat = (0.01 + Math.random() * 0.05).toFixed(2);
+      const stab = (98.5 + Math.random() * 1.4).toFixed(1);
+      
+      const v1 = document.getElementById('odoVal1');
+      if (v1) v1.innerHTML = `<span style="font-family: var(--font-mono);">${fps}</span><span style="font-size: 1.1rem; color: #60a5fa; margin-left: 0.2rem;">FPS</span>`;
+      const v2 = document.getElementById('odoVal2');
+      if (v2) v2.innerHTML = `<span style="font-family: var(--font-mono);">${lat}</span><span style="font-size: 1.1rem; color: #38bdf8; margin-left: 0.2rem;">MS</span>`;
+      const v3 = document.getElementById('odoVal3');
+      if (v3) v3.innerHTML = `<span style="font-family: var(--font-mono);">${stab}</span><span style="font-size: 1.1rem; color: #34d399; margin-left: 0.2rem;">%</span>`;
+      showToast('Metrics randomized with high-velocity telemetry');
+    }
+
+    // 09. Pinned Horizontal Slide Track
+    function manualPinnedSlide(val) {
+      const content = document.getElementById('pinnedSlideContent');
+      if (content) content.style.transform = `translateX(-${val}%)`;
+      const disp = document.getElementById('pinnedSlideDisplay');
+      if (disp) disp.textContent = `${Math.round((val / 65) * 100)}%`;
+    }
+
+    let pinnedInterval = null;
+    function demoPinnedSlide() {
+      if (pinnedInterval) {
+        clearInterval(pinnedInterval);
+        pinnedInterval = null;
+        showToast('Slide demo paused');
+        return;
+      }
+      let pos = 0;
+      let dir = 1;
+      pinnedInterval = setInterval(() => {
+        pos += dir * 0.65;
+        if (pos >= 65) dir = -1;
+        if (pos <= 0) dir = 1;
+        const slider = document.getElementById('pinnedSlideSlider');
+        if (slider) slider.value = pos;
+        manualPinnedSlide(pos);
+      }, 25);
+      showToast('Running horizontal track slide demo');
+    }
+
+    // 10. Cyberpunk Matrix Decryptor
+    const MATRIX_PHRASES = [
+      'QUANTUM SYSTEM DECRYPTION COMPLETED',
+      'HARDWARE ACCELERATED VIEWPORT ENGINE',
+      'NEURAL INTERFACE MATRIX SYNCHRONIZED',
+      'SUB-PIXEL HIGH VELOCITY RENDERING'
+    ];
+    let matrixPhraseIdx = 0;
+    const GLYPHS = '0123456789!@#$%^&*()_+{}[]|:;<>?,./~';
+
+    function triggerMatrixDecrypt() {
+      const el = document.getElementById('decryptorText');
+      if (!el) return;
+      const targetText = MATRIX_PHRASES[matrixPhraseIdx];
+      let iteration = 0;
+      const maxIterations = targetText.length;
+      
+      const interval = setInterval(() => {
+        el.textContent = targetText
+          .split('')
+          .map((char, index) => {
+            if (char === ' ') return ' ';
+            if (index < iteration) return targetText[index];
+            return GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
+          })
+          .join('');
+
+        if (iteration >= maxIterations) {
+          clearInterval(interval);
+          el.textContent = targetText;
+          showToast('Decryption cipher resolved');
+        }
+        iteration += 1 / 2;
+      }, 30);
+    }
+
+    function cycleDecryptPhrase() {
+      matrixPhraseIdx = (matrixPhraseIdx + 1) % MATRIX_PHRASES.length;
+      triggerMatrixDecrypt();
+    }
+
+    // 11. 3D Isometric Card Stack
+    let isoSpread = 45;
+    let isoTiltActive = true;
+    function setIsoSpread(val) {
+      isoSpread = parseFloat(val);
+      const c1 = document.getElementById('isoCard1');
+      const c2 = document.getElementById('isoCard2');
+      const c3 = document.getElementById('isoCard3');
+      if (c1) c1.style.transform = `translateZ(${isoSpread * 1.2}px)`;
+      if (c2) c2.style.transform = `translateZ(${isoSpread * 0.6}px)`;
+      if (c3) c3.style.transform = `translateZ(0px)`;
+      const disp = document.getElementById('isoSpreadDisplay');
+      if (disp) disp.textContent = `${Math.round(val)}px`;
+    }
+
+    function toggleIsoTilt() {
+      isoTiltActive = !isoTiltActive;
+      const stack = document.getElementById('isoStack');
+      if (stack) {
+        stack.style.transform = isoTiltActive ? 'rotateX(55deg) rotateZ(-28deg)' : 'rotateX(30deg) rotateZ(-10deg)';
+      }
+      showToast(isoTiltActive ? 'Full 3D isometric angle' : 'Mild perspective angle');
+    }
+
+    // 12. Deep Focus Optical Zoom
+    function manualDeepFocus(val) {
+      const heading = document.getElementById('deepFocusHeadline');
+      const disp = document.getElementById('deepFocusDisplay');
+      const progress = parseFloat(val) / 100;
+      
+      const scale = 2.4 - progress * 1.4;
+      const blur = (1 - progress) * 16;
+      const op = 0.2 + progress * 0.8;
+
+      if (heading) {
+        heading.style.transform = `scale(${scale.toFixed(2)})`;
+        heading.style.filter = `blur(${blur.toFixed(1)}px)`;
+        heading.style.opacity = op.toFixed(2);
+      }
+
+      if (disp) {
+        disp.textContent = progress > 0.95 ? 'In Focus' : `${Math.round(progress * 100)}% Focal`;
+      }
+    }
+
+    let deepFocusInterval = null;
+    function demoDeepFocus() {
+      if (deepFocusInterval) {
+        clearInterval(deepFocusInterval);
+        deepFocusInterval = null;
+        showToast('Deep focus demo paused');
+        return;
+      }
+      let v = 0;
+      let dir = 1;
+      deepFocusInterval = setInterval(() => {
+        v += dir * 2;
+        if (v >= 100) dir = -1;
+        if (v <= 0) dir = 1;
+        const slider = document.getElementById('deepFocusSlider');
+        if (slider) slider.value = v;
+        manualDeepFocus(v);
+      }, 25);
+      showToast('Running Optical focus warp demo');
+    }
+
+    // 13. Chromatic Border Beam
+    let beamSpeed = 4;
+    let beamAngle = 0;
+    const CHROMA_PALETTES = [
+      { name: 'Cyan/Pink', gradient: 'conic-gradient(from var(--beam-angle, 0deg), transparent 70%, #60a5fa 85%, #ec4899 92%, #38bdf8 100%)' },
+      { name: 'Emerald/Gold', gradient: 'conic-gradient(from var(--beam-angle, 0deg), transparent 70%, #10b981 85%, #f59e0b 92%, #34d399 100%)' },
+      { name: 'Purple/Cyan', gradient: 'conic-gradient(from var(--beam-angle, 0deg), transparent 70%, #a855f7 85%, #06b6d4 92%, #c084fc 100%)' }
+    ];
+    let chromaPaletteIdx = 0;
+
+    function renderChromaBeam() {
+      beamAngle = (beamAngle + beamSpeed * 0.5) % 360;
+      const stage = document.getElementById('chromaBeamStage');
+      if (stage) stage.style.setProperty('--beam-angle', `${beamAngle.toFixed(1)}deg`);
+      requestAnimationFrame(renderChromaBeam);
+    }
+
+    function setBeamSpeed(val) {
+      beamSpeed = parseFloat(val);
+      const disp = document.getElementById('beamSpeedDisplay');
+      if (disp) disp.textContent = `${val}x`;
+    }
+
+    function cycleChromaPalette() {
+      chromaPaletteIdx = (chromaPaletteIdx + 1) % CHROMA_PALETTES.length;
+      const cur = CHROMA_PALETTES[chromaPaletteIdx];
+      const btn = document.getElementById('chromaColorBtn');
+      if (btn) btn.textContent = `Palette: ${cur.name}`;
+      
+      const styleEl = document.getElementById('dynamicChromaStyle') || document.createElement('style');
+      styleEl.id = 'dynamicChromaStyle';
+      styleEl.innerHTML = `.chroma-beam-stage::before { background: ${cur.gradient} !important; }`;
+      document.head.appendChild(styleEl);
+      showToast(`Chromatic beam palette: ${cur.name}`);
+    }
+
+    // Multi-Card In-View Scroll Sync
+    function updateScrollFeatures() {
+      const windowH = window.innerHeight;
+
+      // Parallax update
+      const paraStage = document.getElementById('parallaxDualStage');
+      if (paraStage) {
+        const r = paraStage.getBoundingClientRect();
+        if (r.top < windowH && r.bottom > 0) {
+          const norm = (windowH - r.top) / (windowH + r.height);
+          const offset = (norm - 0.5) * 360;
+          manualParallax(offset);
+          const slider = document.getElementById('parallaxManualSlider');
+          if (slider) slider.value = offset;
+        }
+      }
+
+      // Rolodex update
+      const roloStage = document.getElementById('rolodexStage');
+      if (roloStage) {
+        const r = roloStage.getBoundingClientRect();
+        if (r.top < windowH && r.bottom > 0) {
+          const norm = (windowH - r.top) / (windowH + r.height);
+          const angle = (norm - 0.5) * 60;
+          manualRolodex(angle);
+          const slider = document.getElementById('rolodexManualSlider');
+          if (slider) slider.value = angle;
+        }
+      }
+
+      // Spotlight update
+      const spotStage = document.getElementById('spotlightStage');
+      if (spotStage) {
+        const r = spotStage.getBoundingClientRect();
+        if (r.top < windowH && r.bottom > 0) {
+          const norm = (windowH - r.top) / (windowH + r.height);
+          const x = Math.max(0, Math.min(100, norm * 100));
+          manualSpotlight(x);
+          const slider = document.getElementById('spotlightSlider');
+          if (slider) slider.value = x;
+        }
+      }
+
+      // Deep focus update
+      const focusStage = document.getElementById('deepFocusStage');
+      if (focusStage) {
+        const r = focusStage.getBoundingClientRect();
+        if (r.top < windowH && r.bottom > 0) {
+          const norm = (windowH - r.top) / (windowH + r.height);
+          const focalVal = Math.max(0, Math.min(100, (1 - Math.abs(norm - 0.5) * 2) * 100));
+          manualDeepFocus(focalVal);
+          const slider = document.getElementById('deepFocusSlider');
+          if (slider) slider.value = focalVal;
+        }
+      }
+
+      // Neon Tube Voltage update
+      const neonStage = document.getElementById('neonTubeStage');
+      if (neonStage) {
+        const r = neonStage.getBoundingClientRect();
+        if (r.top < windowH && r.bottom > 0) {
+          const norm = (windowH - r.top) / (windowH + r.height);
+          const volt = Math.max(15, Math.min(100, norm * 110));
+          manualNeonVoltage(volt);
+          const slider = document.getElementById('neonVoltageSlider');
+          if (slider) slider.value = volt;
+        }
+      }
+
+      // Anamorphic flare streak update
+      const flareStage = document.getElementById('anamorphicStage');
+      if (flareStage) {
+        const r = flareStage.getBoundingClientRect();
+        if (r.top < windowH && r.bottom > 0) {
+          const norm = (windowH - r.top) / (windowH + r.height);
+          const x = Math.max(0, Math.min(100, norm * 100));
+          manualFlarePosition(x);
+          const slider = document.getElementById('flarePositionSlider');
+          if (slider) slider.value = x;
+        }
+      }
+
+      // Louver slat update
+      const louvStage = document.getElementById('louverStage');
+      if (louvStage) {
+        const r = louvStage.getBoundingClientRect();
+        if (r.top < windowH && r.bottom > 0) {
+          const norm = (windowH - r.top) / (windowH + r.height);
+          const angle = Math.max(0, Math.min(85, (1 - norm) * 95));
+          manualLouverAngle(angle);
+          const slider = document.getElementById('louverAngleSlider');
+          if (slider) slider.value = angle;
+        }
+      }
+
+      // Variable weight axis update
+      const varStage = document.getElementById('variableAxisStage');
+      if (varStage) {
+        const r = varStage.getBoundingClientRect();
+        if (r.top < windowH && r.bottom > 0) {
+          const norm = (windowH - r.top) / (windowH + r.height);
+          const w = Math.round(200 + norm * 700);
+          setVarWeight(w);
+          const slider = document.getElementById('varWeightSlider');
+          if (slider) slider.value = w;
+        }
+      }
+    }
+
+    // ==========================================================================
+    // LOGIC FOR SCROLLING 14 TO 23
+    // ==========================================================================
+
+    // 14. Liquid Fluid Refraction Wave
+    let liquidViscosity = 3;
+    let liquidPhase = 0;
+    let liquidRafId = null;
+
+    function initLiquidHeadline() {
+      const el = document.getElementById('liquidHeadline');
+      if (!el) return;
+      const text = 'LIQUID FLUID REFRACTION ENGINE';
+      el.textContent = '';
+      for (let i = 0; i < text.length; i++) {
+        const span = document.createElement('span');
+        span.className = 'liquid-char';
+        span.textContent = text[i] === ' ' ? '\u00A0' : text[i];
+        el.appendChild(span);
+      }
+      renderLiquidWave();
+    }
+
+    function renderLiquidWave() {
+      const chars = document.querySelectorAll('#liquidHeadline .liquid-char');
+      chars.forEach((c, idx) => {
+        const offset = Math.sin(idx * 0.45 + liquidPhase) * (liquidViscosity * 3);
+        const skew = Math.cos(idx * 0.35 + liquidPhase) * (liquidViscosity * 1.8);
+        c.style.transform = `translateY(${offset.toFixed(2)}px) skewX(${skew.toFixed(2)}deg)`;
+      });
+      liquidPhase += 0.05;
+      liquidRafId = requestAnimationFrame(renderLiquidWave);
+    }
+
+    function setLiquidViscosity(val) {
+      liquidViscosity = parseFloat(val);
+      const disp = document.getElementById('liquidViscosityDisplay');
+      if (disp) disp.textContent = `${val}x`;
+    }
+
+    function triggerLiquidSplash() {
+      liquidViscosity = 7;
+      const slider = document.getElementById('liquidViscositySlider');
+      if (slider) slider.value = 7;
+      setLiquidViscosity(7);
+      setTimeout(() => {
+        liquidViscosity = 3;
+        if (slider) slider.value = 3;
+        setLiquidViscosity(3);
+      }, 900);
+      showToast('Liquid splash surface refraction triggered');
+    }
+
+    // 15. High-Voltage Neon Tube Ignition
+    let neonVoltage = 80;
+    const NEON_COLORS = ['cyan', 'amber', 'magenta'];
+    let neonColorIdx = 0;
+
+    function manualNeonVoltage(val) {
+      neonVoltage = parseFloat(val);
+      const el = document.getElementById('neonTubeHeadline');
+      if (el) el.style.setProperty('--neon-op', `${(neonVoltage / 100).toFixed(2)}`);
+      const disp = document.getElementById('neonVoltageDisplay');
+      if (disp) disp.textContent = `${Math.round(val)}%`;
+    }
+
+    function triggerNeonIgnition() {
+      const el = document.getElementById('neonTubeHeadline');
+      if (!el) return;
+      el.style.setProperty('--neon-op', '0.05');
+      setTimeout(() => el.style.setProperty('--neon-op', '0.9'), 80);
+      setTimeout(() => el.style.setProperty('--neon-op', '0.2'), 160);
+      setTimeout(() => el.style.setProperty('--neon-op', '1.0'), 250);
+      setTimeout(() => el.style.setProperty('--neon-op', '0.4'), 320);
+      setTimeout(() => {
+        el.style.setProperty('--neon-op', `${(neonVoltage / 100).toFixed(2)}`);
+        showToast('High voltage tube ignition sequence complete');
+      }, 420);
+    }
+
+    function cycleNeonTubeColor() {
+      neonColorIdx = (neonColorIdx + 1) % NEON_COLORS.length;
+      const color = NEON_COLORS[neonColorIdx];
+      const el = document.getElementById('neonTubeHeadline');
+      const btn = document.getElementById('neonPaletteBtn');
+      if (el) {
+        el.className = `neon-tube-headline neon-tube-${color}`;
+      }
+      if (btn) {
+        btn.textContent = `Gas: ${color.charAt(0).toUpperCase() + color.slice(1)}`;
+      }
+      showToast(`Neon tube gas color: ${color}`);
+    }
+
+    // 16. Anamorphic Lens Flare & Streak
+    function manualFlarePosition(val) {
+      const streak = document.getElementById('flareStreak');
+      if (streak) streak.style.setProperty('--flare-x', `${val}%`);
+      const disp = document.getElementById('flarePositionDisplay');
+      if (disp) disp.textContent = `${Math.round(val)}%`;
+    }
+
+    function handleAnamorphicHover(e) {
+      const stage = document.getElementById('anamorphicStage');
+      if (!stage) return;
+      const r = stage.getBoundingClientRect();
+      const pct = Math.max(0, Math.min(100, ((e.clientX - r.left) / r.width) * 100));
+      manualFlarePosition(pct);
+      const slider = document.getElementById('flarePositionSlider');
+      if (slider) slider.value = pct;
+    }
+
+    let flareSweepInterval = null;
+    function demoFlareSweep() {
+      if (flareSweepInterval) {
+        clearInterval(flareSweepInterval);
+        flareSweepInterval = null;
+        showToast('Flare sweep paused');
+        return;
+      }
+      let x = 0;
+      let dir = 1;
+      flareSweepInterval = setInterval(() => {
+        x += dir * 2;
+        if (x >= 100) dir = -1;
+        if (x <= 0) dir = 1;
+        const slider = document.getElementById('flarePositionSlider');
+        if (slider) slider.value = x;
+        manualFlarePosition(x);
+      }, 25);
+      showToast('Running Anamorphic flare streak sweep');
+    }
+
+    // 17. Infinite Circular Topology Ribbon
+    let orbitAngle = 0;
+    function manualOrbitAngle(val) {
+      orbitAngle = parseFloat(val);
+      const orbit = document.getElementById('orbitWrap');
+      if (orbit) orbit.style.transform = `rotateY(${orbitAngle}deg) rotateX(15deg)`;
+      const disp = document.getElementById('orbitAngleDisplay');
+      if (disp) disp.textContent = `${Math.round(val)}°`;
+    }
+
+    let orbitInterval = null;
+    function demoOrbitSpin() {
+      if (orbitInterval) {
+        clearInterval(orbitInterval);
+        orbitInterval = null;
+        showToast('Orbit spin paused');
+        return;
+      }
+      orbitInterval = setInterval(() => {
+        orbitAngle = (orbitAngle + 1.2) % 360;
+        const slider = document.getElementById('orbitAngleSlider');
+        if (slider) slider.value = ((orbitAngle + 180) % 360) - 180;
+        manualOrbitAngle(orbitAngle);
+      }, 25);
+      showToast('Running continuous 3D circular ribbon orbit');
+    }
+
+    // 18. Architectural Louver Shutter Slats
+    let louverAngle = 0;
+    function manualLouverAngle(val) {
+      louverAngle = parseFloat(val);
+      const s1 = document.getElementById('slat1');
+      const s2 = document.getElementById('slat2');
+      const s3 = document.getElementById('slat3');
+      const op = Math.max(0.15, 1 - (louverAngle / 100));
+      if (s1) { s1.style.transform = `rotateX(${louverAngle}deg)`; s1.style.opacity = op; }
+      if (s2) { s2.style.transform = `rotateX(${louverAngle}deg)`; s2.style.opacity = op; }
+      if (s3) { s3.style.transform = `rotateX(${louverAngle}deg)`; s3.style.opacity = op; }
+      const disp = document.getElementById('louverAngleDisplay');
+      if (disp) disp.textContent = `${Math.round(val)}° ${val > 45 ? 'Closed' : 'Open'}`;
+    }
+
+    let louverOpen = true;
+    function demoLouverFlip() {
+      louverOpen = !louverOpen;
+      const targetAngle = louverOpen ? 0 : 85;
+      const slider = document.getElementById('louverAngleSlider');
+      if (slider) slider.value = targetAngle;
+      manualLouverAngle(targetAngle);
+      showToast(louverOpen ? 'Louver slats opened' : 'Louver slats rotated closed');
+    }
+
+    // 19. Variable Typographic Weight & Tracking Axis
+    let currentWeight = 800;
+    let currentTracking = 0;
+
+    function setVarWeight(val) {
+      currentWeight = parseInt(val, 10);
+      const headline = document.getElementById('variableHeadline');
+      if (headline) headline.style.setProperty('--var-weight', currentWeight);
+      const disp = document.getElementById('varWeightDisplay');
+      if (disp) disp.textContent = currentWeight;
+    }
+
+    function setVarTracking(val) {
+      currentTracking = parseFloat(val);
+      const headline = document.getElementById('variableHeadline');
+      const em = (currentTracking / 100).toFixed(3);
+      if (headline) headline.style.setProperty('--var-track', `${em}em`);
+      const disp = document.getElementById('varTrackDisplay');
+      if (disp) disp.textContent = currentTracking === 0 ? 'Normal' : `${em}em`;
+    }
+
+    let breatheInterval = null;
+    function demoVariableBreathe() {
+      if (breatheInterval) {
+        clearInterval(breatheInterval);
+        breatheInterval = null;
+        showToast('Variable font breathing paused');
+        return;
+      }
+      let dir = 1;
+      let w = currentWeight;
+      breatheInterval = setInterval(() => {
+        w += dir * 25;
+        if (w >= 900) dir = -1;
+        if (w <= 200) dir = 1;
+        const slider = document.getElementById('varWeightSlider');
+        if (slider) slider.value = w;
+        setVarWeight(w);
+      }, 35);
+      showToast('Running variable typographic weight breathing');
+    }
+
+    // 20. Chromatic RGB Holographic Aberration Shift
+    let rgbOffset = 5;
+    function setRgbOffset(val) {
+      rgbOffset = parseFloat(val);
+      const headline = document.getElementById('hologramHeadline');
+      if (headline) headline.style.setProperty('--rgb-offset', `${rgbOffset}px`);
+      const disp = document.getElementById('rgbSplitDisplay');
+      if (disp) disp.textContent = `${Math.round(val)}px`;
+    }
+
+    function handleHoloHover(e) {
+      const stage = document.getElementById('chromaHoloStage');
+      if (!stage) return;
+      const r = stage.getBoundingClientRect();
+      const diffX = Math.abs((e.clientX - (r.left + r.width / 2)) / (r.width / 2));
+      const offset = (diffX * 14).toFixed(1);
+      setRgbOffset(offset);
+      const slider = document.getElementById('rgbSplitSlider');
+      if (slider) slider.value = offset;
+    }
+
+    function triggerHoloGlitch() {
+      setRgbOffset(16);
+      setTimeout(() => setRgbOffset(2), 70);
+      setTimeout(() => setRgbOffset(12), 140);
+      setTimeout(() => setRgbOffset(4), 220);
+      setTimeout(() => setRgbOffset(5), 320);
+      showToast('Holographic optic jitter pulse complete');
+    }
+
+    // 21. Magnetic Cursor Gravity & Repulsion Field
+    let magForce = 45;
+    let magRepelMode = true;
+
+    function initMagneticText() {
+      const container = document.getElementById('magneticText');
+      if (!container) return;
+      const text = 'MAGNETIC GRAVITATIONAL FIELD';
+      container.textContent = '';
+      for (let i = 0; i < text.length; i++) {
+        const span = document.createElement('span');
+        span.className = 'mag-char';
+        span.textContent = text[i] === ' ' ? '\u00A0' : text[i];
+        container.appendChild(span);
+      }
+    }
+
+    function setMagneticForce(val) {
+      magForce = parseFloat(val);
+      const disp = document.getElementById('magForceDisplay');
+      if (disp) disp.textContent = `${val}px`;
+    }
+
+    function toggleMagneticMode() {
+      magRepelMode = !magRepelMode;
+      const btn = document.getElementById('magModeBtn');
+      if (btn) btn.textContent = magRepelMode ? 'Mode: Repel Cursor' : 'Mode: Attract Cursor';
+      showToast(`Magnetic field set to ${magRepelMode ? 'Repel' : 'Attract'}`);
+    }
+
+    function handleMagneticHover(e) {
+      const chars = document.querySelectorAll('#magneticText .mag-char');
+      chars.forEach(c => {
+        const r = c.getBoundingClientRect();
+        const charCenterX = r.left + r.width / 2;
+        const charCenterY = r.top + r.height / 2;
+        const dx = e.clientX - charCenterX;
+        const dy = e.clientY - charCenterY;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        if (dist < 140) {
+          const power = (1 - dist / 140) * (magForce * 0.7);
+          const angle = Math.atan2(dy, dx);
+          const moveDir = magRepelMode ? -1 : 1;
+          const moveX = Math.cos(angle) * power * moveDir;
+          const moveY = Math.sin(angle) * power * moveDir;
+          c.style.transform = `translate(${moveX.toFixed(1)}px, ${moveY.toFixed(1)}px)`;
+          c.style.color = '#38bdf8';
+        } else {
+          c.style.transform = 'translate(0px, 0px)';
+          c.style.color = '#fff';
+        }
+      });
+    }
+
+    function resetMagneticHover() {
+      const chars = document.querySelectorAll('#magneticText .mag-char');
+      chars.forEach(c => {
+        c.style.transform = 'translate(0px, 0px)';
+        c.style.color = '#fff';
+      });
+    }
+
+    // 22. Spectral Audio Equalizer Frequency Bars
+    let eqGain = 24;
+    let eqInterval = null;
+
+    function initSpectralEqualizer() {
+      const row = document.getElementById('spectralBarsRow');
+      if (!row) return;
+      row.innerHTML = '';
+      for (let i = 0; i < 28; i++) {
+        const bar = document.createElement('div');
+        bar.className = 'eq-bar';
+        bar.id = `eqBar_${i}`;
+        bar.style.height = `${Math.floor(6 + Math.random() * 16)}px`;
+        row.appendChild(bar);
+      }
+      renderEqualizerPulsing();
+    }
+
+    function renderEqualizerPulsing() {
+      if (eqInterval) clearInterval(eqInterval);
+      eqInterval = setInterval(() => {
+        for (let i = 0; i < 28; i++) {
+          const bar = document.getElementById(`eqBar_${i}`);
+          if (bar) {
+            const h = Math.floor(6 + Math.random() * eqGain);
+            bar.style.height = `${h}px`;
+          }
+        }
+      }, 90);
+    }
+
+    function setEqGain(val) {
+      eqGain = parseFloat(val);
+      const disp = document.getElementById('eqGainDisplay');
+      if (disp) disp.textContent = `${val}px`;
+    }
+
+    function triggerEqBassDrop() {
+      for (let i = 0; i < 28; i++) {
+        const bar = document.getElementById(`eqBar_${i}`);
+        if (bar) bar.style.height = '36px';
+      }
+      showToast('Equalizer bass impact pulse executed');
+    }
+
+    // 23. Sub-Pixel Quantization Grid Dissolve
+    function setPixelQuantization(val) {
+      const headline = document.getElementById('pixelGridHeadline');
+      const disp = document.getElementById('pixelQuantDisplay');
+      const q = parseInt(val, 10);
+      if (headline) {
+        if (q === 0) {
+          headline.style.filter = 'none';
+          headline.style.letterSpacing = '0.06em';
+        } else {
+          headline.style.filter = `blur(${q * 1.4}px) contrast(${100 + q * 25}%)`;
+          headline.style.letterSpacing = `${(q * 0.04).toFixed(2)}em`;
+        }
+      }
+      if (disp) {
+        disp.textContent = q === 0 ? 'Sharp 0' : `Grid Q${q}`;
+      }
+    }
+
+    function triggerPixelDissolve() {
+      setPixelQuantization(9);
+      const slider = document.getElementById('pixelQuantSlider');
+      if (slider) slider.value = 9;
+      setTimeout(() => {
+        setPixelQuantization(4);
+        if (slider) slider.value = 4;
+      }, 250);
+      setTimeout(() => {
+        setPixelQuantization(0);
+        if (slider) slider.value = 0;
+        showToast('Sub-pixel grid quantized and materialized');
+      }, 550);
+    }
+
+    // 5. Extra Text FX Handlers
+    function replayExtraFx(id, preset) {
+      const heading = document.getElementById(`extraHeading${id}`);
+      if (!heading) return;
+
+      heading.classList.remove('mos-animate');
+      heading.style.opacity = '0';
+      void heading.offsetWidth; // Force instant reflow
+      heading.style.removeProperty('opacity');
+      heading.classList.add('mos-animate');
+      showToast(`Playing ${preset} animation`);
+    }
+
+    function filterExtraCards(cat, btn) {
+      const cards = document.querySelectorAll('.extra-card');
+      cards.forEach(card => {
+        if (cat === 'all' || card.getAttribute('data-category') === cat) {
+          card.classList.remove('is-hidden');
+          card.style.removeProperty('display');
+        } else {
+          card.classList.add('is-hidden');
+        }
+      });
+
+      document.querySelectorAll('#extraFilterTabs .fx-tab-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      showToast(`Showing ${cat === 'all' ? 'all 15' : cat} text effects`);
+    }
+
+    function initAllScrollFX() {
+      initScrubParagraph();
+      initWaveformText();
+      initLiquidHeadline();
+      initMagneticText();
+      initSpectralEqualizer();
+      renderChromaBeam();
+      updateScrollFeatures();
+      setTimeout(() => {
+        rollAllOdometers();
+        triggerMatrixDecrypt();
+      }, 500);
+    }
+
+    // Initialize all scroll features once DOM is ready
+    document.addEventListener('DOMContentLoaded', initAllScrollFX);
+    if (document.readyState !== 'loading') {
+      initAllScrollFX();
+    }
+  </script>
+</body>
+</html>
