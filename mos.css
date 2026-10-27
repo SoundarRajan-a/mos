@@ -1,14 +1,14 @@
 /**
- * MOS (Modern Viewport Motion Engine) v1.0
+ * SERRO (Modern Viewport Motion Engine) v1.0
  * 32 Hardware-Accelerated Animation Presets (Zero-Flicker GPU Compositing)
- * https://github.com/soundarrajan-a/mos
+ * https://github.com/soundarrajan-a/serro
  * MIT License
  */
 
 /* ==========================================================================
    GLOBAL MOTION BASE (High-Performance GPU Compositing)
    ========================================================================== */
-[data-mos] {
+[data-serro], [data-mos] {
   opacity: 0;
   transition-property: opacity, transform, filter, -webkit-clip-path, clip-path !important;
   transition-duration: 0.25s;
@@ -19,96 +19,96 @@
   transform: translateZ(0);
 }
 
-[data-mos]:not([data-mos^="text-"]).mos-animate {
+[data-serro], [data-mos]:not([data-mos^="text-"]).serro-animate, .mos-animate {
   opacity: 1 !important;
   transform: none !important;
   filter: none !important;
   letter-spacing: normal !important;
   transition-property: opacity, transform, filter, -webkit-clip-path, clip-path !important;
-  transition-duration: var(--mos-duration, 1.8s);
-  transition-timing-function: var(--mos-ease, cubic-bezier(0.16, 1, 0.3, 1));
+  transition-duration: var(--serro-duration, var(--mos-duration, 1.8s));
+  transition-timing-function: var(--serro-ease, var(--mos-ease, cubic-bezier(0.16, 1, 0.3, 1)));
 }
 
 /* ==========================================================================
    1. MODERN LENS & BLUR PRESETS (Optimized GPU Radii)
    ========================================================================== */
-[data-mos="blur-up"]    { transform: translateY(30px); filter: blur(8px); }
-[data-mos="blur-down"]  { transform: translateY(-30px); filter: blur(8px); }
-[data-mos="blur-left"]  { transform: translateX(35px); filter: blur(8px); }
-[data-mos="blur-right"] { transform: translateX(-35px); filter: blur(8px); }
-[data-mos="blur-scale"] { transform: scale(0.9); filter: blur(8px); }
-[data-mos="lens-flare"] { transform: scale(1.1); filter: blur(8px) brightness(1.25); }
+[data-serro="blur-up"], [data-mos="blur-up"]    { transform: translateY(30px); filter: blur(8px); }
+[data-serro="blur-down"], [data-mos="blur-down"]  { transform: translateY(-30px); filter: blur(8px); }
+[data-serro="blur-left"], [data-mos="blur-left"]  { transform: translateX(35px); filter: blur(8px); }
+[data-serro="blur-right"], [data-mos="blur-right"] { transform: translateX(-35px); filter: blur(8px); }
+[data-serro="blur-scale"], [data-mos="blur-scale"] { transform: scale(0.9); filter: blur(8px); }
+[data-serro="lens-flare"], [data-mos="lens-flare"] { transform: scale(1.1); filter: blur(8px) brightness(1.25); }
 
 /* ==========================================================================
    2. 3D SPATIAL & PERSPECTIVE PRESETS (Isolated 3D Rendering Contexts)
    ========================================================================== */
-[data-mos="tilt-up"],
-[data-mos="tilt-down"],
-[data-mos="tilt-left"],
-[data-mos="tilt-right"],
-[data-mos="flip-x"],
-[data-mos="flip-y"],
-[data-mos="text-glide"],
-[data-mos="text-rotate-drop"],
-[data-mos="text-flip-clock"],
-[data-mos="text-spiral-spin"] {
+[data-serro="tilt-up"], [data-mos="tilt-up"],
+[data-serro="tilt-down"], [data-mos="tilt-down"],
+[data-serro="tilt-left"], [data-mos="tilt-left"],
+[data-serro="tilt-right"], [data-mos="tilt-right"],
+[data-serro="flip-x"], [data-mos="flip-x"],
+[data-serro="flip-y"], [data-mos="flip-y"],
+[data-serro="text-glide"], [data-mos="text-glide"],
+[data-serro="text-rotate-drop"], [data-mos="text-rotate-drop"],
+[data-serro="text-flip-clock"], [data-mos="text-flip-clock"],
+[data-serro="text-spiral-spin"], [data-mos="text-spiral-spin"] {
   transform-style: preserve-3d;
 }
 
-[data-mos="tilt-up"]    { transform: perspective(1000px) rotateX(18deg) translateY(30px); }
-[data-mos="tilt-down"]  { transform: perspective(1000px) rotateX(-18deg) translateY(-30px); }
-[data-mos="tilt-left"]  { transform: perspective(1000px) rotateY(-16deg) translateX(-30px); }
-[data-mos="tilt-right"] { transform: perspective(1000px) rotateY(16deg) translateX(30px); }
-[data-mos="flip-x"]     { transform: perspective(1000px) rotateX(70deg); }
-[data-mos="flip-y"]     { transform: perspective(1000px) rotateY(70deg); }
-[data-mos="skew-up"]    { transform: skewY(4deg) translateY(30px); }
-[data-mos="skew-down"]  { transform: skewY(-4deg) translateY(-30px); }
+[data-serro="tilt-up"], [data-mos="tilt-up"]    { transform: perspective(1000px) rotateX(18deg) translateY(30px); }
+[data-serro="tilt-down"], [data-mos="tilt-down"]  { transform: perspective(1000px) rotateX(-18deg) translateY(-30px); }
+[data-serro="tilt-left"], [data-mos="tilt-left"]  { transform: perspective(1000px) rotateY(-16deg) translateX(-30px); }
+[data-serro="tilt-right"], [data-mos="tilt-right"] { transform: perspective(1000px) rotateY(16deg) translateX(30px); }
+[data-serro="flip-x"], [data-mos="flip-x"]     { transform: perspective(1000px) rotateX(70deg); }
+[data-serro="flip-y"], [data-mos="flip-y"]     { transform: perspective(1000px) rotateY(70deg); }
+[data-serro="skew-up"], [data-mos="skew-up"]    { transform: skewY(4deg) translateY(30px); }
+[data-serro="skew-down"], [data-mos="skew-down"]  { transform: skewY(-4deg) translateY(-30px); }
 
 /* ==========================================================================
    3. ARCHITECTURAL SHAPE WIPES (GPU Safe Area Geometry)
    ========================================================================== */
-[data-mos="wipe-up"],
-[data-mos="wipe-down"],
-[data-mos="wipe-right"],
-[data-mos="wipe-left"],
-[data-mos="circle-expand"],
-[data-mos="diagonal-wipe"] {
+[data-serro="wipe-up"], [data-mos="wipe-up"],
+[data-serro="wipe-down"], [data-mos="wipe-down"],
+[data-serro="wipe-right"], [data-mos="wipe-right"],
+[data-serro="wipe-left"], [data-mos="wipe-left"],
+[data-serro="circle-expand"], [data-mos="circle-expand"],
+[data-serro="diagonal-wipe"], [data-mos="diagonal-wipe"] {
   will-change: -webkit-clip-path, clip-path;
 }
-[data-mos="wipe-up"]    { opacity: 1; -webkit-clip-path: inset(99.9% 0% 0% 0%); clip-path: inset(99.9% 0% 0% 0%); }
-[data-mos="wipe-up"].mos-animate { -webkit-clip-path: inset(0% 0% 0% 0%) !important; clip-path: inset(0% 0% 0% 0%) !important; }
+[data-serro="wipe-up"], [data-mos="wipe-up"]    { opacity: 1; -webkit-clip-path: inset(99.9% 0% 0% 0%); clip-path: inset(99.9% 0% 0% 0%); }
+[data-serro="wipe-up"], [data-mos="wipe-up"].serro-animate, .mos-animate { -webkit-clip-path: inset(0% 0% 0% 0%) !important; clip-path: inset(0% 0% 0% 0%) !important; }
 
-[data-mos="wipe-down"]  { opacity: 1; -webkit-clip-path: inset(0% 0% 99.9% 0%); clip-path: inset(0% 0% 99.9% 0%); }
-[data-mos="wipe-down"].mos-animate { -webkit-clip-path: inset(0% 0% 0% 0%) !important; clip-path: inset(0% 0% 0% 0%) !important; }
+[data-serro="wipe-down"], [data-mos="wipe-down"]  { opacity: 1; -webkit-clip-path: inset(0% 0% 99.9% 0%); clip-path: inset(0% 0% 99.9% 0%); }
+[data-serro="wipe-down"], [data-mos="wipe-down"].serro-animate, .mos-animate { -webkit-clip-path: inset(0% 0% 0% 0%) !important; clip-path: inset(0% 0% 0% 0%) !important; }
 
-[data-mos="wipe-right"] { opacity: 1; -webkit-clip-path: inset(0% 99.9% 0% 0%); clip-path: inset(0% 99.9% 0% 0%); }
-[data-mos="wipe-right"].mos-animate { -webkit-clip-path: inset(0% 0% 0% 0%) !important; clip-path: inset(0% 0% 0% 0%) !important; }
+[data-serro="wipe-right"], [data-mos="wipe-right"] { opacity: 1; -webkit-clip-path: inset(0% 99.9% 0% 0%); clip-path: inset(0% 99.9% 0% 0%); }
+[data-serro="wipe-right"], [data-mos="wipe-right"].serro-animate, .mos-animate { -webkit-clip-path: inset(0% 0% 0% 0%) !important; clip-path: inset(0% 0% 0% 0%) !important; }
 
-[data-mos="wipe-left"]  { opacity: 1; -webkit-clip-path: inset(0% 0% 0% 99.9%); clip-path: inset(0% 0% 0% 99.9%); }
-[data-mos="wipe-left"].mos-animate { -webkit-clip-path: inset(0% 0% 0% 0%) !important; clip-path: inset(0% 0% 0% 0%) !important; }
+[data-serro="wipe-left"], [data-mos="wipe-left"]  { opacity: 1; -webkit-clip-path: inset(0% 0% 0% 99.9%); clip-path: inset(0% 0% 0% 99.9%); }
+[data-serro="wipe-left"], [data-mos="wipe-left"].serro-animate, .mos-animate { -webkit-clip-path: inset(0% 0% 0% 0%) !important; clip-path: inset(0% 0% 0% 0%) !important; }
 
-[data-mos="circle-expand"] { opacity: 1; -webkit-clip-path: circle(0.1% at 50% 50%); clip-path: circle(0.1% at 50% 50%); }
-[data-mos="circle-expand"].mos-animate { -webkit-clip-path: circle(140% at 50% 50%) !important; clip-path: circle(140% at 50% 50%) !important; }
+[data-serro="circle-expand"], [data-mos="circle-expand"] { opacity: 1; -webkit-clip-path: circle(0.1% at 50% 50%); clip-path: circle(0.1% at 50% 50%); }
+[data-serro="circle-expand"], [data-mos="circle-expand"].serro-animate, .mos-animate { -webkit-clip-path: circle(140% at 50% 50%) !important; clip-path: circle(140% at 50% 50%) !important; }
 
-[data-mos="diagonal-wipe"] { opacity: 1; -webkit-clip-path: polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%); clip-path: polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%); }
-[data-mos="diagonal-wipe"].mos-animate { -webkit-clip-path: polygon(0% 0%, 140% 0%, 100% 140%, 0% 100%) !important; clip-path: polygon(0% 0%, 140% 0%, 100% 140%, 0% 100%) !important; }
+[data-serro="diagonal-wipe"], [data-mos="diagonal-wipe"] { opacity: 1; -webkit-clip-path: polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%); clip-path: polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%); }
+[data-serro="diagonal-wipe"], [data-mos="diagonal-wipe"].serro-animate, .mos-animate { -webkit-clip-path: polygon(0% 0%, 140% 0%, 100% 140%, 0% 100%) !important; clip-path: polygon(0% 0%, 140% 0%, 100% 140%, 0% 100%) !important; }
 
 /* ==========================================================================
    4. DIRECTIONAL SPRINGS & SCALES (8 Types)
    ========================================================================== */
-[data-mos="fade-up"]    { transform: translateY(30px); }
-[data-mos="fade-down"]  { transform: translateY(-30px); }
-[data-mos="fade-left"]  { transform: translateX(35px); }
-[data-mos="fade-right"] { transform: translateX(-35px); }
-[data-mos="zoom-in"]    { transform: scale(0.85); }
-[data-mos="zoom-out"]   { transform: scale(1.15); filter: blur(4px); }
-[data-mos="pop"]        { transform: scale(0.75); --mos-ease: cubic-bezier(0.34, 1.56, 0.64, 1); }
-[data-mos="spin-in"]    { transform: rotate(-10deg) scale(0.88); }
+[data-serro="fade-up"], [data-mos="fade-up"]    { transform: translateY(30px); }
+[data-serro="fade-down"], [data-mos="fade-down"]  { transform: translateY(-30px); }
+[data-serro="fade-left"], [data-mos="fade-left"]  { transform: translateX(35px); }
+[data-serro="fade-right"], [data-mos="fade-right"] { transform: translateX(-35px); }
+[data-serro="zoom-in"], [data-mos="zoom-in"]    { transform: scale(0.85); }
+[data-serro="zoom-out"], [data-mos="zoom-out"]   { transform: scale(1.15); filter: blur(4px); }
+[data-serro="pop"], [data-mos="pop"]        { transform: scale(0.75); --mos-ease: cubic-bezier(0.34, 1.56, 0.64, 1); }
+[data-serro="spin-in"], [data-mos="spin-in"]    { transform: rotate(-10deg) scale(0.88); }
 
 /* ==========================================================================
    5. KINETIC TEXT ANIMATION PRESETS
    ========================================================================== */
-.mos-split-item {
+.serro-split-item, .mos-split-item {
   display: inline-block;
   vertical-align: top;
   white-space: pre-wrap;
@@ -289,126 +289,126 @@
 }
 
 /* 1. Sliding Text Reveal (Masked Baseline Glide) */
-[data-mos="text-slide-up"] {
+[data-serro="text-slide-up"], [data-mos="text-slide-up"] {
   opacity: 0;
   transform: translateY(115%);
   -webkit-clip-path: inset(0% 0% 99.9% 0%);
   clip-path: inset(0% 0% 99.9% 0%);
   transition: none !important;
 }
-[data-mos="text-slide-up"].mos-animate {
+[data-serro="text-slide-up"], [data-mos="text-slide-up"].serro-animate, .mos-animate {
   opacity: 1;
   transform: translateY(0);
   -webkit-clip-path: inset(0% 0% 0% 0%);
   clip-path: inset(0% 0% 0% 0%);
-  animation: mosSlideUp var(--mos-duration, 1.8s) var(--mos-ease, cubic-bezier(0.16, 1, 0.3, 1)) forwards;
+  animation: mosSlideUp var(--serro-duration, var(--mos-duration, 1.8s)) var(--serro-ease, var(--mos-ease, cubic-bezier(0.16, 1, 0.3, 1))) forwards;
 }
 
 /* 2. Stretch & Snap (Kinetic Elastic Recoil) */
-[data-mos="text-stretch-snap"] {
+[data-serro="text-stretch-snap"], [data-mos="text-stretch-snap"] {
   opacity: 0;
   transform: scaleY(2.2) scaleX(0.7) translateY(40px);
   transform-origin: bottom center;
   filter: blur(4px);
   transition: none !important;
 }
-[data-mos="text-stretch-snap"].mos-animate {
+[data-serro="text-stretch-snap"], [data-mos="text-stretch-snap"].serro-animate, .mos-animate {
   opacity: 1;
   transform: scaleY(1) scaleX(1) translateY(0);
   filter: none;
-  animation: mosStretchSnap var(--mos-duration, 1.8s) var(--mos-ease, cubic-bezier(0.34, 1.56, 0.64, 1)) forwards;
+  animation: mosStretchSnap var(--serro-duration, var(--mos-duration, 1.8s)) var(--serro-ease, var(--mos-ease, cubic-bezier(0.34, 1.56, 0.64, 1))) forwards;
 }
 
 /* 3. Blur Text Scroller (Optical Bokeh & Tracking Expansion) */
-[data-mos="text-blur-scroller"] {
+[data-serro="text-blur-scroller"], [data-mos="text-blur-scroller"] {
   opacity: 0;
   filter: blur(14px);
   letter-spacing: 0.16em;
   transform: translateY(24px) scale(0.94);
   transition: none !important;
 }
-[data-mos="text-blur-scroller"].mos-animate {
+[data-serro="text-blur-scroller"], [data-mos="text-blur-scroller"].serro-animate, .mos-animate {
   opacity: 1;
   filter: none;
   letter-spacing: normal;
   transform: translateY(0) scale(1);
-  animation: mosBlurScroller var(--mos-duration, 1.8s) var(--mos-ease, cubic-bezier(0.16, 1, 0.3, 1)) forwards;
+  animation: mosBlurScroller var(--serro-duration, var(--mos-duration, 1.8s)) var(--serro-ease, var(--mos-ease, cubic-bezier(0.16, 1, 0.3, 1))) forwards;
 }
 
 /* 4. Kinetic 3D Glide */
-[data-mos="text-glide"] {
+[data-serro="text-glide"], [data-mos="text-glide"] {
   opacity: 0;
   transform: perspective(800px) rotateX(50deg) translateY(45px);
   filter: blur(6px);
   transform-style: preserve-3d;
   transition: none !important;
 }
-[data-mos="text-glide"].mos-animate {
+[data-serro="text-glide"], [data-mos="text-glide"].serro-animate, .mos-animate {
   opacity: 1;
   transform: perspective(800px) rotateX(0deg) translateY(0);
   filter: none;
-  animation: mosTextGlide var(--mos-duration, 1.8s) var(--mos-ease, cubic-bezier(0.16, 1, 0.3, 1)) forwards;
+  animation: mosTextGlide var(--serro-duration, var(--mos-duration, 1.8s)) var(--serro-ease, var(--mos-ease, cubic-bezier(0.16, 1, 0.3, 1))) forwards;
 }
 
 /* 5. Sine Wave Ripple */
-[data-mos="text-wave"] { opacity: 0; transform: translateY(40px) scale(0.92); transition: none !important; }
-[data-mos="text-wave"].mos-animate { opacity: 1; transform: translateY(0) scale(1); animation: mosWave var(--mos-duration, 1.4s) cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+[data-serro="text-wave"], [data-mos="text-wave"] { opacity: 0; transform: translateY(40px) scale(0.92); transition: none !important; }
+[data-serro="text-wave"], [data-mos="text-wave"].serro-animate, .mos-animate { opacity: 1; transform: translateY(0) scale(1); animation: mosWave var(--serro-duration, var(--mos-duration, 1.4s)) cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
 /* 6. Cyberpunk Scanline Glitch */
-[data-mos="text-glitch"] { opacity: 0; transform: skewX(-15deg); transition: none !important; }
-[data-mos="text-glitch"].mos-animate { opacity: 1; transform: none; animation: mosGlitch var(--mos-duration, 1.2s) cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
+[data-serro="text-glitch"], [data-mos="text-glitch"] { opacity: 0; transform: skewX(-15deg); transition: none !important; }
+[data-serro="text-glitch"], [data-mos="text-glitch"].serro-animate, .mos-animate { opacity: 1; transform: none; animation: mosGlitch var(--serro-duration, var(--mos-duration, 1.2s)) cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
 
 /* 7. Kinetic Zoom Blast */
-[data-mos="text-zoom-burst"] { opacity: 0; transform: scale(2.2); filter: blur(12px); transition: none !important; }
-[data-mos="text-zoom-burst"].mos-animate { opacity: 1; transform: scale(1); filter: none; animation: mosZoomBurst var(--mos-duration, 1.3s) cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+[data-serro="text-zoom-burst"], [data-mos="text-zoom-burst"] { opacity: 0; transform: scale(2.2); filter: blur(12px); transition: none !important; }
+[data-serro="text-zoom-burst"], [data-mos="text-zoom-burst"].serro-animate, .mos-animate { opacity: 1; transform: scale(1); filter: none; animation: mosZoomBurst var(--serro-duration, var(--mos-duration, 1.3s)) cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
 /* 8. 3D Overhead Flip & Drop */
-[data-mos="text-rotate-drop"] { opacity: 0; transform: perspective(900px) rotateX(-90deg) translateY(-50px); filter: blur(6px); transform-style: preserve-3d; transition: none !important; }
-[data-mos="text-rotate-drop"].mos-animate { opacity: 1; transform: perspective(900px) rotateX(0deg) translateY(0); filter: none; animation: mosRotateDrop var(--mos-duration, 1.4s) cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+[data-serro="text-rotate-drop"], [data-mos="text-rotate-drop"] { opacity: 0; transform: perspective(900px) rotateX(-90deg) translateY(-50px); filter: blur(6px); transform-style: preserve-3d; transition: none !important; }
+[data-serro="text-rotate-drop"], [data-mos="text-rotate-drop"].serro-animate, .mos-animate { opacity: 1; transform: perspective(900px) rotateX(0deg) translateY(0); filter: none; animation: mosRotateDrop var(--serro-duration, var(--mos-duration, 1.4s)) cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
 /* 9. Radial Bokeh Expansion */
-[data-mos="text-blur-spread"] { opacity: 0; filter: blur(16px); letter-spacing: -0.08em; transform: scale(0.88); transition: none !important; }
-[data-mos="text-blur-spread"].mos-animate { opacity: 1; filter: none; letter-spacing: normal; transform: scale(1); animation: mosBlurSpread var(--mos-duration, 1.5s) cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+[data-serro="text-blur-spread"], [data-mos="text-blur-spread"] { opacity: 0; filter: blur(16px); letter-spacing: -0.08em; transform: scale(0.88); transition: none !important; }
+[data-serro="text-blur-spread"], [data-mos="text-blur-spread"].serro-animate, .mos-animate { opacity: 1; filter: none; letter-spacing: normal; transform: scale(1); animation: mosBlurSpread var(--serro-duration, var(--mos-duration, 1.5s)) cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
 /* 10. Architectural Skew & Shear */
-[data-mos="text-skew-shear"] { opacity: 0; transform: skewX(-24deg) translateX(-45px); filter: blur(4px); transition: none !important; }
-[data-mos="text-skew-shear"].mos-animate { opacity: 1; transform: none; filter: none; animation: mosSkewShear var(--mos-duration, 1.3s) cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+[data-serro="text-skew-shear"], [data-mos="text-skew-shear"] { opacity: 0; transform: skewX(-24deg) translateX(-45px); filter: blur(4px); transition: none !important; }
+[data-serro="text-skew-shear"], [data-mos="text-skew-shear"].serro-animate, .mos-animate { opacity: 1; transform: none; filter: none; animation: mosSkewShear var(--serro-duration, var(--mos-duration, 1.3s)) cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
 /* 11. Staggered Blind Shutter */
-[data-mos="text-shutter"] { opacity: 0; transform: translateY(60px) scaleY(0.1); -webkit-clip-path: inset(100% 0% 0% 0%); clip-path: inset(100% 0% 0% 0%); transition: none !important; }
-[data-mos="text-shutter"].mos-animate { opacity: 1; transform: none; -webkit-clip-path: inset(0% 0% 0% 0%); clip-path: inset(0% 0% 0% 0%); animation: mosShutter var(--mos-duration, 1.4s) cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+[data-serro="text-shutter"], [data-mos="text-shutter"] { opacity: 0; transform: translateY(60px) scaleY(0.1); -webkit-clip-path: inset(100% 0% 0% 0%); clip-path: inset(100% 0% 0% 0%); transition: none !important; }
+[data-serro="text-shutter"], [data-mos="text-shutter"].serro-animate, .mos-animate { opacity: 1; transform: none; -webkit-clip-path: inset(0% 0% 0% 0%); clip-path: inset(0% 0% 0% 0%); animation: mosShutter var(--serro-duration, var(--mos-duration, 1.4s)) cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
 /* 12. Magnetic Spring Recoil */
-[data-mos="text-magnetic-pull"] { opacity: 0; transform: scale(0.5) translateY(50px); filter: blur(8px); transition: none !important; }
-[data-mos="text-magnetic-pull"].mos-animate { opacity: 1; transform: none; filter: none; animation: mosMagneticPull var(--mos-duration, 1.3s) cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+[data-serro="text-magnetic-pull"], [data-mos="text-magnetic-pull"] { opacity: 0; transform: scale(0.5) translateY(50px); filter: blur(8px); transition: none !important; }
+[data-serro="text-magnetic-pull"], [data-mos="text-magnetic-pull"].serro-animate, .mos-animate { opacity: 1; transform: none; filter: none; animation: mosMagneticPull var(--serro-duration, var(--mos-duration, 1.3s)) cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
 
 /* 13. Neon Glow Ignition */
-[data-mos="text-neon-flicker"] { opacity: 0; filter: brightness(0.2); transition: none !important; }
-[data-mos="text-neon-flicker"].mos-animate { opacity: 1; animation: mosNeonFlicker var(--mos-duration, 1.5s) ease-out forwards; }
+[data-serro="text-neon-flicker"], [data-mos="text-neon-flicker"] { opacity: 0; filter: brightness(0.2); transition: none !important; }
+[data-serro="text-neon-flicker"], [data-mos="text-neon-flicker"].serro-animate, .mos-animate { opacity: 1; animation: mosNeonFlicker var(--serro-duration, var(--mos-duration, 1.5s)) ease-out forwards; }
 
 /* 14. Mechanical Split-Flap */
-[data-mos="text-flip-clock"] { opacity: 0; transform: perspective(800px) rotateX(90deg); transform-origin: top center; filter: blur(4px); transform-style: preserve-3d; transition: none !important; }
-[data-mos="text-flip-clock"].mos-animate { opacity: 1; transform: perspective(800px) rotateX(0deg); filter: none; animation: mosFlipClock var(--mos-duration, 1.3s) cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+[data-serro="text-flip-clock"], [data-mos="text-flip-clock"] { opacity: 0; transform: perspective(800px) rotateX(90deg); transform-origin: top center; filter: blur(4px); transform-style: preserve-3d; transition: none !important; }
+[data-serro="text-flip-clock"], [data-mos="text-flip-clock"].serro-animate, .mos-animate { opacity: 1; transform: perspective(800px) rotateX(0deg); filter: none; animation: mosFlipClock var(--serro-duration, var(--mos-duration, 1.3s)) cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
 /* 15. Spatial Vortex Twist */
-[data-mos="text-spiral-spin"] { opacity: 0; transform: perspective(1000px) rotateZ(-120deg) rotateY(60deg) scale(0.4); filter: blur(8px); transform-style: preserve-3d; transition: none !important; }
-[data-mos="text-spiral-spin"].mos-animate { opacity: 1; transform: perspective(1000px) rotateZ(0deg) rotateY(0deg) scale(1); filter: none; animation: mosSpiralSpin var(--mos-duration, 1.5s) cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+[data-serro="text-spiral-spin"], [data-mos="text-spiral-spin"] { opacity: 0; transform: perspective(1000px) rotateZ(-120deg) rotateY(60deg) scale(0.4); filter: blur(8px); transform-style: preserve-3d; transition: none !important; }
+[data-serro="text-spiral-spin"], [data-mos="text-spiral-spin"].serro-animate, .mos-animate { opacity: 1; transform: perspective(1000px) rotateZ(0deg) rotateY(0deg) scale(1); filter: none; animation: mosSpiralSpin var(--serro-duration, var(--mos-duration, 1.5s)) cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
 /* 16. Chromatic Gradient Shift */
-[data-mos="text-gradient-flow"] { opacity: 0; background: linear-gradient(90deg, #60a5fa, #a855f7, #ec4899, #38bdf8); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; transform: translateY(25px); transition: none !important; }
-[data-mos="text-gradient-flow"].mos-animate { opacity: 1; background: linear-gradient(90deg, #60a5fa, #a855f7, #ec4899, #38bdf8); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; transform: translateY(0); animation: mosGradientFlow var(--mos-duration, 1.6s) ease-out forwards; }
+[data-serro="text-gradient-flow"], [data-mos="text-gradient-flow"] { opacity: 0; background: linear-gradient(90deg, #60a5fa, #a855f7, #ec4899, #38bdf8); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; transform: translateY(25px); transition: none !important; }
+[data-serro="text-gradient-flow"], [data-mos="text-gradient-flow"].serro-animate, .mos-animate { opacity: 1; background: linear-gradient(90deg, #60a5fa, #a855f7, #ec4899, #38bdf8); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; transform: translateY(0); animation: mosGradientFlow var(--serro-duration, var(--mos-duration, 1.6s)) ease-out forwards; }
 
 /* 17. Rubber Band Rebound */
-[data-mos="text-elastic-bounce"] { opacity: 0; transform: scaleY(3.2) scaleX(0.6) translateY(60px); filter: blur(4px); transform-origin: bottom center; transition: none !important; }
-[data-mos="text-elastic-bounce"].mos-animate { opacity: 1; transform: none; filter: none; animation: mosElasticBounce var(--mos-duration, 1.5s) cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+[data-serro="text-elastic-bounce"], [data-mos="text-elastic-bounce"] { opacity: 0; transform: scaleY(3.2) scaleX(0.6) translateY(60px); filter: blur(4px); transform-origin: bottom center; transition: none !important; }
+[data-serro="text-elastic-bounce"], [data-mos="text-elastic-bounce"].serro-animate, .mos-animate { opacity: 1; transform: none; filter: none; animation: mosElasticBounce var(--serro-duration, var(--mos-duration, 1.5s)) cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
 
 /* 18. Diagonal Curtain Unveil */
-[data-mos="text-masked-curtain"] { opacity: 0; -webkit-clip-path: polygon(0 0, 0 0, 0 100%, 0 100%); clip-path: polygon(0 0, 0 0, 0 100%, 0 100%); transform: translateX(-30px); transition: none !important; }
-[data-mos="text-masked-curtain"].mos-animate { opacity: 1; -webkit-clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); transform: translateX(0); animation: mosMaskedCurtain var(--mos-duration, 1.4s) cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+[data-serro="text-masked-curtain"], [data-mos="text-masked-curtain"] { opacity: 0; -webkit-clip-path: polygon(0 0, 0 0, 0 100%, 0 100%); clip-path: polygon(0 0, 0 0, 0 100%, 0 100%); transform: translateX(-30px); transition: none !important; }
+[data-serro="text-masked-curtain"], [data-mos="text-masked-curtain"].serro-animate, .mos-animate { opacity: 1; -webkit-clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); transform: translateX(0); animation: mosMaskedCurtain var(--serro-duration, var(--mos-duration, 1.4s)) cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
 /* 19. Optical Matrix Convergence */
-[data-mos="text-pixel-converge"] { opacity: 0; letter-spacing: 0.1em; filter: blur(14px) contrast(180%); transform: scale(1.05); transition: none !important; }
-[data-mos="text-pixel-converge"].mos-animate { opacity: 1; letter-spacing: normal; filter: none; transform: scale(1); animation: mosPixelConverge var(--mos-duration, 1.4s) cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+[data-serro="text-pixel-converge"], [data-mos="text-pixel-converge"] { opacity: 0; letter-spacing: 0.1em; filter: blur(14px) contrast(180%); transform: scale(1.05); transition: none !important; }
+[data-serro="text-pixel-converge"], [data-mos="text-pixel-converge"].serro-animate, .mos-animate { opacity: 1; letter-spacing: normal; filter: none; transform: scale(1); animation: mosPixelConverge var(--serro-duration, var(--mos-duration, 1.4s)) cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
 /* ==========================================================================
    6. VELOCITY MARQUEE / INFINITE TEXT SCROLLER
@@ -423,7 +423,7 @@
   100% { transform: translate3d(0, 0, 0); }
 }
 
-.mos-ticker-wrap {
+.serro-ticker-wrap, .mos-ticker-wrap {
   width: 100%;
   overflow: hidden;
   position: relative;
@@ -433,32 +433,32 @@
   -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
 }
 
-.mos-ticker-track-left,
+.serro-ticker-track-left, .mos-ticker-track-left,
 .ticker-track-left {
   display: flex !important;
   flex-direction: row !important;
   flex-wrap: nowrap !important;
   align-items: center !important;
   width: max-content !important;
-  animation: mosTickerLeft var(--mos-ticker-speed, 26s) linear infinite;
+  animation: mosTickerLeft var(--serro-ticker-speed, var(--mos-ticker-speed, 26s)) linear infinite;
   will-change: transform;
 }
 
-.mos-ticker-track-right,
+.serro-ticker-track-right, .mos-ticker-track-right,
 .ticker-track-right {
   display: flex !important;
   flex-direction: row !important;
   flex-wrap: nowrap !important;
   align-items: center !important;
   width: max-content !important;
-  animation: mosTickerRight var(--mos-ticker-speed, 26s) linear infinite;
+  animation: mosTickerRight var(--serro-ticker-speed, var(--mos-ticker-speed, 26s)) linear infinite;
   will-change: transform;
 }
 
-.mos-ticker-wrap:hover .mos-ticker-track-left,
-.mos-ticker-wrap:hover .ticker-track-left,
-.mos-ticker-wrap:hover .mos-ticker-track-right,
-.mos-ticker-wrap:hover .ticker-track-right {
+.serro-ticker-wrap, .mos-ticker-wrap:hover .serro-ticker-track-left, .mos-ticker-track-left,
+.serro-ticker-wrap, .mos-ticker-wrap:hover .ticker-track-left,
+.serro-ticker-wrap, .mos-ticker-wrap:hover .serro-ticker-track-right, .mos-ticker-track-right,
+.serro-ticker-wrap, .mos-ticker-wrap:hover .ticker-track-right {
   animation-play-state: paused;
 }
 
@@ -522,7 +522,7 @@
    7. EDITORIAL SCROLL SCRUB (PROGRESSIVE WORD ILLUMINATION)
    ========================================================================== */
 .scrub-paragraph,
-[data-mos="scrub"] {
+[data-serro="scrub"], [data-mos="scrub"] {
   font-size: clamp(1.2rem, 2.5vw, 1.95rem);
   font-weight: 700;
   line-height: 1.55;
@@ -596,7 +596,7 @@
 
 /* Accessibility support */
 @media (prefers-reduced-motion: reduce) {
-  [data-mos] {
+  [data-serro], [data-mos] {
     opacity: 1 !important;
     transform: none !important;
     filter: none !important;
