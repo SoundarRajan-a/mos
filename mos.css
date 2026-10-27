@@ -558,6 +558,14 @@
   text-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
 }
 
+.scrub-stage {
+  padding: 1.5rem 1.25rem;
+  border-radius: 10px;
+  border: 1px dashed rgba(125, 125, 125, 0.25);
+  position: relative;
+  margin: 1.5rem 0;
+}
+
 .scrub-meter-bar {
   display: flex;
   align-items: center;
