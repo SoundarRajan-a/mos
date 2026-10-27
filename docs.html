@@ -84,7 +84,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   
   <!-- Core SERRO Stylesheet -->
-  <link rel="stylesheet" href="serro.css?v=1.0.1">
+  <link rel="stylesheet" href="serro.css?v=1.0.2">
 
   <style>
     :root {
@@ -649,7 +649,7 @@
           <strong>SERRO</strong> is a fast, zero-dependency browser motion system designed to replace heavy legacy animation libraries. Built from the ground up around the modern <code>IntersectionObserver</code> API and pure CSS GPU compositing pipelines (<code>transform</code>, <code>opacity</code>, <code>filter</code>, <code>clip-path</code>), SERRO achieves rock-solid, fluid motion on both desktop and mobile devices.
         </p>
         <p>
-          Unlike legacy libraries that trigger reflows by calculating element bounding boxes on scroll events, MOS uses a decoupled asynchronous lifecycle:
+          Unlike legacy libraries that trigger reflows by calculating element bounding boxes on scroll events, SERRO uses a decoupled asynchronous lifecycle:
         </p>
         <div class="callout">
           <div class="callout-title">Core Engine Principles</div>
@@ -722,7 +722,7 @@
       <section class="doc-section page-break" id="presets">
         <h2 class="doc-h2">3. Viewport Scroll Animation Presets (28 Core Presets)</h2>
         <p>
-          Attach the <code>data-mos</code> attribute to any HTML element. Customize transition timing with <code>data-mos-duration</code> (in milliseconds or seconds) and <code>data-mos-delay</code>:
+          Attach the <code>data-serro</code> attribute to any HTML element. Customize transition timing with <code>data-serro-duration</code> (in milliseconds or seconds) and <code>data-serro-delay</code>:
         </p>
 
         <div class="ref-table-wrap">
@@ -738,133 +738,133 @@
             <tbody>
               <tr>
                 <td><strong>Lens &amp; Blur</strong></td>
-                <td><code>data-mos="blur-up"</code></td>
+                <td><code>data-serro="blur-up"</code></td>
                 <td>Translates +30px Y with 8px optical bokeh blur</td>
                 <td>cubic-bezier(0.16, 1, 0.3, 1)</td>
               </tr>
               <tr>
                 <td><strong>Lens &amp; Blur</strong></td>
-                <td><code>data-mos="blur-down"</code></td>
+                <td><code>data-serro="blur-down"</code></td>
                 <td>Translates -30px Y with 8px optical bokeh blur</td>
                 <td>cubic-bezier(0.16, 1, 0.3, 1)</td>
               </tr>
               <tr>
                 <td><strong>Lens &amp; Blur</strong></td>
-                <td><code>data-mos="blur-left"</code></td>
+                <td><code>data-serro="blur-left"</code></td>
                 <td>Translates +35px X with 8px optical bokeh blur</td>
                 <td>cubic-bezier(0.16, 1, 0.3, 1)</td>
               </tr>
               <tr>
                 <td><strong>Lens &amp; Blur</strong></td>
-                <td><code>data-mos="blur-right"</code></td>
+                <td><code>data-serro="blur-right"</code></td>
                 <td>Translates -35px X with 8px optical bokeh blur</td>
                 <td>cubic-bezier(0.16, 1, 0.3, 1)</td>
               </tr>
               <tr>
                 <td><strong>Lens &amp; Blur</strong></td>
-                <td><code>data-mos="blur-scale"</code></td>
+                <td><code>data-serro="blur-scale"</code></td>
                 <td>Scales from 0.90 with 8px bokeh diffusion</td>
                 <td>cubic-bezier(0.16, 1, 0.3, 1)</td>
               </tr>
               <tr>
                 <td><strong>Lens &amp; Blur</strong></td>
-                <td><code>data-mos="lens-flare"</code></td>
+                <td><code>data-serro="lens-flare"</code></td>
                 <td>Scales from 1.10 with high-contrast brightness flare</td>
                 <td>cubic-bezier(0.16, 1, 0.3, 1)</td>
               </tr>
               <tr>
                 <td><strong>3D Spatial</strong></td>
-                <td><code>data-mos="tilt-up"</code></td>
+                <td><code>data-serro="tilt-up"</code></td>
                 <td>18&deg; X-axis perspective pitch rotation + 30px Y</td>
                 <td>preserve-3d</td>
               </tr>
               <tr>
                 <td><strong>3D Spatial</strong></td>
-                <td><code>data-mos="tilt-down"</code></td>
+                <td><code>data-serro="tilt-down"</code></td>
                 <td>-18&deg; X-axis perspective pitch rotation - 30px Y</td>
                 <td>preserve-3d</td>
               </tr>
               <tr>
                 <td><strong>3D Spatial</strong></td>
-                <td><code>data-mos="tilt-left"</code></td>
+                <td><code>data-serro="tilt-left"</code></td>
                 <td>-16&deg; Y-axis perspective yaw rotation - 30px X</td>
                 <td>preserve-3d</td>
               </tr>
               <tr>
                 <td><strong>3D Spatial</strong></td>
-                <td><code>data-mos="tilt-right"</code></td>
+                <td><code>data-serro="tilt-right"</code></td>
                 <td>16&deg; Y-axis perspective yaw rotation + 30px X</td>
                 <td>preserve-3d</td>
               </tr>
               <tr>
                 <td><strong>3D Spatial</strong></td>
-                <td><code>data-mos="flip-x"</code></td>
+                <td><code>data-serro="flip-x"</code></td>
                 <td>70&deg; perspective flip along horizontal baseline</td>
                 <td>preserve-3d</td>
               </tr>
               <tr>
                 <td><strong>3D Spatial</strong></td>
-                <td><code>data-mos="flip-y"</code></td>
+                <td><code>data-serro="flip-y"</code></td>
                 <td>70&deg; perspective flip along vertical baseline</td>
                 <td>preserve-3d</td>
               </tr>
               <tr>
                 <td><strong>Shape Wipes</strong></td>
-                <td><code>data-mos="wipe-up"</code></td>
+                <td><code>data-serro="wipe-up"</code></td>
                 <td>Geometric upward clip-path inset reveal</td>
                 <td>clip-path: inset()</td>
               </tr>
               <tr>
                 <td><strong>Shape Wipes</strong></td>
-                <td><code>data-mos="wipe-down"</code></td>
+                <td><code>data-serro="wipe-down"</code></td>
                 <td>Geometric downward clip-path inset reveal</td>
                 <td>clip-path: inset()</td>
               </tr>
               <tr>
                 <td><strong>Shape Wipes</strong></td>
-                <td><code>data-mos="wipe-left"</code></td>
+                <td><code>data-serro="wipe-left"</code></td>
                 <td>Geometric leftward clip-path inset reveal</td>
                 <td>clip-path: inset()</td>
               </tr>
               <tr>
                 <td><strong>Shape Wipes</strong></td>
-                <td><code>data-mos="wipe-right"</code></td>
+                <td><code>data-serro="wipe-right"</code></td>
                 <td>Geometric rightward clip-path inset reveal</td>
                 <td>clip-path: inset()</td>
               </tr>
               <tr>
                 <td><strong>Shape Wipes</strong></td>
-                <td><code>data-mos="circle-expand"</code></td>
+                <td><code>data-serro="circle-expand"</code></td>
                 <td>Radial circle(140%) clip-path expansion</td>
                 <td>clip-path: circle()</td>
               </tr>
               <tr>
                 <td><strong>Shape Wipes</strong></td>
-                <td><code>data-mos="diagonal-wipe"</code></td>
+                <td><code>data-serro="diagonal-wipe"</code></td>
                 <td>Polygon angular curtain diagonal wipe</td>
                 <td>clip-path: polygon()</td>
               </tr>
               <tr>
                 <td><strong>Springs &amp; Fades</strong></td>
-                <td><code>data-mos="fade-up"</code></td>
+                <td><code>data-serro="fade-up"</code></td>
                 <td>Classic upward translation with fade in</td>
                 <td>cubic-bezier(0.16, 1, 0.3, 1)</td>
               </tr>
               <tr>
                 <td><strong>Springs &amp; Fades</strong></td>
-                <td><code>data-mos="fade-down"</code></td>
+                <td><code>data-serro="fade-down"</code></td>
                 <td>Classic downward translation with fade in</td>
                 <td>cubic-bezier(0.16, 1, 0.3, 1)</td>
               </tr>
               <tr>
                 <td><strong>Springs &amp; Fades</strong></td>
-                <td><code>data-mos="spring-pop"</code></td>
+                <td><code>data-serro="spring-pop"</code></td>
                 <td>Scale(0.7) overshoot to scale(1.0) with recoil</td>
                 <td>cubic-bezier(0.34, 1.56, 0.64, 1)</td>
               </tr>
               <tr>
                 <td><strong>Springs &amp; Fades</strong></td>
-                <td><code>data-mos="soft-bounce"</code></td>
+                <td><code>data-serro="soft-bounce"</code></td>
                 <td>Damped spring settling translation</td>
                 <td>cubic-bezier(0.34, 1.3, 0.64, 1)</td>
               </tr>
@@ -886,8 +886,8 @@
             <span>HTML Markup</span>
             <button class="copy-btn" onclick="copyCode(this)">Copy</button>
           </div>
-          <pre><code>&lt;div class="mos-ticker-wrap"&gt;
-  &lt;div class="mos-ticker-track-left"&gt;
+          <pre><code>&lt;div class="serro-ticker-wrap"&gt;
+  &lt;div class="serro-ticker-track-left"&gt;
     &lt;div class="ticker-row"&gt;
       &lt;span class="ticker-item ticker-item-solid"&gt;ULTRA LIGHTWEIGHT &lt;span class="ticker-dot"&gt;&lt;/span&gt;&lt;/span&gt;
       &lt;span class="ticker-item ticker-item-outline"&gt;ZERO DEPENDENCIES &lt;span class="ticker-dot"&gt;&lt;/span&gt;&lt;/span&gt;
@@ -904,10 +904,10 @@
         </div>
 
         <div class="callout">
-          <div class="callout-title">Automatic Features in MOS Marquee</div>
+          <div class="callout-title">Automatic Features in SERRO Marquee</div>
           <p style="margin: 0;">
-            1. <strong>Reverse Direction</strong>: Use <code>class="mos-ticker-track-right"</code> for reverse motion.<br>
-            2. <strong>Auto-Duplication</strong>: If only one <code>.ticker-row</code> is provided, <code>mos.js</code> automatically duplicates it with <code>aria-hidden="true"</code> to guarantee an infinite loop.<br>
+            1. <strong>Reverse Direction</strong>: Use <code>class="serro-ticker-track-right"</code> for reverse motion.<br>
+            2. <strong>Auto-Duplication</strong>: If only one <code>.ticker-row</code> is provided, <code>serro.js</code> automatically duplicates it with <code>aria-hidden="true"</code> to guarantee an infinite loop.<br>
             3. <strong>Hover Pause</strong>: Hovering over the ticker automatically pauses animation smoothly via pure CSS.
           </p>
         </div>
@@ -935,7 +935,7 @@
     &lt;span class="scrub-percent-label"&gt;0%&lt;/span&gt;
   &lt;/div&gt;
 
-  &lt;p class="scrub-paragraph" data-mos-scrub-highlight="motion,viewport,scroll,kinetic"&gt;
+  &lt;p class="scrub-paragraph" data-serro-scrub-highlight="motion,viewport,scroll,kinetic"&gt;
     Motion that responds directly to your scroll position. Every word dynamically illuminates
     from deep dark to high-contrast brilliance with GPU hardware acceleration.
   &lt;/p&gt;
@@ -961,7 +961,7 @@
       <section class="doc-section" id="kinetic">
         <h2 class="doc-h2">6. Kinetic Typography &amp; Split-Text Engine</h2>
         <p>
-          MOS features a built-in kinetic typography engine capable of tokenizing text by word or character and applying staggered kinetic motion presets:
+          SERRO features a built-in kinetic typography engine capable of tokenizing text by word or character and applying staggered kinetic motion presets:
         </p>
 
         <h3 class="doc-h3">Split Text Attributes</h3>
@@ -976,17 +976,17 @@
             </thead>
             <tbody>
               <tr>
-                <td><code>data-mos-split</code></td>
+                <td><code>data-serro-split</code></td>
                 <td><code>words</code> | <code>chars</code></td>
                 <td>Tokenizes element content into words or individual characters</td>
               </tr>
               <tr>
-                <td><code>data-mos-stagger</code></td>
+                <td><code>data-serro-stagger</code></td>
                 <td>Milliseconds (e.g. <code>50</code>, <code>70</code>)</td>
                 <td>Delay gap between consecutive animated spans</td>
               </tr>
               <tr>
-                <td><code>data-mos</code></td>
+                <td><code>data-serro</code></td>
                 <td>Text Preset Name</td>
                 <td>Target animation preset applied to each staggered token</td>
               </tr>
@@ -1001,22 +1001,22 @@
             <button class="copy-btn" onclick="copyCode(this)">Copy</button>
           </div>
           <pre><code>&lt;!-- Staggered Words Masked Baseline --&gt;
-&lt;h1 data-mos="text-slide-up" data-mos-split="words" data-mos-stagger="70"&gt;
+&lt;h1 data-serro="text-slide-up" data-serro-split="words" data-serro-stagger="70"&gt;
   FLUID KINETIC HEADLINE MASKED BASELINE
 &lt;/h1&gt;
 
 &lt;!-- Staggered Character Elastic Recoil --&gt;
-&lt;h2 data-mos="text-stretch-snap" data-mos-split="chars" data-mos-stagger="40"&gt;
+&lt;h2 data-serro="text-stretch-snap" data-serro-split="chars" data-serro-stagger="40"&gt;
   MOMENTUM RECOIL
 &lt;/h2&gt;
 
 &lt;!-- Cyberpunk Scanline Glitch --&gt;
-&lt;h2 data-mos="text-glitch" data-mos-duration="1200"&gt;
+&lt;h2 data-serro="text-glitch" data-serro-duration="1200"&gt;
   CYBERNETIC CHANNEL GLITCH
 &lt;/h2&gt;
 
 &lt;!-- Gas Discharge Neon Glow --&gt;
-&lt;h2 data-mos="text-neon-flicker" data-mos-duration="1500"&gt;
+&lt;h2 data-serro="text-neon-flicker" data-serro-duration="1500"&gt;
   HIGH VOLTAGE NEON GLOW
 &lt;/h2&gt;</code></pre>
         </div>
@@ -1026,7 +1026,7 @@
       <section class="doc-section page-break" id="api">
         <h2 class="doc-h2">7. JavaScript API &amp; Configuration Options</h2>
         <p>
-          MOS exposes a global <code>window.MOS</code> object with full programmatic controls:
+          SERRO exposes a global <code>window.SERRO</code> object with full programmatic controls:
         </p>
 
         <h3 class="doc-h3">API Methods</h3>
@@ -1041,17 +1041,17 @@
             </thead>
             <tbody>
               <tr>
-                <td><code>MOS.init(options)</code></td>
+                <td><code>SERRO.init(options)</code></td>
                 <td>Configuration Object (Optional)</td>
                 <td>Initializes split-text, marquees, scrubbers, and observers</td>
               </tr>
               <tr>
-                <td><code>MOS.refresh()</code></td>
+                <td><code>SERRO.refresh()</code></td>
                 <td>None</td>
                 <td>Re-scans DOM for dynamically inserted elements / single page apps</td>
               </tr>
               <tr>
-                <td><code>MOS.updateScrubs()</code></td>
+                <td><code>SERRO.updateScrubs()</code></td>
                 <td>None</td>
                 <td>Recalculates scroll progress on all active editorial scrub paragraphs</td>
               </tr>
@@ -1065,7 +1065,7 @@
             <span>JavaScript</span>
             <button class="copy-btn" onclick="copyCode(this)">Copy</button>
           </div>
-          <pre><code>MOS.init({
+          <pre><code>SERRO.init({
   // Trigger once on entry or replay on two-way scroll (default: false)
   once: false,
 
@@ -1085,10 +1085,10 @@
           Legacy scroll libraries often suffer from <em>Layout Hysteresis</em>: when an element exits the viewport, removing the animation class restores its initial transform (e.g. <code>translateY(30px)</code>), which shifts the element back into the viewport, triggering an infinite rapid chattering flicker.
         </p>
         <p>
-          MOS completely eliminates this issue with a dual-stage safety mechanism:
+          SERRO completely eliminates this issue with a dual-stage safety mechanism:
         </p>
         <div class="callout">
-          <div class="callout-title">The MOS Hysteresis Solution</div>
+          <div class="callout-title">The SERRO Hysteresis Solution</div>
           <ol style="padding-left: 1.25rem; margin-top: 0.35rem;">
             <li><strong>Sticky Retention at Top of Screen</strong>: Elements that have entered the screen and scrolled past the top boundary <em>remain rendered</em>. They are never removed while the user is reading downwards.</li>
             <li><strong>80px Clearance Buffer for Reset</strong>: Elements are only reset when they have exited more than 80px below the bottom of the viewport (<code>rect.top &gt; windowH + 80</code>). Transform shifts (30-40px) can never bridge this 80px gap, making chattering physically impossible.</li>
@@ -1185,7 +1185,7 @@
   </footer>
 
   <!-- Scripts -->
-  <script src="serro.js?v=1.0.1"></script>
+  <script src="serro.js?v=1.0.2"></script>
   <script>
     function copyCode(btn) {
       const code = btn.closest('.code-box').querySelector('pre').textContent;

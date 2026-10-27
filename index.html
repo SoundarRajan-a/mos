@@ -107,7 +107,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
   <!-- Core Standalone SERRO Library -->
-  <link rel="stylesheet" href="serro.css?v=1.0.1" />
+  <link rel="stylesheet" href="serro.css?v=1.0.2" />
 
   <style>
     /* ==========================================================================
@@ -1511,7 +1511,7 @@
             <div class="dot"></div>
             <div class="dot"></div>
           </div>
-          <div class="studio-title">mos-preview.studio</div>
+          <div class="studio-title">serro-preview.studio</div>
           <div style="width: 40px;"></div>
         </div>
 
@@ -1519,7 +1519,7 @@
           <!-- Stage Area -->
           <div class="stage" id="studioStage" onclick="triggerReplay()" style="cursor: pointer;" title="Click stage to replay animation">
             <!-- Mode 1: Element / Box Preview -->
-            <div id="liveTarget" class="preview-box mos-animate" data-mos="blur-up">
+            <div id="liveTarget" class="preview-box serro-animate" data-serro="blur-up">
               <div class="preview-icon">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
               </div>
@@ -1536,7 +1536,7 @@
                 </span>
               </div>
               <div class="preview-text-stage-inner">
-                <h2 id="liveTextTarget" class="studio-typo-headline mos-animate" data-mos="text-slide-up">
+                <h2 id="liveTextTarget" class="studio-typo-headline serro-animate" data-serro="text-slide-up">
                   KINETIC TYPOGRAPHY
                 </h2>
               </div>
@@ -1625,7 +1625,7 @@
             <div class="control-group">
               <label>Generated Tag</label>
               <div class="snippet-preview" id="snippetPreview">
-                &lt;div data-mos="blur-up" data-mos-duration="1800"&gt;
+                &lt;div data-serro="blur-up" data-serro-duration="1800"&gt;
               </div>
             </div>
 
@@ -1660,369 +1660,369 @@
       <div class="catalog-stream" id="catalogGrid">
         
         <!-- BLURS (6) -->
-        <div class="anim-card" data-category="blur" data-mos="blur-up" data-mos-duration="1800">
+        <div class="anim-card" data-category="blur" data-serro="blur-up" data-serro-duration="1800">
           <div class="card-meta">
             <span class="card-label">01 / Blur Up</span>
-            <span class="card-copy" onclick="copyTag('data-mos=\x22blur-up\x22')">Copy</span>
+            <span class="card-copy" onclick="copyTag('data-serro=\x22blur-up\x22')">Copy</span>
           </div>
           <div class="code-editor">
-            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"blur-up"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-serro</span>=<span class="c-val">"blur-up"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-duration</span>=<span class="c-num">"1800"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
             <span class="c-tag">&lt;/div&gt;</span>
           </div>
         </div>
 
-        <div class="anim-card" data-category="blur" data-mos="blur-down" data-mos-duration="1800">
+        <div class="anim-card" data-category="blur" data-serro="blur-down" data-serro-duration="1800">
           <div class="card-meta">
             <span class="card-label">02 / Blur Down</span>
-            <span class="card-copy" onclick="copyTag('data-mos=\x22blur-down\x22')">Copy</span>
+            <span class="card-copy" onclick="copyTag('data-serro=\x22blur-down\x22')">Copy</span>
           </div>
           <div class="code-editor">
-            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"blur-down"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-serro</span>=<span class="c-val">"blur-down"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-duration</span>=<span class="c-num">"1800"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
             <span class="c-tag">&lt;/div&gt;</span>
           </div>
         </div>
 
-        <div class="anim-card" data-category="blur" data-mos="blur-left" data-mos-duration="1800">
+        <div class="anim-card" data-category="blur" data-serro="blur-left" data-serro-duration="1800">
           <div class="card-meta">
             <span class="card-label">03 / Blur Left</span>
-            <span class="card-copy" onclick="copyTag('data-mos=\x22blur-left\x22')">Copy</span>
+            <span class="card-copy" onclick="copyTag('data-serro=\x22blur-left\x22')">Copy</span>
           </div>
           <div class="code-editor">
-            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"blur-left"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-serro</span>=<span class="c-val">"blur-left"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-duration</span>=<span class="c-num">"1800"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
             <span class="c-tag">&lt;/div&gt;</span>
           </div>
         </div>
 
-        <div class="anim-card" data-category="blur" data-mos="blur-right" data-mos-duration="1800">
+        <div class="anim-card" data-category="blur" data-serro="blur-right" data-serro-duration="1800">
           <div class="card-meta">
             <span class="card-label">04 / Blur Right</span>
-            <span class="card-copy" onclick="copyTag('data-mos=\x22blur-right\x22')">Copy</span>
+            <span class="card-copy" onclick="copyTag('data-serro=\x22blur-right\x22')">Copy</span>
           </div>
           <div class="code-editor">
-            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"blur-right"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-serro</span>=<span class="c-val">"blur-right"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-duration</span>=<span class="c-num">"1800"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
             <span class="c-tag">&lt;/div&gt;</span>
           </div>
         </div>
 
-        <div class="anim-card" data-category="blur" data-mos="blur-scale" data-mos-duration="1800">
+        <div class="anim-card" data-category="blur" data-serro="blur-scale" data-serro-duration="1800">
           <div class="card-meta">
             <span class="card-label">05 / Blur Scale</span>
-            <span class="card-copy" onclick="copyTag('data-mos=\x22blur-scale\x22')">Copy</span>
+            <span class="card-copy" onclick="copyTag('data-serro=\x22blur-scale\x22')">Copy</span>
           </div>
           <div class="code-editor">
-            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"blur-scale"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-serro</span>=<span class="c-val">"blur-scale"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-duration</span>=<span class="c-num">"1800"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
             <span class="c-tag">&lt;/div&gt;</span>
           </div>
         </div>
 
-        <div class="anim-card" data-category="blur" data-mos="lens-flare" data-mos-duration="1800">
+        <div class="anim-card" data-category="blur" data-serro="lens-flare" data-serro-duration="1800">
           <div class="card-meta">
             <span class="card-label">06 / Lens Flare</span>
-            <span class="card-copy" onclick="copyTag('data-mos=\x22lens-flare\x22')">Copy</span>
+            <span class="card-copy" onclick="copyTag('data-serro=\x22lens-flare\x22')">Copy</span>
           </div>
           <div class="code-editor">
-            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"lens-flare"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-serro</span>=<span class="c-val">"lens-flare"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-duration</span>=<span class="c-num">"1800"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
             <span class="c-tag">&lt;/div&gt;</span>
           </div>
         </div>
 
         <!-- 3D PERSPECTIVES (8) -->
-        <div class="anim-card" data-category="3d" data-mos="tilt-up" data-mos-duration="1800">
+        <div class="anim-card" data-category="3d" data-serro="tilt-up" data-serro-duration="1800">
           <div class="card-meta">
             <span class="card-label">07 / Tilt Up</span>
-            <span class="card-copy" onclick="copyTag('data-mos=\x22tilt-up\x22')">Copy</span>
+            <span class="card-copy" onclick="copyTag('data-serro=\x22tilt-up\x22')">Copy</span>
           </div>
           <div class="code-editor">
-            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"tilt-up"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-serro</span>=<span class="c-val">"tilt-up"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-duration</span>=<span class="c-num">"1800"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
             <span class="c-tag">&lt;/div&gt;</span>
           </div>
         </div>
 
-        <div class="anim-card" data-category="3d" data-mos="tilt-down" data-mos-duration="1800">
+        <div class="anim-card" data-category="3d" data-serro="tilt-down" data-serro-duration="1800">
           <div class="card-meta">
             <span class="card-label">08 / Tilt Down</span>
-            <span class="card-copy" onclick="copyTag('data-mos=\x22tilt-down\x22')">Copy</span>
+            <span class="card-copy" onclick="copyTag('data-serro=\x22tilt-down\x22')">Copy</span>
           </div>
           <div class="code-editor">
-            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"tilt-down"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-serro</span>=<span class="c-val">"tilt-down"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-duration</span>=<span class="c-num">"1800"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
             <span class="c-tag">&lt;/div&gt;</span>
           </div>
         </div>
 
-        <div class="anim-card" data-category="3d" data-mos="tilt-left" data-mos-duration="1800">
+        <div class="anim-card" data-category="3d" data-serro="tilt-left" data-serro-duration="1800">
           <div class="card-meta">
             <span class="card-label">09 / Tilt Left</span>
-            <span class="card-copy" onclick="copyTag('data-mos=\x22tilt-left\x22')">Copy</span>
+            <span class="card-copy" onclick="copyTag('data-serro=\x22tilt-left\x22')">Copy</span>
           </div>
           <div class="code-editor">
-            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"tilt-left"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-serro</span>=<span class="c-val">"tilt-left"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-duration</span>=<span class="c-num">"1800"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
             <span class="c-tag">&lt;/div&gt;</span>
           </div>
         </div>
 
-        <div class="anim-card" data-category="3d" data-mos="tilt-right" data-mos-duration="1800">
+        <div class="anim-card" data-category="3d" data-serro="tilt-right" data-serro-duration="1800">
           <div class="card-meta">
             <span class="card-label">10 / Tilt Right</span>
-            <span class="card-copy" onclick="copyTag('data-mos=\x22tilt-right\x22')">Copy</span>
+            <span class="card-copy" onclick="copyTag('data-serro=\x22tilt-right\x22')">Copy</span>
           </div>
           <div class="code-editor">
-            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"tilt-right"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-serro</span>=<span class="c-val">"tilt-right"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-duration</span>=<span class="c-num">"1800"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
             <span class="c-tag">&lt;/div&gt;</span>
           </div>
         </div>
 
-        <div class="anim-card" data-category="3d" data-mos="flip-x" data-mos-duration="1800">
+        <div class="anim-card" data-category="3d" data-serro="flip-x" data-serro-duration="1800">
           <div class="card-meta">
             <span class="card-label">11 / Flip X</span>
-            <span class="card-copy" onclick="copyTag('data-mos=\x22flip-x\x22')">Copy</span>
+            <span class="card-copy" onclick="copyTag('data-serro=\x22flip-x\x22')">Copy</span>
           </div>
           <div class="code-editor">
-            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"flip-x"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-serro</span>=<span class="c-val">"flip-x"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-duration</span>=<span class="c-num">"1800"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
             <span class="c-tag">&lt;/div&gt;</span>
           </div>
         </div>
 
-        <div class="anim-card" data-category="3d" data-mos="flip-y" data-mos-duration="1800">
+        <div class="anim-card" data-category="3d" data-serro="flip-y" data-serro-duration="1800">
           <div class="card-meta">
             <span class="card-label">12 / Flip Y</span>
-            <span class="card-copy" onclick="copyTag('data-mos=\x22flip-y\x22')">Copy</span>
+            <span class="card-copy" onclick="copyTag('data-serro=\x22flip-y\x22')">Copy</span>
           </div>
           <div class="code-editor">
-            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"flip-y"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-serro</span>=<span class="c-val">"flip-y"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-duration</span>=<span class="c-num">"1800"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
             <span class="c-tag">&lt;/div&gt;</span>
           </div>
         </div>
 
-        <div class="anim-card" data-category="3d" data-mos="skew-up" data-mos-duration="1800">
+        <div class="anim-card" data-category="3d" data-serro="skew-up" data-serro-duration="1800">
           <div class="card-meta">
             <span class="card-label">13 / Skew Up</span>
-            <span class="card-copy" onclick="copyTag('data-mos=\x22skew-up\x22')">Copy</span>
+            <span class="card-copy" onclick="copyTag('data-serro=\x22skew-up\x22')">Copy</span>
           </div>
           <div class="code-editor">
-            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"skew-up"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-serro</span>=<span class="c-val">"skew-up"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-duration</span>=<span class="c-num">"1800"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
             <span class="c-tag">&lt;/div&gt;</span>
           </div>
         </div>
 
-        <div class="anim-card" data-category="3d" data-mos="skew-down" data-mos-duration="1800">
+        <div class="anim-card" data-category="3d" data-serro="skew-down" data-serro-duration="1800">
           <div class="card-meta">
             <span class="card-label">14 / Skew Down</span>
-            <span class="card-copy" onclick="copyTag('data-mos=\x22skew-down\x22')">Copy</span>
+            <span class="card-copy" onclick="copyTag('data-serro=\x22skew-down\x22')">Copy</span>
           </div>
           <div class="code-editor">
-            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"skew-down"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-serro</span>=<span class="c-val">"skew-down"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-duration</span>=<span class="c-num">"1800"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
             <span class="c-tag">&lt;/div&gt;</span>
           </div>
         </div>
 
         <!-- SHAPE WIPES (6) -->
-        <div class="anim-card" data-category="wipe" data-mos="wipe-up" data-mos-duration="3000">
+        <div class="anim-card" data-category="wipe" data-serro="wipe-up" data-serro-duration="3000">
           <div class="card-meta">
             <span class="card-label">15 / Architectural Wipe Up (3s Preview)</span>
-            <span class="card-copy" onclick="copyTag('data-mos=\x22wipe-up\x22 data-mos-duration=\x223000\x22')">Copy</span>
+            <span class="card-copy" onclick="copyTag('data-serro=\x22wipe-up\x22 data-serro-duration=\x223000\x22')">Copy</span>
           </div>
           <div class="code-editor">
-            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"wipe-up"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"3000"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-serro</span>=<span class="c-val">"wipe-up"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-duration</span>=<span class="c-num">"3000"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
             <span class="c-tag">&lt;/div&gt;</span>
           </div>
         </div>
 
-        <div class="anim-card" data-category="wipe" data-mos="wipe-down" data-mos-duration="3000">
+        <div class="anim-card" data-category="wipe" data-serro="wipe-down" data-serro-duration="3000">
           <div class="card-meta">
             <span class="card-label">16 / Wipe Down (3s Preview)</span>
-            <span class="card-copy" onclick="copyTag('data-mos=\x22wipe-down\x22 data-mos-duration=\x223000\x22')">Copy</span>
+            <span class="card-copy" onclick="copyTag('data-serro=\x22wipe-down\x22 data-serro-duration=\x223000\x22')">Copy</span>
           </div>
           <div class="code-editor">
-            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"wipe-down"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"3000"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-serro</span>=<span class="c-val">"wipe-down"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-duration</span>=<span class="c-num">"3000"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
             <span class="c-tag">&lt;/div&gt;</span>
           </div>
         </div>
 
-        <div class="anim-card" data-category="wipe" data-mos="wipe-right" data-mos-duration="3000">
+        <div class="anim-card" data-category="wipe" data-serro="wipe-right" data-serro-duration="3000">
           <div class="card-meta">
             <span class="card-label">17 / Wipe Right (3s Preview)</span>
-            <span class="card-copy" onclick="copyTag('data-mos=\x22wipe-right\x22 data-mos-duration=\x223000\x22')">Copy</span>
+            <span class="card-copy" onclick="copyTag('data-serro=\x22wipe-right\x22 data-serro-duration=\x223000\x22')">Copy</span>
           </div>
           <div class="code-editor">
-            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"wipe-right"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"3000"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-serro</span>=<span class="c-val">"wipe-right"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-duration</span>=<span class="c-num">"3000"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
             <span class="c-tag">&lt;/div&gt;</span>
           </div>
         </div>
 
-        <div class="anim-card" data-category="wipe" data-mos="wipe-left" data-mos-duration="3000">
+        <div class="anim-card" data-category="wipe" data-serro="wipe-left" data-serro-duration="3000">
           <div class="card-meta">
             <span class="card-label">18 / Wipe Left (3s Preview)</span>
-            <span class="card-copy" onclick="copyTag('data-mos=\x22wipe-left\x22 data-mos-duration=\x223000\x22')">Copy</span>
+            <span class="card-copy" onclick="copyTag('data-serro=\x22wipe-left\x22 data-serro-duration=\x223000\x22')">Copy</span>
           </div>
           <div class="code-editor">
-            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"wipe-left"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"3000"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-serro</span>=<span class="c-val">"wipe-left"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-duration</span>=<span class="c-num">"3000"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
             <span class="c-tag">&lt;/div&gt;</span>
           </div>
         </div>
 
-        <div class="anim-card" data-category="wipe" data-mos="circle-expand" data-mos-duration="3000">
+        <div class="anim-card" data-category="wipe" data-serro="circle-expand" data-serro-duration="3000">
           <div class="card-meta">
             <span class="card-label">19 / Radial Circle Expand (3s Preview)</span>
-            <span class="card-copy" onclick="copyTag('data-mos=\x22circle-expand\x22 data-mos-duration=\x223000\x22')">Copy</span>
+            <span class="card-copy" onclick="copyTag('data-serro=\x22circle-expand\x22 data-serro-duration=\x223000\x22')">Copy</span>
           </div>
           <div class="code-editor">
-            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"circle-expand"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"3000"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-serro</span>=<span class="c-val">"circle-expand"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-duration</span>=<span class="c-num">"3000"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
             <span class="c-tag">&lt;/div&gt;</span>
           </div>
         </div>
 
-        <div class="anim-card" data-category="wipe" data-mos="diagonal-wipe" data-mos-duration="3000">
+        <div class="anim-card" data-category="wipe" data-serro="diagonal-wipe" data-serro-duration="3000">
           <div class="card-meta">
             <span class="card-label">20 / Diagonal Wipe (3s Preview)</span>
-            <span class="card-copy" onclick="copyTag('data-mos=\x22diagonal-wipe\x22 data-mos-duration=\x223000\x22')">Copy</span>
+            <span class="card-copy" onclick="copyTag('data-serro=\x22diagonal-wipe\x22 data-serro-duration=\x223000\x22')">Copy</span>
           </div>
           <div class="code-editor">
-            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"diagonal-wipe"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"3000"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-serro</span>=<span class="c-val">"diagonal-wipe"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-duration</span>=<span class="c-num">"3000"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
             <span class="c-tag">&lt;/div&gt;</span>
           </div>
         </div>
 
         <!-- SPRINGS & SCALES (8) -->
-        <div class="anim-card" data-category="spring" data-mos="fade-up" data-mos-duration="1800">
+        <div class="anim-card" data-category="spring" data-serro="fade-up" data-serro-duration="1800">
           <div class="card-meta">
             <span class="card-label">21 / Spring Fade Up</span>
-            <span class="card-copy" onclick="copyTag('data-mos=\x22fade-up\x22')">Copy</span>
+            <span class="card-copy" onclick="copyTag('data-serro=\x22fade-up\x22')">Copy</span>
           </div>
           <div class="code-editor">
-            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"fade-up"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-serro</span>=<span class="c-val">"fade-up"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-duration</span>=<span class="c-num">"1800"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
             <span class="c-tag">&lt;/div&gt;</span>
           </div>
         </div>
 
-        <div class="anim-card" data-category="spring" data-mos="fade-down" data-mos-duration="1800">
+        <div class="anim-card" data-category="spring" data-serro="fade-down" data-serro-duration="1800">
           <div class="card-meta">
             <span class="card-label">22 / Spring Fade Down</span>
-            <span class="card-copy" onclick="copyTag('data-mos=\x22fade-down\x22')">Copy</span>
+            <span class="card-copy" onclick="copyTag('data-serro=\x22fade-down\x22')">Copy</span>
           </div>
           <div class="code-editor">
-            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"fade-down"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-serro</span>=<span class="c-val">"fade-down"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-duration</span>=<span class="c-num">"1800"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
             <span class="c-tag">&lt;/div&gt;</span>
           </div>
         </div>
 
-        <div class="anim-card" data-category="spring" data-mos="fade-left" data-mos-duration="1800">
+        <div class="anim-card" data-category="spring" data-serro="fade-left" data-serro-duration="1800">
           <div class="card-meta">
             <span class="card-label">23 / Spring Fade Left</span>
-            <span class="card-copy" onclick="copyTag('data-mos=\x22fade-left\x22')">Copy</span>
+            <span class="card-copy" onclick="copyTag('data-serro=\x22fade-left\x22')">Copy</span>
           </div>
           <div class="code-editor">
-            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"fade-left"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-serro</span>=<span class="c-val">"fade-left"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-duration</span>=<span class="c-num">"1800"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
             <span class="c-tag">&lt;/div&gt;</span>
           </div>
         </div>
 
-        <div class="anim-card" data-category="spring" data-mos="fade-right" data-mos-duration="1800">
+        <div class="anim-card" data-category="spring" data-serro="fade-right" data-serro-duration="1800">
           <div class="card-meta">
             <span class="card-label">24 / Spring Fade Right</span>
-            <span class="card-copy" onclick="copyTag('data-mos=\x22fade-right\x22')">Copy</span>
+            <span class="card-copy" onclick="copyTag('data-serro=\x22fade-right\x22')">Copy</span>
           </div>
           <div class="code-editor">
-            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"fade-right"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-serro</span>=<span class="c-val">"fade-right"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-duration</span>=<span class="c-num">"1800"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
             <span class="c-tag">&lt;/div&gt;</span>
           </div>
         </div>
 
-        <div class="anim-card" data-category="spring" data-mos="zoom-in" data-mos-duration="1800">
+        <div class="anim-card" data-category="spring" data-serro="zoom-in" data-serro-duration="1800">
           <div class="card-meta">
             <span class="card-label">25 / Snappy Zoom In</span>
-            <span class="card-copy" onclick="copyTag('data-mos=\x22zoom-in\x22')">Copy</span>
+            <span class="card-copy" onclick="copyTag('data-serro=\x22zoom-in\x22')">Copy</span>
           </div>
           <div class="code-editor">
-            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"zoom-in"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-serro</span>=<span class="c-val">"zoom-in"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-duration</span>=<span class="c-num">"1800"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
             <span class="c-tag">&lt;/div&gt;</span>
           </div>
         </div>
 
-        <div class="anim-card" data-category="spring" data-mos="zoom-out" data-mos-duration="1800">
+        <div class="anim-card" data-category="spring" data-serro="zoom-out" data-serro-duration="1800">
           <div class="card-meta">
             <span class="card-label">26 / Cinematic Zoom Out</span>
-            <span class="card-copy" onclick="copyTag('data-mos=\x22zoom-out\x22')">Copy</span>
+            <span class="card-copy" onclick="copyTag('data-serro=\x22zoom-out\x22')">Copy</span>
           </div>
           <div class="code-editor">
-            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"zoom-out"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-serro</span>=<span class="c-val">"zoom-out"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-duration</span>=<span class="c-num">"1800"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
             <span class="c-tag">&lt;/div&gt;</span>
           </div>
         </div>
 
-        <div class="anim-card" data-category="spring" data-mos="pop" data-mos-duration="1800">
+        <div class="anim-card" data-category="spring" data-serro="pop" data-serro-duration="1800">
           <div class="card-meta">
             <span class="card-label">27 / Tactile Pop</span>
-            <span class="card-copy" onclick="copyTag('data-mos=\x22pop\x22')">Copy</span>
+            <span class="card-copy" onclick="copyTag('data-serro=\x22pop\x22')">Copy</span>
           </div>
           <div class="code-editor">
-            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"pop"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-serro</span>=<span class="c-val">"pop"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-duration</span>=<span class="c-num">"1800"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
             <span class="c-tag">&lt;/div&gt;</span>
           </div>
         </div>
 
-        <div class="anim-card" data-category="spring" data-mos="spin-in" data-mos-duration="1800">
+        <div class="anim-card" data-category="spring" data-serro="spin-in" data-serro-duration="1800">
           <div class="card-meta">
             <span class="card-label">28 / Subtle Spin In</span>
-            <span class="card-copy" onclick="copyTag('data-mos=\x22spin-in\x22')">Copy</span>
+            <span class="card-copy" onclick="copyTag('data-serro=\x22spin-in\x22')">Copy</span>
           </div>
           <div class="code-editor">
-            <span class="c-tag">&lt;div</span> <span class="c-attr">data-mos</span>=<span class="c-val">"spin-in"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-duration</span>=<span class="c-num">"1800"</span><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-mos-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
+            <span class="c-tag">&lt;div</span> <span class="c-attr">data-serro</span>=<span class="c-val">"spin-in"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-duration</span>=<span class="c-num">"1800"</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-attr">data-serro-easing</span>=<span class="c-val">"spring"</span><span class="c-tag">&gt;</span><br>
             <span class="c-tag">&lt;/div&gt;</span>
           </div>
         </div>
@@ -2163,7 +2163,7 @@ SERRO.init({
   </footer>
 
   <!-- Core Standalone Script -->
-  <script src="serro.js?v=1.0.1"></script>
+  <script src="serro.js?v=1.0.2"></script>
 
   <!-- Interactive Demo UI Scripts -->
   <script>
@@ -2235,7 +2235,7 @@ SERRO.init({
           }
         }
 
-        snippet.textContent = `<h1 data-mos="${preset}" data-mos-duration="${durMs}">`;
+        snippet.textContent = `<h1 data-serro="${preset}" data-serro-duration="${durMs}">`;
       } else {
         // ELEMENT MODE: Hide text typography, show element preview box
         if (textWrap) textWrap.style.display = 'none';
@@ -2256,7 +2256,7 @@ SERRO.init({
           }
         }
 
-        snippet.textContent = `<div data-mos="${preset}" data-mos-duration="${durMs}">`;
+        snippet.textContent = `<div data-serro="${preset}" data-serro-duration="${durMs}">`;
       }
 
       triggerReplay();
@@ -2281,10 +2281,10 @@ SERRO.init({
         const textTarget = document.getElementById('liveTextTarget');
         if (!textTarget) return;
 
-        textTarget.classList.remove('mos-animate');
+        textTarget.classList.remove('serro-animate');
         textTarget.style.setProperty('transition', 'none', 'important');
         textTarget.style.setProperty('animation', 'none', 'important');
-        textTarget.setAttribute('data-mos', preset);
+        textTarget.setAttribute('data-serro', preset);
 
         // Force reflow
         void textTarget.offsetWidth;
@@ -2293,20 +2293,20 @@ SERRO.init({
           textTarget.style.removeProperty('transition');
           textTarget.style.removeProperty('animation');
           textTarget.style.transitionDuration = `${dur}s`;
-          textTarget.style.setProperty('--mos-duration', `${dur}s`);
+          textTarget.style.setProperty('--serro-duration', `${dur}s`);
 
           requestAnimationFrame(() => {
-            textTarget.classList.add('mos-animate');
+            textTarget.classList.add('serro-animate');
           });
         });
       } else {
         const target = document.getElementById('liveTarget');
         if (!target) return;
 
-        target.classList.remove('mos-animate');
+        target.classList.remove('serro-animate');
         target.style.setProperty('transition', 'none', 'important');
         target.style.setProperty('animation', 'none', 'important');
-        target.setAttribute('data-mos', preset);
+        target.setAttribute('data-serro', preset);
 
         // Force reflow
         void target.offsetWidth;
@@ -2315,10 +2315,10 @@ SERRO.init({
           target.style.removeProperty('transition');
           target.style.removeProperty('animation');
           target.style.transitionDuration = `${dur}s`;
-          target.style.setProperty('--mos-duration', `${dur}s`);
+          target.style.setProperty('--serro-duration', `${dur}s`);
 
           requestAnimationFrame(() => {
-            target.classList.add('mos-animate');
+            target.classList.add('serro-animate');
           });
         });
       }
@@ -2390,19 +2390,19 @@ SERRO.init({
 
     // Replay animation on click for any catalog card
     function replayCard(card) {
-      const durAttr = card.getAttribute('data-mos-duration');
+      const durAttr = card.getAttribute('data-serro-duration') ;
       const dur = durAttr ? (parseFloat(durAttr) > 10 ? `${parseFloat(durAttr) / 1000}s` : `${durAttr}s`) : '1.8s';
 
-      card.classList.remove('mos-animate');
+      card.classList.remove('serro-animate');
       card.style.setProperty('transition', 'none', 'important');
       void card.offsetWidth; // Force layout reflow
 
       requestAnimationFrame(() => {
         card.style.removeProperty('transition');
         card.style.transitionDuration = dur;
-        card.style.setProperty('--mos-duration', dur);
+        card.style.setProperty('--serro-duration', dur);
         requestAnimationFrame(() => {
-          card.classList.add('mos-animate');
+          card.classList.add('serro-animate');
         });
       });
     }
@@ -2416,7 +2416,7 @@ SERRO.init({
           const card = e.target.closest('.anim-card');
           if (card) {
             replayCard(card);
-            showToast(`Replaying: ${card.getAttribute('data-mos')}`);
+            showToast(`Replaying: ${card.getAttribute('data-serro') }`);
           }
         });
       }
