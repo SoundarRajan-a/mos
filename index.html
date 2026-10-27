@@ -2,8 +2,105 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MOS — Modern Viewport Motion Engine</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  
+  <!-- Primary SEO Meta Tags -->
+  <title>MOS — Modern Viewport Motion Engine | 120 FPS Scroll Animation Library</title>
+  <meta name="title" content="MOS — Modern Viewport Motion Engine | 120 FPS Scroll Animation Library">
+  <meta name="description" content="MOS is an ultra-lightweight (&lt; 2KB) zero-dependency viewport animation trigger, kinetic typography engine, velocity marquee streamer, and progressive editorial scroll scrubber. 120 FPS GPU hardware acceleration with two-way scroll replay. Created by SOUNDARRAJAN-A.">
+  <meta name="keywords" content="MOS, modern viewport motion engine, scroll animation library, lightweight AOS alternative, kinetic typography, 120 FPS animations, velocity marquee ticker, editorial scroll scrub, soundarrajan-a, web animations, CSS GPU motion, javascript scroll library">
+  <meta name="author" content="SOUNDARRAJAN-A">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <meta name="theme-color" content="#090a0f">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="canonical" href="https://soundarrajan-a.github.io/mos/">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="MOS Motion Engine">
+  <meta property="og:url" content="https://soundarrajan-a.github.io/mos/">
+  <meta property="og:title" content="MOS — Modern Viewport Motion Engine | 120 FPS Scroll Animation Library">
+  <meta property="og:description" content="Ultra-lightweight (&lt; 2KB) zero-dependency viewport animation trigger, kinetic typography engine, velocity marquee, and scroll scrubber. Created by SOUNDARRAJAN-A.">
+  <meta property="og:image" content="https://soundarrajan-a.github.io/mos/og-preview.png">
+  <meta property="og:locale" content="en_US">
+
+  <!-- Twitter / X -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://soundarrajan-a.github.io/mos/">
+  <meta name="twitter:title" content="MOS — Modern Viewport Motion Engine | 120 FPS Scroll Animation Library">
+  <meta name="twitter:description" content="Ultra-lightweight (&lt; 2KB) zero-dependency viewport animation trigger, kinetic typography engine, velocity marquee, and scroll scrubber. Created by SOUNDARRAJAN-A.">
+  <meta name="twitter:image" content="https://soundarrajan-a.github.io/mos/og-preview.png">
+  <meta name="twitter:creator" content="@soundarrajan">
+
+  <!-- Schema.org SoftwareApplication & WebSite JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://soundarrajan-a.github.io/mos/#website",
+        "url": "https://soundarrajan-a.github.io/mos/",
+        "name": "MOS Motion Engine",
+        "description": "Ultra-lightweight 120 FPS viewport motion engine and kinetic typography library",
+        "inLanguage": "en"
+      },
+      {
+        "@type": "SoftwareApplication",
+        "@id": "https://soundarrajan-a.github.io/mos/#software",
+        "name": "MOS (Modern Viewport Motion Engine)",
+        "operatingSystem": "All Web Browsers (Chrome, Brave, Safari, Edge, Firefox)",
+        "applicationCategory": "DeveloperApplication",
+        "softwareVersion": "1.0",
+        "fileSize": "2KB",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "author": {
+          "@type": "Person",
+          "name": "SOUNDARRAJAN-A",
+          "url": "https://github.com/soundarrajan-a"
+        },
+        "license": "https://opensource.org/licenses/MIT",
+        "codeRepository": "https://github.com/soundarrajan-a/mos",
+        "downloadUrl": "https://cdn.jsdelivr.net/gh/soundarrajan-a/mos@main/mos.js"
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://soundarrajan-a.github.io/mos/#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is MOS?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "MOS is an ultra-lightweight, hardware-accelerated viewport animation library and kinetic typography engine built with IntersectionObserver and pure CSS GPU compositing."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How to install MOS via CDN?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Include the mos.css stylesheet in the document head and the mos.js script before the closing body tag, then invoke MOS.init()."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does MOS support two-way scroll without flickering?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes, MOS features an anti-flicker hysteresis buffer that retains rendered content past viewport boundaries and only resets when elements are more than 80px below the screen."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
   
   <!-- Inter & JetBrains Mono Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1268,7 +1365,7 @@
           Text FX
         </a>
         <a href="#presets">28 Presets</a>
-        <a href="#docs">Docs</a>
+        <a href="docs.html">Docs</a>
         <div class="nav-divider"></div>
         <a href="https://github.com/soundarrajan-a/mos" target="_blank" class="nav-btn-source">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
@@ -1324,13 +1421,13 @@
           </div>
         </a>
 
-        <a href="#docs" class="mobile-drawer-link" onclick="closeMobileMenu()">
+        <a href="docs.html" class="mobile-drawer-link" onclick="closeMobileMenu()">
           <div class="mobile-link-icon">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
           </div>
           <div class="mobile-link-text">
-            <span class="link-title">Documentation</span>
-            <span class="link-desc">CDN install, attributes & API options</span>
+            <span class="link-title">Documentation &amp; PDF</span>
+            <span class="link-desc">Online guide &amp; printable PDF manual</span>
           </div>
         </a>
 
@@ -1941,6 +2038,28 @@
       <div class="section-title">Developer Quick Start</div>
       <div class="section-desc">Drop into any project or host on GitHub Pages in under 60 seconds.</div>
 
+      <!-- Documentation & PDF Manual Banner -->
+      <div style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.12), rgba(168, 85, 247, 0.08)); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 12px; padding: 1.25rem 1.5rem; margin: 1.5rem 0 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.25rem;">
+        <div style="max-width: 650px;">
+          <div style="font-weight: 700; color: #fff; font-size: 1.05rem; display: flex; align-items: center; gap: 0.55rem;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            Complete Developer Documentation &amp; Offline PDF Manual
+          </div>
+          <div style="font-size: 0.88rem; color: #94a3b8; margin-top: 0.35rem; line-height: 1.5;">
+            Read the full API guide online with interactive examples, or download the official printable PDF formatted for your developer desk.
+          </div>
+        </div>
+        <div style="display: flex; gap: 0.65rem; flex-wrap: wrap;">
+          <a href="docs.html" class="btn-download" style="background: #2563eb; border-color: #3b82f6; color: #fff; font-weight: 600; text-decoration: none;">
+            Read Docs Online &rarr;
+          </a>
+          <a href="mos-documentation.pdf" download="mos-documentation.pdf" class="btn-download" style="background: rgba(239, 68, 68, 0.14); border-color: rgba(239, 68, 68, 0.4); color: #fca5a5; text-decoration: none;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            Download PDF
+          </a>
+        </div>
+      </div>
+
       <div class="step-grid">
         <div class="step-box">
           <h4><span class="step-num">1</span> Direct CDN Link or Download</h4>
@@ -1953,6 +2072,14 @@
             <a href="mos.js" download="mos.js" class="btn-download" style="background: rgba(255, 255, 255, 0.05); border-color: var(--card-border); color: #cbd5e1;">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
               Download mos.js
+            </a>
+            <a href="docs.html" class="btn-download" style="background: rgba(59, 130, 246, 0.15); border-color: rgba(59, 130, 246, 0.35); color: #93c5fd;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+              Docs Online &rarr;
+            </a>
+            <a href="mos-documentation.pdf" download="mos-documentation.pdf" class="btn-download" style="background: rgba(239, 68, 68, 0.12); border-color: rgba(239, 68, 68, 0.32); color: #fca5a5;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+              Download PDF Manual
             </a>
           </div>
 
@@ -2021,6 +2148,13 @@ MOS.init({
   <footer>
     <p><strong>MOS (Modern Viewport Motion Engine)</strong> • MIT Licensed Open Source Project</p>
     <p style="margin-top: 0.4rem; font-weight: 600; letter-spacing: 0.04em;">SOUNDARRAJAN-A</p>
+    <div style="margin-top: 0.65rem; display: flex; gap: 0.9rem; justify-content: center; font-size: 0.85rem; flex-wrap: wrap;">
+      <a href="docs.html" style="color: #94a3b8; text-decoration: none;">Documentation</a>
+      <span style="color: rgba(255,255,255,0.2);">&bull;</span>
+      <a href="mos-documentation.pdf" download="mos-documentation.pdf" style="color: #94a3b8; text-decoration: none;">Download PDF Manual</a>
+      <span style="color: rgba(255,255,255,0.2);">&bull;</span>
+      <a href="text-fx.html" style="color: #94a3b8; text-decoration: none;">Kinetic Typography Studio</a>
+    </div>
     <p style="margin-top: 0.75rem;">
       <a href="https://github.com/soundarrajan-a/mos" target="_blank" style="color: #60a5fa; display: inline-flex; align-items: center; gap: 0.45rem; font-weight: 500;">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>

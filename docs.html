@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  
+  <!-- Primary SEO Meta Tags -->
+  <title>MOS Documentation & API Reference | Modern Viewport Motion Engine</title>
+  <meta name="title" content="MOS Documentation & API Reference | Modern Viewport Motion Engine">
+  <meta name="description" content="Complete official developer documentation and API reference for MOS (Modern Viewport Motion Engine). Learn CDN install, 32 scroll presets, kinetic typography, velocity marquees, and editorial scroll scrub. Created by SOUNDARRAJAN-A.">
+  <meta name="keywords" content="MOS documentation, scroll animation library, javascript motion engine, kinetic typography API, velocity marquee ticker, editorial scroll scrub, soundarrajan-a, web animations guide, lightweight AOS alternative, 120 FPS web motion">
+  <meta name="author" content="SOUNDARRAJAN-A">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <meta name="theme-color" content="#090a0f">
+  <link rel="canonical" href="https://soundarrajan-a.github.io/mos/docs.html">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="MOS Motion Engine">
+  <meta property="og:url" content="https://soundarrajan-a.github.io/mos/docs.html">
+  <meta property="og:title" content="MOS Documentation & API Reference | Modern Viewport Motion Engine">
+  <meta property="og:description" content="The complete developer manual for MOS. 32 GPU presets, kinetic typography, infinite marquee tickers, and editorial scroll scrub with zero dependencies.">
+  <meta property="og:image" content="https://soundarrajan-a.github.io/mos/og-preview.png">
+  <meta property="og:locale" content="en_US">
+
+  <!-- Twitter / X -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://soundarrajan-a.github.io/mos/docs.html">
+  <meta name="twitter:title" content="MOS Documentation & API Reference | Modern Viewport Motion Engine">
+  <meta name="twitter:description" content="The complete developer manual for MOS. 32 GPU presets, kinetic typography, infinite marquee tickers, and editorial scroll scrub with zero dependencies.">
+  <meta name="twitter:image" content="https://soundarrajan-a.github.io/mos/og-preview.png">
+  <meta name="twitter:creator" content="@soundarrajan">
+
+  <!-- Schema.org TechArticle & Breadcrumb Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "TechArticle",
+        "@id": "https://soundarrajan-a.github.io/mos/docs.html#article",
+        "headline": "MOS (Modern Viewport Motion Engine) Complete Developer Documentation",
+        "description": "Comprehensive documentation, setup guide, and API reference for the MOS viewport motion engine.",
+        "author": {
+          "@type": "Person",
+          "name": "SOUNDARRAJAN-A",
+          "url": "https://github.com/soundarrajan-a"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "MOS Motion Engine",
+          "url": "https://soundarrajan-a.github.io/mos/"
+        },
+        "datePublished": "2026-10-27",
+        "dateModified": "2026-10-27",
+        "mainEntityOfPage": "https://soundarrajan-a.github.io/mos/docs.html",
+        "proficiencyLevel": "Beginner to Advanced",
+        "inLanguage": "en"
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "MOS Home",
+            "item": "https://soundarrajan-a.github.io/mos/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Documentation & API",
+            "item": "https://soundarrajan-a.github.io/mos/docs.html"
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <!-- Typography & Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Core MOS Stylesheet -->
+  <link rel="stylesheet" href="mos.css">
+
+  <style>
+    :root {
+      --bg: #090a0f;
+      --surface: #101524;
+      --surface-border: rgba(255, 255, 255, 0.08);
+      --card-border: rgba(255, 255, 255, 0.1);
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #3b82f6;
+      --accent-glow: rgba(59, 130, 246, 0.35);
+      --success: #10b981;
+      --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      overflow-x: hidden;
+      line-height: 1.65;
+    }
+
+    body {
+      min-height: 100vh;
+      padding-top: 72px;
+      position: relative;
+    }
+
+    /* Fixed GPU Composited Nav */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      z-index: 1000;
+      background: rgba(9, 10, 15, 0.94);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--surface-border);
+      transform: translateZ(0);
+      -webkit-transform: translateZ(0);
+      will-change: transform;
+    }
+
+    .nav-container {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 0.85rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-weight: 800;
+      font-size: 1.15rem;
+      color: #fff;
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-tag {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      background: rgba(59, 130, 246, 0.15);
+      color: #60a5fa;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .nav-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
+      transition: color 0.15s;
+    }
+
+    .nav-link:hover { color: #fff; }
+
+    .btn-pdf-download {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      color: #fff !important;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border-radius: 7px;
+      font-size: 0.84rem;
+      font-weight: 600;
+      box-shadow: 0 4px 14px rgba(59, 130, 246, 0.35);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .btn-pdf-download:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(59, 130, 246, 0.45);
+    }
+
+    /* Layout: Sidebar + Main Content */
+    .docs-layout {
+      max-width: 1300px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 2.5rem;
+      padding: 2.5rem 1.5rem 5rem;
+      position: relative;
+    }
+
+    /* Sticky Sidebar Navigation */
+    .docs-sidebar {
+      position: sticky;
+      top: 96px;
+      height: calc(100vh - 120px);
+      overflow-y: auto;
+      padding-right: 1rem;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+    }
+
+    .sidebar-section-title {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #64748b;
+      margin-bottom: 0.75rem;
+      padding-left: 0.5rem;
+    }
+
+    .sidebar-nav {
+      list-style: none;
+      margin-bottom: 1.75rem;
+    }
+
+    .sidebar-nav li a {
+      display: block;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+      padding: 0.42rem 0.65rem;
+      border-radius: 6px;
+      border-left: 2px solid transparent;
+      transition: all 0.15s;
+    }
+
+    .sidebar-nav li a:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.04);
+      border-left-color: var(--accent);
+    }
+
+    /* Content Area */
+    .docs-content {
+      min-width: 0;
+      max-width: 880px;
+    }
+
+    /* Hero Banner */
+    .doc-hero {
+      padding-bottom: 2rem;
+      margin-bottom: 2.5rem;
+      border-bottom: 1px solid var(--surface-border);
+    }
+
+    .doc-badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.25rem 0.7rem;
+      border-radius: 999px;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #34d399;
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      margin-bottom: 1rem;
+    }
+
+    .doc-hero-title {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #ffffff 40%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .doc-hero-sub {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    .doc-meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.25rem;
+      align-items: center;
+      font-size: 0.85rem;
+      color: #94a3b8;
+    }
+
+    .doc-meta-row strong {
+      color: #fff;
+    }
+
+    /* Headings & Anchors */
+    .doc-section {
+      margin-bottom: 3.5rem;
+      scroll-margin-top: 100px;
+    }
+
+    h2.doc-h2 {
+      font-size: 1.7rem;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      color: #fff;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--surface-border);
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    h3.doc-h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #e2e8f0;
+      margin: 1.75rem 0 0.75rem;
+    }
+
+    p {
+      color: #cbd5e1;
+      margin-bottom: 1rem;
+      font-size: 0.98rem;
+    }
+
+    /* Code Snippet Box */
+    .code-box {
+      background: #06070a;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      margin: 1rem 0 1.5rem;
+      overflow: hidden;
+    }
+
+    .code-box-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 1rem;
+      background: rgba(255, 255, 255, 0.03);
+      border-bottom: 1px solid var(--surface-border);
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: #94a3b8;
+    }
+
+    .copy-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #fff;
+      font-size: 0.72rem;
+      font-family: var(--font-mono);
+      padding: 0.25rem 0.55rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .copy-btn:hover { background: rgba(59, 130, 246, 0.3); }
+
+    pre {
+      padding: 1rem 1.25rem;
+      overflow-x: auto;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: #e2e8f0;
+      line-height: 1.6;
+    }
+
+    code {
+      font-family: var(--font-mono);
+      font-size: 0.88em;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 0.15em 0.4em;
+      border-radius: 4px;
+      color: #60a5fa;
+    }
+
+    /* Callout Card */
+    .callout {
+      border-left: 3px solid var(--accent);
+      background: rgba(59, 130, 246, 0.08);
+      padding: 1rem 1.25rem;
+      border-radius: 0 8px 8px 0;
+      margin: 1.25rem 0;
+      font-size: 0.92rem;
+    }
+
+    .callout-title {
+      font-weight: 700;
+      color: #93c5fd;
+      margin-bottom: 0.3rem;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    /* Reference Table */
+    .ref-table-wrap {
+      overflow-x: auto;
+      margin: 1.25rem 0 2rem;
+      border: 1px solid var(--surface-border);
+      border-radius: 8px;
+    }
+
+    table.ref-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.88rem;
+    }
+
+    table.ref-table th {
+      background: rgba(255, 255, 255, 0.03);
+      padding: 0.75rem 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: #94a3b8;
+      border-bottom: 1px solid var(--surface-border);
+      text-transform: uppercase;
+    }
+
+    table.ref-table td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      color: #cbd5e1;
+    }
+
+    table.ref-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--surface-border);
+      padding: 3rem 1.5rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    footer a { color: #60a5fa; text-decoration: none; }
+
+    /* ==========================================================================
+       PRINT SPECIFICATION FOR HIGH-RESOLUTION PDF OUTPUT
+       ========================================================================== */
+    @media print {
+      body {
+        padding-top: 0 !important;
+        background: #ffffff !important;
+        color: #111827 !important;
+        font-size: 10.5pt !important;
+        line-height: 1.5 !important;
+      }
+
+      nav, .docs-sidebar, .copy-btn, .btn-pdf-download, .no-print {
+        display: none !important;
+      }
+
+      .docs-layout {
+        display: block !important;
+        padding: 0 !important;
+        max-width: 100% !important;
+      }
+
+      .docs-content {
+        max-width: 100% !important;
+      }
+
+      .doc-hero-title {
+        color: #111827 !important;
+        -webkit-text-fill-color: #111827 !important;
+        font-size: 24pt !important;
+      }
+
+      h2.doc-h2 {
+        color: #1e3a8a !important;
+        border-bottom: 1.5pt solid #cbd5e1 !important;
+        page-break-after: avoid;
+        margin-top: 18pt !important;
+        font-size: 15pt !important;
+      }
+
+      h3.doc-h3 {
+        color: #1f2937 !important;
+        page-break-after: avoid;
+        font-size: 12pt !important;
+      }
+
+      p, li {
+        color: #374151 !important;
+      }
+
+      .code-box {
+        background: #f8fafc !important;
+        border: 1pt solid #e2e8f0 !important;
+        page-break-inside: avoid;
+      }
+
+      pre {
+        color: #0f172a !important;
+        font-size: 8.5pt !important;
+      }
+
+      code {
+        background: #f1f5f9 !important;
+        color: #1e40af !important;
+        border: 0.5pt solid #e2e8f0 !important;
+      }
+
+      .callout {
+        background: #f0fdf4 !important;
+        border-left: 3pt solid #10b981 !important;
+        color: #065f46 !important;
+      }
+
+      table.ref-table th {
+        background: #f1f5f9 !important;
+        color: #334155 !important;
+        border-bottom: 1pt solid #cbd5e1 !important;
+      }
+
+      table.ref-table td {
+        border-bottom: 0.5pt solid #e2e8f0 !important;
+        color: #1e293b !important;
+      }
+
+      .page-break {
+        page-break-before: always;
+      }
+    }
+
+    @media (max-width: 860px) {
+      .docs-layout { grid-template-columns: 1fr; }
+      .docs-sidebar { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Fixed Top Navigation -->
+  <nav class="no-print">
+    <div class="nav-container">
+      <a href="index.html" class="brand">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2.5"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+        MOS Motion
+        <span class="brand-tag">Docs</span>
+      </a>
+
+      <div class="nav-actions">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="text-fx.html" class="nav-link">Text FX</a>
+        <a href="https://github.com/soundarrajan-a/mos" target="_blank" rel="noopener" class="nav-link">GitHub</a>
+        <a href="mos-documentation.pdf" download="mos-documentation.pdf" class="btn-pdf-download">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+          Download PDF
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Docs Grid Layout -->
+  <div class="docs-layout">
+
+    <!-- Sticky Table of Contents (Desktop) -->
+    <aside class="docs-sidebar no-print">
+      <div class="sidebar-section-title">Getting Started</div>
+      <ul class="sidebar-nav">
+        <li><a href="#intro">Overview &amp; Architecture</a></li>
+        <li><a href="#quickstart">Quick Start &amp; CDN</a></li>
+        <li><a href="#installation">Installation Options</a></li>
+      </ul>
+
+      <div class="sidebar-section-title">Core Modules</div>
+      <ul class="sidebar-nav">
+        <li><a href="#presets">32 Viewport Presets</a></li>
+        <li><a href="#marquee">Velocity Marquee Ticker</a></li>
+        <li><a href="#scrub">Editorial Scroll Scrub</a></li>
+        <li><a href="#kinetic">Kinetic Typography &amp; Split</a></li>
+      </ul>
+
+      <div class="sidebar-section-title">Reference</div>
+      <ul class="sidebar-nav">
+        <li><a href="#api">JavaScript API &amp; Options</a></li>
+        <li><a href="#antiflicker">Anti-Flicker Architecture</a></li>
+        <li><a href="#browser-support">Browser Compatibility</a></li>
+        <li><a href="#faq">FAQ &amp; Troubleshooting</a></li>
+      </ul>
+
+      <div class="sidebar-section-title">Quick Actions</div>
+      <ul class="sidebar-nav">
+        <li><a href="javascript:window.print()">Print Document</a></li>
+        <li><a href="mos-documentation.pdf" download="mos-documentation.pdf">Download PDF File</a></li>
+      </ul>
+    </aside>
+
+    <!-- Main Content Stream -->
+    <main class="docs-content">
+
+      <!-- Hero Header -->
+      <header class="doc-hero">
+        <div class="doc-badge-pill">
+          <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#10b981;"></span>
+          Official Technical Specification v1.0
+        </div>
+        <h1 class="doc-hero-title">MOS (Modern Viewport Motion Engine)</h1>
+        <p class="doc-hero-sub">
+          Ultra-lightweight viewport animation trigger, kinetic typography engine, velocity marquee stream, and progressive editorial scroll scrubber. Engineered for 120 FPS hardware acceleration with zero dependencies.
+        </p>
+
+        <div class="doc-meta-row">
+          <div>Author: <strong>SOUNDARRAJAN-A</strong></div>
+          <div>License: <strong>MIT Open Source</strong></div>
+          <div>Size: <strong>&lt; 2 KB minified</strong></div>
+          <div>Compositing: <strong>120 FPS GPU Native</strong></div>
+        </div>
+      </header>
+
+      <!-- SECTION 1: OVERVIEW & ARCHITECTURE -->
+      <section class="doc-section" id="intro">
+        <h2 class="doc-h2">1. Overview &amp; Architecture</h2>
+        <p>
+          <strong>MOS</strong> is an ultra-fast, zero-dependency browser motion system designed to replace heavy legacy animation libraries. Built from the ground up around the modern <code>IntersectionObserver</code> API and pure CSS GPU compositing pipelines (<code>transform</code>, <code>opacity</code>, <code>filter</code>, <code>clip-path</code>), MOS achieves rock-solid 120 FPS performance on both desktop and mobile devices.
+        </p>
+        <p>
+          Unlike legacy libraries that trigger reflows by calculating element bounding boxes on scroll events, MOS uses a decoupled asynchronous lifecycle:
+        </p>
+        <div class="callout">
+          <div class="callout-title">Core Engine Principles</div>
+          <ul style="padding-left: 1.25rem; margin-top: 0.35rem;">
+            <li><strong>Zero Layout Shifts (CLS 0.0)</strong>: No dimensions, margins, or padding are mutated during animation execution.</li>
+            <li><strong>Two-Way Scroll Lifecycle</strong>: Elements animate in on entry and reset cleanly when scrolled out of view, replaying on demand.</li>
+            <li><strong>Anti-Flicker Boundary Hysteresis</strong>: An 80px boundary clearance buffer prevents layout chattering when elements near viewport edges.</li>
+            <li><strong>Pure CSS Keyframe Engines</strong>: Complex character and word split animations run entirely on browser compositor threads.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- SECTION 2: QUICK START & CDN -->
+      <section class="doc-section" id="quickstart">
+        <h2 class="doc-h2">2. Quick Start &amp; CDN Setup</h2>
+        <p>
+          Drop the official CDN links into your HTML document. No package managers, build steps, or compilation required:
+        </p>
+
+        <div class="code-box">
+          <div class="code-box-header">
+            <span>HTML &bull; In &lt;head&gt;</span>
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <pre><code>&lt;!-- Official MOS Stylesheet --&gt;
+&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/soundarrajan-a/mos@main/mos.css"&gt;</code></pre>
+        </div>
+
+        <div class="code-box">
+          <div class="code-box-header">
+            <span>HTML &bull; Before &lt;/body&gt;</span>
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <pre><code>&lt;!-- Official MOS JavaScript Engine --&gt;
+&lt;script src="https://cdn.jsdelivr.net/gh/soundarrajan-a/mos@main/mos.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+  MOS.init();
+&lt;/script&gt;</code></pre>
+        </div>
+
+        <h3 class="doc-h3">Minimal Complete Example</h3>
+        <div class="code-box">
+          <div class="code-box-header">
+            <span>index.html</span>
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/soundarrajan-a/mos@main/mos.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+  &lt;h1 data-mos="text-slide-up"&gt;Hello World&lt;/h1&gt;
+  &lt;div data-mos="blur-up" data-mos-duration="1200"&gt;
+    &lt;p&gt;This element animates smoothly when scrolled into view.&lt;/p&gt;
+  &lt;/div&gt;
+
+  &lt;script src="https://cdn.jsdelivr.net/gh/soundarrajan-a/mos@main/mos.js"&gt;&lt;/script&gt;
+  &lt;script&gt;
+    MOS.init();
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+        </div>
+      </section>
+
+      <!-- SECTION 3: 32 VIEWPORT ANIMATION PRESETS -->
+      <section class="doc-section page-break" id="presets">
+        <h2 class="doc-h2">3. Viewport Scroll Animation Presets (32 Types)</h2>
+        <p>
+          Attach the <code>data-mos</code> attribute to any HTML element. Customize transition timing with <code>data-mos-duration</code> (in milliseconds or seconds) and <code>data-mos-delay</code>:
+        </p>
+
+        <div class="ref-table-wrap">
+          <table class="ref-table">
+            <thead>
+              <tr>
+                <th>Category</th>
+                <th>Attribute Value</th>
+                <th>GPU Compositor Behavior</th>
+                <th>Default Easing</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Lens &amp; Blur</strong></td>
+                <td><code>data-mos="blur-up"</code></td>
+                <td>Translates +30px Y with 8px optical bokeh blur</td>
+                <td>cubic-bezier(0.16, 1, 0.3, 1)</td>
+              </tr>
+              <tr>
+                <td><strong>Lens &amp; Blur</strong></td>
+                <td><code>data-mos="blur-down"</code></td>
+                <td>Translates -30px Y with 8px optical bokeh blur</td>
+                <td>cubic-bezier(0.16, 1, 0.3, 1)</td>
+              </tr>
+              <tr>
+                <td><strong>Lens &amp; Blur</strong></td>
+                <td><code>data-mos="blur-left"</code></td>
+                <td>Translates +35px X with 8px optical bokeh blur</td>
+                <td>cubic-bezier(0.16, 1, 0.3, 1)</td>
+              </tr>
+              <tr>
+                <td><strong>Lens &amp; Blur</strong></td>
+                <td><code>data-mos="blur-right"</code></td>
+                <td>Translates -35px X with 8px optical bokeh blur</td>
+                <td>cubic-bezier(0.16, 1, 0.3, 1)</td>
+              </tr>
+              <tr>
+                <td><strong>Lens &amp; Blur</strong></td>
+                <td><code>data-mos="blur-scale"</code></td>
+                <td>Scales from 0.90 with 8px bokeh diffusion</td>
+                <td>cubic-bezier(0.16, 1, 0.3, 1)</td>
+              </tr>
+              <tr>
+                <td><strong>Lens &amp; Blur</strong></td>
+                <td><code>data-mos="lens-flare"</code></td>
+                <td>Scales from 1.10 with high-contrast brightness flare</td>
+                <td>cubic-bezier(0.16, 1, 0.3, 1)</td>
+              </tr>
+              <tr>
+                <td><strong>3D Spatial</strong></td>
+                <td><code>data-mos="tilt-up"</code></td>
+                <td>18&deg; X-axis perspective pitch rotation + 30px Y</td>
+                <td>preserve-3d</td>
+              </tr>
+              <tr>
+                <td><strong>3D Spatial</strong></td>
+                <td><code>data-mos="tilt-down"</code></td>
+                <td>-18&deg; X-axis perspective pitch rotation - 30px Y</td>
+                <td>preserve-3d</td>
+              </tr>
+              <tr>
+                <td><strong>3D Spatial</strong></td>
+                <td><code>data-mos="tilt-left"</code></td>
+                <td>-16&deg; Y-axis perspective yaw rotation - 30px X</td>
+                <td>preserve-3d</td>
+              </tr>
+              <tr>
+                <td><strong>3D Spatial</strong></td>
+                <td><code>data-mos="tilt-right"</code></td>
+                <td>16&deg; Y-axis perspective yaw rotation + 30px X</td>
+                <td>preserve-3d</td>
+              </tr>
+              <tr>
+                <td><strong>3D Spatial</strong></td>
+                <td><code>data-mos="flip-x"</code></td>
+                <td>70&deg; perspective flip along horizontal baseline</td>
+                <td>preserve-3d</td>
+              </tr>
+              <tr>
+                <td><strong>3D Spatial</strong></td>
+                <td><code>data-mos="flip-y"</code></td>
+                <td>70&deg; perspective flip along vertical baseline</td>
+                <td>preserve-3d</td>
+              </tr>
+              <tr>
+                <td><strong>Shape Wipes</strong></td>
+                <td><code>data-mos="wipe-up"</code></td>
+                <td>Geometric upward clip-path inset reveal</td>
+                <td>clip-path: inset()</td>
+              </tr>
+              <tr>
+                <td><strong>Shape Wipes</strong></td>
+                <td><code>data-mos="wipe-down"</code></td>
+                <td>Geometric downward clip-path inset reveal</td>
+                <td>clip-path: inset()</td>
+              </tr>
+              <tr>
+                <td><strong>Shape Wipes</strong></td>
+                <td><code>data-mos="wipe-left"</code></td>
+                <td>Geometric leftward clip-path inset reveal</td>
+                <td>clip-path: inset()</td>
+              </tr>
+              <tr>
+                <td><strong>Shape Wipes</strong></td>
+                <td><code>data-mos="wipe-right"</code></td>
+                <td>Geometric rightward clip-path inset reveal</td>
+                <td>clip-path: inset()</td>
+              </tr>
+              <tr>
+                <td><strong>Shape Wipes</strong></td>
+                <td><code>data-mos="circle-expand"</code></td>
+                <td>Radial circle(140%) clip-path expansion</td>
+                <td>clip-path: circle()</td>
+              </tr>
+              <tr>
+                <td><strong>Shape Wipes</strong></td>
+                <td><code>data-mos="diagonal-wipe"</code></td>
+                <td>Polygon angular curtain diagonal wipe</td>
+                <td>clip-path: polygon()</td>
+              </tr>
+              <tr>
+                <td><strong>Springs &amp; Fades</strong></td>
+                <td><code>data-mos="fade-up"</code></td>
+                <td>Classic upward translation with fade in</td>
+                <td>cubic-bezier(0.16, 1, 0.3, 1)</td>
+              </tr>
+              <tr>
+                <td><strong>Springs &amp; Fades</strong></td>
+                <td><code>data-mos="fade-down"</code></td>
+                <td>Classic downward translation with fade in</td>
+                <td>cubic-bezier(0.16, 1, 0.3, 1)</td>
+              </tr>
+              <tr>
+                <td><strong>Springs &amp; Fades</strong></td>
+                <td><code>data-mos="spring-pop"</code></td>
+                <td>Scale(0.7) overshoot to scale(1.0) with recoil</td>
+                <td>cubic-bezier(0.34, 1.56, 0.64, 1)</td>
+              </tr>
+              <tr>
+                <td><strong>Springs &amp; Fades</strong></td>
+                <td><code>data-mos="soft-bounce"</code></td>
+                <td>Damped spring settling translation</td>
+                <td>cubic-bezier(0.34, 1.3, 0.64, 1)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- SECTION 4: VELOCITY MARQUEE TICKER -->
+      <section class="doc-section" id="marquee">
+        <h2 class="doc-h2">4. Velocity Marquee Ticker Engine</h2>
+        <p>
+          The Velocity Marquee provides continuous, hardware-accelerated horizontal text streaming with automatic infinite looping. It supports multi-element typography, glowing separator dots, outline strokes, and automatic single-row duplication.
+        </p>
+
+        <h3 class="doc-h3">Standard Marquee Markup</h3>
+        <div class="code-box">
+          <div class="code-box-header">
+            <span>HTML Markup</span>
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <pre><code>&lt;div class="mos-ticker-wrap"&gt;
+  &lt;div class="mos-ticker-track-left"&gt;
+    &lt;div class="ticker-row"&gt;
+      &lt;span class="ticker-item ticker-item-solid"&gt;ULTRA LIGHTWEIGHT &lt;span class="ticker-dot"&gt;&lt;/span&gt;&lt;/span&gt;
+      &lt;span class="ticker-item ticker-item-outline"&gt;ZERO DEPENDENCIES &lt;span class="ticker-dot"&gt;&lt;/span&gt;&lt;/span&gt;
+      &lt;span class="ticker-item ticker-item-accent"&gt;120 FPS FLUID MOTION &lt;span class="ticker-dot"&gt;&lt;/span&gt;&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;!-- Duplicate row for seamless infinite looping --&gt;
+    &lt;div class="ticker-row" aria-hidden="true"&gt;
+      &lt;span class="ticker-item ticker-item-solid"&gt;ULTRA LIGHTWEIGHT &lt;span class="ticker-dot"&gt;&lt;/span&gt;&lt;/span&gt;
+      &lt;span class="ticker-item ticker-item-outline"&gt;ZERO DEPENDENCIES &lt;span class="ticker-dot"&gt;&lt;/span&gt;&lt;/span&gt;
+      &lt;span class="ticker-item ticker-item-accent"&gt;120 FPS FLUID MOTION &lt;span class="ticker-dot"&gt;&lt;/span&gt;&lt;/span&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+        </div>
+
+        <div class="callout">
+          <div class="callout-title">Automatic Features in MOS Marquee</div>
+          <p style="margin: 0;">
+            1. <strong>Reverse Direction</strong>: Use <code>class="mos-ticker-track-right"</code> for reverse motion.<br>
+            2. <strong>Auto-Duplication</strong>: If only one <code>.ticker-row</code> is provided, <code>mos.js</code> automatically duplicates it with <code>aria-hidden="true"</code> to guarantee an infinite loop.<br>
+            3. <strong>Hover Pause</strong>: Hovering over the ticker automatically pauses animation smoothly via pure CSS.
+          </p>
+        </div>
+      </section>
+
+      <!-- SECTION 5: EDITORIAL SCROLL SCRUB -->
+      <section class="doc-section page-break" id="scrub">
+        <h2 class="doc-h2">5. Editorial Scroll Scrub</h2>
+        <p>
+          The Editorial Scroll Scrub dynamically binds paragraph text to viewport scroll progression. As the user travels down the page, every word progressively illuminates from 18% opacity to high-contrast 100% brilliance, with subtle glow effects and keyword highlighting.
+        </p>
+
+        <h3 class="doc-h3">Option A: Full Stage with Progress Meter</h3>
+        <div class="code-box">
+          <div class="code-box-header">
+            <span>HTML &bull; Stage with Meter</span>
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <pre><code>&lt;div class="scrub-stage"&gt;
+  &lt;div class="scrub-meter-bar"&gt;
+    &lt;span&gt;SCROLL PROGRESSION&lt;/span&gt;
+    &lt;div class="scrub-progress-track"&gt;
+      &lt;div class="scrub-progress-fill"&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;span class="scrub-percent-label"&gt;0%&lt;/span&gt;
+  &lt;/div&gt;
+
+  &lt;p class="scrub-paragraph" data-mos-scrub-highlight="motion,viewport,scroll,kinetic"&gt;
+    Motion that responds directly to your scroll position. Every word dynamically illuminates
+    from deep dark to high-contrast brilliance with 120 FPS hardware acceleration.
+  &lt;/p&gt;
+&lt;/div&gt;</code></pre>
+        </div>
+
+        <h3 class="doc-h3">Option B: Standalone Raw Paragraph</h3>
+        <p>
+          You can drop <code>class="scrub-paragraph"</code> on any plain <code>&lt;p&gt;</code> element without stages or wrappers:
+        </p>
+        <div class="code-box">
+          <div class="code-box-header">
+            <span>HTML &bull; Raw Markup</span>
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <pre><code>&lt;p class="scrub-paragraph"&gt;
+  Pure vanilla paragraph text that tracks its own viewport coordinates automatically.
+&lt;/p&gt;</code></pre>
+        </div>
+      </section>
+
+      <!-- SECTION 6: KINETIC TYPOGRAPHY -->
+      <section class="doc-section" id="kinetic">
+        <h2 class="doc-h2">6. Kinetic Typography &amp; Split-Text Engine</h2>
+        <p>
+          MOS features a built-in kinetic typography engine capable of tokenizing text by word or character and applying staggered kinetic motion presets:
+        </p>
+
+        <h3 class="doc-h3">Split Text Attributes</h3>
+        <div class="ref-table-wrap">
+          <table class="ref-table">
+            <thead>
+              <tr>
+                <th>Attribute</th>
+                <th>Values</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>data-mos-split</code></td>
+                <td><code>words</code> | <code>chars</code></td>
+                <td>Tokenizes element content into words or individual characters</td>
+              </tr>
+              <tr>
+                <td><code>data-mos-stagger</code></td>
+                <td>Milliseconds (e.g. <code>50</code>, <code>70</code>)</td>
+                <td>Delay gap between consecutive animated spans</td>
+              </tr>
+              <tr>
+                <td><code>data-mos</code></td>
+                <td>Text Preset Name</td>
+                <td>Target animation preset applied to each staggered token</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="doc-h3">Popular Kinetic Presets</h3>
+        <div class="code-box">
+          <div class="code-box-header">
+            <span>HTML Examples</span>
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <pre><code>&lt;!-- Staggered Words Masked Baseline --&gt;
+&lt;h1 data-mos="text-slide-up" data-mos-split="words" data-mos-stagger="70"&gt;
+  FLUID KINETIC HEADLINE MASKED BASELINE
+&lt;/h1&gt;
+
+&lt;!-- Staggered Character Elastic Recoil --&gt;
+&lt;h2 data-mos="text-stretch-snap" data-mos-split="chars" data-mos-stagger="40"&gt;
+  MOMENTUM RECOIL
+&lt;/h2&gt;
+
+&lt;!-- Cyberpunk Scanline Glitch --&gt;
+&lt;h2 data-mos="text-glitch" data-mos-duration="1200"&gt;
+  CYBERNETIC CHANNEL GLITCH
+&lt;/h2&gt;
+
+&lt;!-- Gas Discharge Neon Glow --&gt;
+&lt;h2 data-mos="text-neon-flicker" data-mos-duration="1500"&gt;
+  HIGH VOLTAGE NEON GLOW
+&lt;/h2&gt;</code></pre>
+        </div>
+      </section>
+
+      <!-- SECTION 7: JAVASCRIPT API -->
+      <section class="doc-section page-break" id="api">
+        <h2 class="doc-h2">7. JavaScript API &amp; Configuration Options</h2>
+        <p>
+          MOS exposes a global <code>window.MOS</code> object with full programmatic controls:
+        </p>
+
+        <h3 class="doc-h3">API Methods</h3>
+        <div class="ref-table-wrap">
+          <table class="ref-table">
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th>Parameters</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>MOS.init(options)</code></td>
+                <td>Configuration Object (Optional)</td>
+                <td>Initializes split-text, marquees, scrubbers, and observers</td>
+              </tr>
+              <tr>
+                <td><code>MOS.refresh()</code></td>
+                <td>None</td>
+                <td>Re-scans DOM for dynamically inserted elements / single page apps</td>
+              </tr>
+              <tr>
+                <td><code>MOS.updateScrubs()</code></td>
+                <td>None</td>
+                <td>Recalculates scroll progress on all active editorial scrub paragraphs</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="doc-h3">Configuration Options</h3>
+        <div class="code-box">
+          <div class="code-box-header">
+            <span>JavaScript</span>
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <pre><code>MOS.init({
+  // Trigger once on entry or replay on two-way scroll (default: false)
+  once: false,
+
+  // Viewport intersection root margin (default: '0px 0px -40px 0px')
+  rootMargin: '0px 0px -40px 0px',
+
+  // Ratio of element visibility required to trigger (default: 0)
+  threshold: 0
+});</code></pre>
+        </div>
+      </section>
+
+      <!-- SECTION 8: ANTI-FLICKER ARCHITECTURE -->
+      <section class="doc-section" id="antiflicker">
+        <h2 class="doc-h2">8. Anti-Flicker Architecture &amp; Hysteresis Buffer</h2>
+        <p>
+          Legacy scroll libraries often suffer from <em>Layout Hysteresis</em>: when an element exits the viewport, removing the animation class restores its initial transform (e.g. <code>translateY(30px)</code>), which shifts the element back into the viewport, triggering an infinite rapid chattering flicker.
+        </p>
+        <p>
+          MOS completely eliminates this issue with a dual-stage safety mechanism:
+        </p>
+        <div class="callout">
+          <div class="callout-title">The MOS Hysteresis Solution</div>
+          <ol style="padding-left: 1.25rem; margin-top: 0.35rem;">
+            <li><strong>Sticky Retention at Top of Screen</strong>: Elements that have entered the screen and scrolled past the top boundary <em>remain rendered</em>. They are never removed while the user is reading downwards.</li>
+            <li><strong>80px Clearance Buffer for Reset</strong>: Elements are only reset when they have exited more than 80px below the bottom of the viewport (<code>rect.top &gt; windowH + 80</code>). Transform shifts (30-40px) can never bridge this 80px gap, making chattering physically impossible.</li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- SECTION 9: BROWSER COMPATIBILITY -->
+      <section class="doc-section" id="browser-support">
+        <h2 class="doc-h2">9. Browser Compatibility &amp; Benchmarks</h2>
+        <div class="ref-table-wrap">
+          <table class="ref-table">
+            <thead>
+              <tr>
+                <th>Browser</th>
+                <th>Minimum Version</th>
+                <th>GPU Compositor Support</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Google Chrome</strong></td>
+                <td>Version 58+</td>
+                <td>Full 120 FPS Hardware Acceleration</td>
+                <td>Supported</td>
+              </tr>
+              <tr>
+                <td><strong>Brave Browser</strong></td>
+                <td>Version 1.0+</td>
+                <td>Full 120 FPS Hardware Acceleration</td>
+                <td>Supported</td>
+              </tr>
+              <tr>
+                <td><strong>Apple Safari (iOS / macOS)</strong></td>
+                <td>Version 12.1+</td>
+                <td>WebKit Hardware Compositing</td>
+                <td>Supported</td>
+              </tr>
+              <tr>
+                <td><strong>Mozilla Firefox</strong></td>
+                <td>Version 55+</td>
+                <td>Gecko Quantum Compositor</td>
+                <td>Supported</td>
+              </tr>
+              <tr>
+                <td><strong>Microsoft Edge</strong></td>
+                <td>Version 79+</td>
+                <td>Chromium Direct3D Compositor</td>
+                <td>Supported</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- SECTION 10: FAQ & TROUBLESHOOTING -->
+      <section class="doc-section" id="faq">
+        <h2 class="doc-h2">10. Frequently Asked Questions (FAQ)</h2>
+
+        <h3 class="doc-h3">Q: Can I use MOS without any CSS or JS frameworks?</h3>
+        <p>
+          Yes. MOS is 100% vanilla HTML, CSS, and JavaScript. It does not require React, Vue, jQuery, or any build steps.
+        </p>
+
+        <h3 class="doc-h3">Q: How do I make animations trigger only once?</h3>
+        <p>
+          Pass <code>once: true</code> to <code>MOS.init({ once: true })</code>. Elements will animate when first scrolled into view and remain permanently visible.
+        </p>
+
+        <h3 class="doc-h3">Q: Why did my ticker wrap vertically in an online sandbox?</h3>
+        <p>
+          If your sandbox cached an older version of <code>mos.css</code>, ensure you include <code>mos.js</code>. The latest <code>mos.js</code> automatically enforces inline flex layout and nowrap rules directly on all ticker rows.
+        </p>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Footer -->
+  <footer class="no-print">
+    <p><strong>MOS (Modern Viewport Motion Engine)</strong> &bull; MIT Licensed Open Source Project</p>
+    <p style="margin-top: 0.4rem; font-weight: 600; letter-spacing: 0.04em; color: var(--text);">SOUNDARRAJAN-A</p>
+    <p style="margin-top: 0.75rem;">
+      <a href="https://github.com/soundarrajan-a/mos" target="_blank" style="display:inline-flex;align-items:center;gap:0.4rem;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        GitHub Repository
+      </a>
+      &bull;
+      <a href="javascript:window.print()">Print Document</a>
+      &bull;
+      <a href="mos-documentation.pdf" download="mos-documentation.pdf">Download PDF</a>
+    </p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="mos.js"></script>
+  <script>
+    function copyCode(btn) {
+      const code = btn.closest('.code-box').querySelector('pre').textContent;
+      navigator.clipboard.writeText(code).then(() => {
+        const orig = btn.textContent;
+        btn.textContent = 'Copied!';
+        setTimeout(() => btn.textContent = orig, 1800);
+      });
+    }
+  </script>
+</body>
+</html>

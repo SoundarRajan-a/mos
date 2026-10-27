@@ -1,0 +1,6 @@
+# Local test and scratch files
+standalone-test.html
+demo.html
+scratch/
+*.tmp
+.DS_Store
